@@ -22,11 +22,13 @@ if "score" not in st.session_state:
 if "submitted" not in st.session_state:
     st.session_state.submitted = False
 
-# Sidebar Navigation
+# Sidebar Navigation (Erweitert um Fallstudien & Freitext)
 mode = st.sidebar.radio(
-    "Modus wählen:",
+    "Lernform / Modus wählen:",
     [
         "🎲 Dynamische Generatoren (Naegele, GOÄ, BBiG)",
+        "📑 Original-Fallstudien (Komplexaufgaben)",
+        "✏️ Freitext- & Fachbegriffe-Trainer",
         "📝 Musterklausur (Zufallsauswahl)",
         "📚 Gesamter Fragenkatalog (LF 1 – 5)",
     ],
@@ -89,7 +91,86 @@ def generate_urlaub_task():
 
 
 # ==============================================================================
-# 3. KONSOLIDIERTER FRAGENDATENBANK (LF 1 BIS LF 5)
+# 3. KOMPLEXE FALLSTUDIEN (PRÜFUNGSNAH)
+# ==============================================================================
+CASE_STUDIES = [
+    {
+        "title": "Fallstudie 1: Akuter Notfall in der Praxis (Anaphylaxie)",
+        "scenario": """
+        **Ausgangslage:** Herr Müller (45 Jahre) erhält in Ihrer Praxis eine intramuskuläre Injektion eines Antibiotikums.
+        3 Minuten nach der Injektion klagt der Patient über plötzlichen Juckreiz an den Handflächen, Atemnot, Schwindel und Hitzegefühl.
+        Sein Gesicht wächst an (Angioödem), die Haut zeigt Urtikaria.
+        """,
+        "questions": [
+            {
+                "q": "1. Welches Krankheitsbild liegt hier höchstwahrscheinlich vor?",
+                "solution": "Anaphylaktischer Schock (Anaphylaxie / Schwerwiegende allergische Sofortreaktion Typ I).",
+            },
+            {
+                "q": "2. Welche Sofortmaßnahmen müssen Sie als MFA unverzüglich einleiten?",
+                "solution": "1. Arzt sofort benachrichtigen / Notruf veranlassen.\n2. Patient flach lagern, bei Atemnot Oberkörper hochlagern (bzw. Schocklagerung bei Kollaps).\n3. Atemwege freihalten und O2-Gabe vorbereiten.\n4. Notfallkoffer & Anaphylaxie-Besteck bereitstellen (Adrenalin, Antihistaminika, Glukokortikoide).",
+            },
+            {
+                "q": "3. Welches Notfallmedikament ist das Mittel der 1. Wahl bei einer Anaphylaxie mit Atemnot/Schock?",
+                "solution": "Adrenalin (Epinephrin) – vorzugsweise i.m. (z. B. in den Oberschenkel).",
+            },
+        ],
+    },
+    {
+        "title": "Fallstudie 2: Arbeitsunfall & Hygiene (Nadelstichverletzung)",
+        "scenario": """
+        **Ausgangslage:** Während der Blutentnahme bei einem bekannten Hepatitis-C-Patienten rutscht die Auszubildende Lisa ab
+        und sticht sich mit der gebrauchten Kanüle tief in den rechten Zeigefinger.
+        """,
+        "questions": [
+            {
+                "q": "1. Welche Sofortmaßnahmen am Verletzungsort sind durchzuführen?",
+                "solution": "1. Wundblutung anregen (nicht quetschen!).\n2. Wunde gründlich mit hautverträglichem Antiseptikum spülen/desinfizieren (mind. 1 Minute).\n3. Wunde steril abdecken.",
+            },
+            {
+                "q": "2. Welche Stellen/Personen müssen umgehend informiert und aufgesucht werden?",
+                "solution": "1. Praxisinhaber / Sicherheitsbeauftragten informieren.\n2. Durchgangsarzt (D-Arzt) zur Unfalldokumentation aufsuchen.\n3. Eintragung in das Verbandbuch / Unfallsystem der Berufsgenossenschaft (BGW).",
+            },
+            {
+                "q": "3. Welche Blutuntersuchungen müssen beim Indexpatienten und der MFA veranlasst werden?",
+                "solution": "Bestimmung des Serologie-Status auf HBV (HBsAg, Anti-HBs), HCV (Anti-HCV) und HIV (Anti-HIV) zum Zeitpunkt 0 sowie Verlaufskontrollen.",
+            },
+        ],
+    },
+]
+
+# ==============================================================================
+# 4. FREITEXT- & FACHBEGRIFFE-DATENBANK
+# ==============================================================================
+FREETEXT_TASKS = [
+    {
+        "term": "Naegele-Regel (einfach)",
+        "prompt": "Geben Sie die mathematische Formel für die einfache Naegele-Regel an:",
+        "keywords": ["7 tage", "3 monate", "1 jahr", "letzten regel"],
+        "sample": "1. Tag der letzten Regel + 7 Tage - 3 Monate + 1 Jahr",
+    },
+    {
+        "term": "EBM Chronikerpauschale Ziffer",
+        "prompt": "Welche EBM-Ziffer wird für die Betreuung eines chronisch kranken Patienten angesetzt?",
+        "keywords": ["03220", "03221"],
+        "sample": "EBM 03220 (bzw. 03221)",
+    },
+    {
+        "term": "Fachbegriff: Bluthochdruck",
+        "prompt": "Wie lautet der medizinische Fachbegriff für dauerhaft erhöhten Blutdruck (≥ 140/90 mmHg)?",
+        "keywords": ["hypertonie", "arterielle hypertonie"],
+        "sample": "Arterielle Hypertonie",
+    },
+    {
+        "term": "BBiG Probezeit Dauer",
+        "prompt": "Wie lang muss die Probezeit im Berufsausbildungsvertrag laut BBiG mindestens und darf sie maximal sein?",
+        "keywords": ["1 monat", "4 monate"],
+        "sample": "Mindestens 1 Monat, maximal 4 Monate.",
+    },
+]
+
+# ==============================================================================
+# 5. KONSOLIDIERTE FRAGENDATENBANK (MULTIPLE CHOICE LF 1 BIS LF 5)
 # ==============================================================================
 ALL_QUESTIONS = [
     # --- LERNFELD 1: Behandlungsassistenz & Medizinische Fachkunde ---
@@ -459,7 +540,7 @@ ALL_QUESTIONS = [
 ]
 
 # ==============================================================================
-# 4. BENUTZEROBERFLÄCHE & STEUERUNG
+# 6. BENUTZEROBERFLÄCHE & MODUS-STEUERUNG
 # ==============================================================================
 
 if mode == "🎲 Dynamische Generatoren (Naegele, GOÄ, BBiG)":
@@ -550,6 +631,58 @@ if mode == "🎲 Dynamische Generatoren (Naegele, GOÄ, BBiG)":
             st.error(
                 f"❌ Falsch. Der gesetzliche Mindestanspruch beträgt {u_task['urlaub']} Werktage."
             )
+
+elif mode == "📑 Original-Fallstudien (Komplexaufgaben)":
+    st.header("📑 Original-Fallstudien & Komplexaufgaben")
+    st.write(
+        "Wie in der praktischen & schriftlichen Prüfung: Bearbeiten Sie zusammenhängende Praxisfälle Schritt für Schritt."
+    )
+
+    case_choice = st.selectbox(
+        "Wählen Sie einen Fall zur Bearbeitung aus:",
+        [c["title"] for c in CASE_STUDIES],
+    )
+    selected_case = next(c for c in CASE_STUDIES if c["title"] == case_choice)
+
+    st.markdown(selected_case["scenario"])
+    st.markdown("---")
+
+    for idx, q_item in enumerate(selected_case["questions"]):
+        st.markdown(f"**{q_item['q']}**")
+        user_input = st.text_area(
+            "Ihre Lösung / Vorgehensweise:", key=f"cs_{case_choice}_{idx}"
+        )
+
+        with st.expander("💡 Musterlösung & Prüfungskriterien anzeigen"):
+            st.markdown(q_item["solution"])
+
+elif mode == "✏️ Freitext- & Fachbegriffe-Trainer":
+    st.header("✏️ Freitext- & Fachbegriffe-Trainer")
+    st.write(
+        "Testen Sie Ihr Wissen ohne vorgegebene Antwortmöglichkeiten. Geben Sie die Antwort frei ein:"
+    )
+
+    for idx, ft in enumerate(FREETEXT_TASKS):
+        st.subheader(f"Aufgabe {idx+1}: {ft['term']}")
+        st.write(ft["prompt"])
+        user_txt = st.text_input("Ihre Antwort:", key=f"ft_in_{idx}")
+
+        if st.button("Antwort auswerten", key=f"ft_btn_{idx}"):
+            if user_txt.strip() != "":
+                # Prüfung auf Schlüsselwörter
+                found_keywords = [
+                    kw for kw in ft["keywords"] if kw in user_txt.lower()
+                ]
+                if len(found_keywords) > 0:
+                    st.success("✅ Sehr gut! Kernbegriffe richtig erkannt.")
+                else:
+                    st.warning(
+                        "⚠️ Überprüfen Sie Ihre Eingabe anhand der Musterlösung."
+                    )
+                st.info(f"**Musterlösung:** {ft['sample']}")
+            else:
+                st.error("Bitte geben Sie zuerst eine Antwort ein.")
+        st.markdown("---")
 
 elif mode == "📝 Musterklausur (Zufallsauswahl)":
     st.header("📝 Generierte Musterklausur")
