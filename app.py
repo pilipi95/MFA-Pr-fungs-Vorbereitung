@@ -1,7 +1,9 @@
 import datetime
+import io
 import json
 import os
 import random
+from PIL import Image, ImageDraw, ImageFont
 import streamlit as st
 
 # ==============================================================================
@@ -22,7 +24,6 @@ st.caption(
 # Robuste absolute Pfadberechnung
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 JSON_FILE = os.path.join(BASE_DIR, "fragen.json")
-IMAGE_DIR = os.path.join(BASE_DIR, "bilder")
 
 
 @st.cache_data
@@ -35,9 +36,6 @@ def load_questions():
             st.error(f"Fehler beim Lesen der 'fragen.json': {e}")
             return get_fallback_questions()
     else:
-        st.warning(
-            f"⚠️ 'fragen.json' wurde unter `{JSON_FILE}` nicht gefunden. Nutze Notfall-Fragenkatalog."
-        )
         return get_fallback_questions()
 
 
@@ -79,15 +77,119 @@ st.sidebar.markdown("---")
 st.sidebar.metric("📋 Geladene Fragen", len(ALL_QUESTIONS))
 
 # ==============================================================================
-# 2. BILD-FALLBEISPIELE (DATENBANK MIT LOKALEN PFADEN & WEB-FALLBACKS)
+# 2. BILD-GENERATOREN (DYNAMISCHE BILDERZEUGUNG MIT PILLOW)
+# ==============================================================================
+
+
+def create_urine_strip_image():
+    """Erzeugt ein Bild eines Urin-Teststreifens mit positiven Feldern."""
+    img = Image.new("RGB", (300, 500), color="#F8FAFC")
+    draw = ImageDraw.Draw(img)
+
+    # Teststreifen-Körper
+    draw.rectangle([110, 20, 190, 480], fill="#E2E8F0", outline="#94A3B8")
+
+    # Testfelder (von oben nach unten)
+    fields = [
+        ("LEU (Leukozyten)", "#8B5CF6"),  # Positiv (Lila)
+        ("NIT (Nitrit)", "#EC4899"),  # Positiv (Pink/Rosa)
+        ("PRO (Protein)", "#FACC15"),  # Negativ (Gelb)
+        ("GLU (Glukose)", "#10B981"),  # Negativ (Grün)
+        ("BLO (Blut)", "#F97316"),  # Leicht positiv (Orange)
+    ]
+
+    y_start = 50
+    for name, color in fields:
+        draw.rectangle(
+            [125, y_start, 175, y_start + 40], fill=color, outline="#475569"
+        )
+        draw.text((195, y_start + 12), name, fill="#1E293B")
+        y_start += 80
+
+    return img
+
+
+def create_ekg_image():
+    """Erzeugt ein EKG-Bild mit ST-Hebung (STEMI)."""
+    img = Image.new("RGB", (600, 300), color="#FFF5F5")
+    draw = ImageDraw.Draw(img)
+
+    # EKG-Gitter zeichnen
+    for x in range(0, 600, 20):
+        draw.line([(x, 0), (x, 300)], fill="#FED7D7", width=1)
+    for y in range(0, 300, 20):
+        draw.line([(0, y), (600, y)], fill="#FED7D7", width=1)
+
+    # EKG-Linie mit ST-Hebung
+    points = [
+        (20, 180),
+        (60, 180),
+        (70, 190),
+        (80, 180),
+        (90, 180),  # P-Welle
+        (100, 210),
+        (110, 80),
+        (120, 230),  # QRS
+        (130, 120),
+        (180, 120),  # ST-Hebung (Elevated)
+        (210, 180),
+        (260, 180),  # T-Welle / Isoelektrisch
+        # Wiederholung
+        (270, 190),
+        (280, 180),
+        (290, 180),
+        (300, 210),
+        (310, 80),
+        (320, 230),
+        (330, 120),
+        (380, 120),
+        (410, 180),
+        (580, 180),
+    ]
+
+    draw.line(points, fill="#DC2626", width=3)
+    draw.text((20, 20), "Ableitung II - Akuter Befund", fill="#991B1B")
+
+    return img
+
+
+def create_au_form_image():
+    """Erzeugt eine schematische Muster-1 Arbeitsunfähigkeitsbescheinigung."""
+    img = Image.new("RGB", (500, 350), color="#F0FDF4")
+    draw = ImageDraw.Draw(img)
+
+    # Formular-Rahmen
+    draw.rectangle([10, 10, 490, 340], fill="#DCFCE7", outline="#16A34A", width=2)
+    draw.text((20, 20), "Muster 1: Arbeitsunfähigkeitsbescheinigung", fill="#15803D")
+
+    # Kästchen Erst-/Folgemeldung
+    draw.rectangle([30, 60, 150, 90], outline="#16A34A")
+    draw.text((35, 68), "[X] Erstbescheinigung", fill="#166534")
+
+    draw.rectangle([170, 60, 290, 90], outline="#16A34A")
+    draw.text((175, 68), "[ ] Folgebescheinigung", fill="#166534")
+
+    # Diagnosenfeld
+    draw.text((30, 120), "AU begründende Diagnose (ICD-10):", fill="#166534")
+    draw.rectangle([30, 145, 470, 185], fill="#FFFFFF", outline="#16A34A")
+    draw.text((40, 158), "J06.9 G (Akute Infektion der oberen Atemwege)", fill="#0F172A")
+
+    draw.text((30, 210), "Arbeitsunfähig seit: 12.10.2026", fill="#166534")
+    draw.text((30, 235), "Voraussichtlich bis: 18.10.2026", fill="#166534")
+    draw.text((30, 260), "Festgestellt am: 12.10.2026", fill="#166534")
+
+    return img
+
+
+# ==============================================================================
+# 3. BILD-FALLBEISPIELE (DATENBANK)
 # ==============================================================================
 IMAGE_CASE_STUDIES = [
     {
         "id": "fall_1",
         "title": "Fallbeispiel 1: Urindiagnostik bei Harnwegsinfekt",
-        "local_file": "urin_test.jpg",
-        "fallback_url": "https://placehold.co/600x400/e2e8f0/1e293b?text=Urin-Teststreifen+Befund",
-        "caption": "Abb. 1: Ausgewerteter Urin-Teststreifen aus der Praxis (Morgenurin).",
+        "generator": create_urine_strip_image,
+        "caption": "Abb. 1: Ausgewerteter Urin-Teststreifen der Patientin (Morgenurin).",
         "scenario": """
         **Patientenanamnese:**
         Frau Weber (38 Jahre) kommt mit brennenden Schmerzen beim Wasserlassen (Dysurie) und ständigem Harndrang (Pollakisurie) in die Praxis. 
@@ -95,18 +197,18 @@ IMAGE_CASE_STUDIES = [
         """,
         "questions": [
             {
-                "q": "1. Welche zwei Testfelder sind bei einem bakteriellen Harnwegsinfekt klassischerweise positiv?",
+                "q": "1. Welche zwei Testfelder sind auf dem Teststreifen oben eindeutig positiv verändert?",
                 "options": [
                     "Leukozyten und Nitrit",
                     "Glukose und Ketone",
                     "Bilirubin und Urobilinogen",
-                    "Protein und pH-Wert 9.0",
+                    "Protein und pH-Wert",
                 ],
                 "correct": "Leukozyten und Nitrit",
-                "exp": "Leukozyten weisen auf eine Entzündungsreaktion hin; Nitrit zeigt die Anwesenheit nitratreduzierender Bakterien (z.B. E. coli) an.",
+                "exp": "Leukozyten zeigen die Entzündung an; Nitrit weist auf nitratreduzierende Bakterien (z.B. E. coli) hin.",
             },
             {
-                "q": "2. Welche Bedingung muss für eine verlässliche Nitritbestimmung im Urin erfüllt sein?",
+                "q": "2. Welche Bedingung muss für eine verlässliche Nitritbestimmung erfüllt sein?",
                 "options": [
                     "Der Urin muss mindestens 4 Stunden in der Blase verweilt haben (Morgenurin).",
                     "Der Urin muss vor der Messung auf 37 °C erwärmt werden.",
@@ -114,22 +216,21 @@ IMAGE_CASE_STUDIES = [
                     "Die Patientin muss zuvor 1 Liter Wasser trinken.",
                 ],
                 "correct": "Der Urin muss mindestens 4 Stunden in der Blase verweilt haben (Morgenurin).",
-                "exp": "Bakterien benötigen Zeit, um im Urin vorhandenes Nitrat zu Nitrit zu reduzieren.",
+                "exp": "Bakterien benötigen Verweilzeit im Urin, um Nitrat zu Nitrit zu reduzieren.",
             },
             {
                 "q": "3. Welche EBM-Ziffer rechnet die Hausarztpraxis für den Urinstreifen-Schnelltest ab?",
                 "options": ["EBM 32033", "EBM 03000", "EBM 03220", "EBM 32001"],
                 "correct": "EBM 32033",
-                "exp": "Die EBM 32033 ist die Gebührenordnungsposition für den Harnstreifentest in der Kassenpraxis.",
+                "exp": "Die EBM 32033 ist die Gebührenordnungsposition für den Harnstreifentest.",
             },
         ],
     },
     {
         "id": "fall_2",
         "title": "Fallbeispiel 2: EKG-Befundung bei Brustschmerz",
-        "local_file": "ekg.png",
-        "fallback_url": "https://placehold.co/600x400/e2e8f0/1e293b?text=12-Kanal-EKG+STEMI",
-        "caption": "Abb. 2: 12-Kanal-EKG bei Ankunft des Patienten.",
+        "generator": create_ekg_image,
+        "caption": "Abb. 2: 12-Kanal-EKG bei Ankunft des Patienten (Ausschnitt Ableitung II).",
         "scenario": """
         **Patientenanamnese:**
         Herr Huber (58 Jahre) klagt über plötzlich aufgetretenen, retrosternalen Vernichtungsschmerz mit Ausstrahlung in den linken Arm und Kaltschweißigkeit. 
@@ -137,8 +238,15 @@ IMAGE_CASE_STUDIES = [
         """,
         "questions": [
             {
-                "q": "1. Welche Pathologie zeigt das EKG im Falle eines akuten Herzinfarkts?",
-                "solution": "ST-Streckenhebung in mindestens zwei korrespondierenden Ableitungen (STEMI).",
+                "q": "1. Welche auffällige Pathologie zeigt das EKG im Kurvenverlauf?",
+                "options": [
+                    "Signifikante ST-Streckenhebung (STEMI)",
+                    "Verlängerte PQ-Zeit (AV-Block I°)",
+                    "Absolute Arrhythmie bei Vorhofflimmern",
+                    "Ablaufende Ventrikuläre Tachykardie",
+                ],
+                "correct": "Signifikante ST-Streckenhebung (STEMI)",
+                "exp": "Die Hebung der ST-Strecke direkt aus dem absteigenden Schenkel der R-Zacke zeigt einen akuten Infarkt.",
             },
             {
                 "q": "2. Welche Erstmaßnahmen leiten Sie als MFA unverzüglich ein?",
@@ -146,10 +254,39 @@ IMAGE_CASE_STUDIES = [
             },
         ],
     },
+    {
+        "id": "fall_3",
+        "title": "Fallbeispiel 3: Formularkunde & AU-Bescheinigung (Muster 1)",
+        "generator": create_au_form_image,
+        "caption": "Abb. 3: Ausgestelltes Muster 1 Formular zur Überprüfung.",
+        "scenario": """
+        **Patientenanamnese:**
+        Ein Patient erscheint am Freitag in der Praxis zur Verlängerung seiner Arbeitsunfähigkeit. Im System liegt bereits eine Erstbescheinigung vor.
+        """,
+        "questions": [
+            {
+                "q": "1. Welche Zusatzbuchstabe im ICD-10-Code bedeutet 'Gesicherte Diagnose'?",
+                "options": ["G (Gesichert)", "V (Verdacht)", "A (Ausschluss)", "G (Grad)"],
+                "correct": "G (Gesichert)",
+                "exp": "In der ambulanten Versorgung steht 'G' für gesichert, 'V' für Verdacht auf und 'A' für Ausschluss.",
+            },
+            {
+                "q": "2. Bis zu wie vielen Tagen darf eine AU-Bescheinigung in Ausnahmefällen rückdatiert werden?",
+                "options": [
+                    "Maximal 3 Tage nach gründlicher ärztlicher Untersuchung",
+                    "Bis zu 7 Tage",
+                    "Rückdatierung ist gesetzlich streng verboten",
+                    "Unbegrenzt nach Ermessen des Arztes",
+                ],
+                "correct": "Maximal 3 Tage nach gründlicher ärztlicher Untersuchung",
+                "exp": "Eine Rückdatierung ist nur ausnahmsweise und nach ärztlicher Rücksprache für max. 3 Tage zulässig.",
+            },
+        ],
+    },
 ]
 
 # ==============================================================================
-# 3. GENERATOREN & DIAGNOSTIK
+# 4. HELPER-FUNKTIONEN FÜR ANDERE MODI
 # ==============================================================================
 
 
@@ -224,7 +361,7 @@ FREETEXT_TASKS = [
 ]
 
 # ==============================================================================
-# 4. MODUS-STEUERUNG
+# 5. MODUS-STEUERUNG
 # ==============================================================================
 
 if mode == "🖼️ Bild-Fallbeispiele (Komplex)":
@@ -244,24 +381,13 @@ if mode == "🖼️ Bild-Fallbeispiele (Komplex)":
     col1, col2 = st.columns([1, 1])
 
     with col1:
-        # Pfad zum lokalen Bild prüfen
-        local_img_path = os.path.join(
-            IMAGE_DIR, selected_img_case["local_file"]
+        # Dynamisch erzeugtes Bild anzeigen
+        generated_img = selected_img_case["generator"]()
+        st.image(
+            generated_img,
+            caption=selected_img_case["caption"],
+            use_container_width=True,
         )
-
-        if os.path.exists(local_img_path):
-            st.image(
-                local_img_path,
-                caption=selected_img_case["caption"],
-                use_container_width=True,
-            )
-        else:
-            # Falls Bild lokal noch nicht vorhanden ist, Platzhalter/URL nutzen
-            st.image(
-                selected_img_case["fallback_url"],
-                caption=f"{selected_img_case['caption']} (Hinweis: Bild '{selected_img_case['local_file']}' im Ordner 'bilder' hochladen)",
-                use_container_width=True,
-            )
 
     with col2:
         st.markdown(selected_img_case["scenario"])
