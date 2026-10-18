@@ -623,4 +623,114 @@ elif mode == "🩸 Laborwert-Diagnostiker":
         if user_eval == correct_eval:
             st.success(f"✅ Richtig! Wert ist {correct_eval}.")
         else:
-            st.error(f"❌
+            st.error(f"❌ Falsch. Richtig: **{correct_eval}**.")
+
+elif mode == "🔄 Zuordnungs-Trainer":
+    st.header("🔄 Zuordnungs-Trainer (Matching)")
+    for m_idx, m_task in enumerate(MATCHING_TASKS):
+        st.subheader(f"{m_idx+1}. {m_task['title']}")
+        user_matches = {}
+        for item_idx, item in enumerate(m_task["items"]):
+            user_matches[item_idx] = st.selectbox(
+                f"Kategorie für **{item['term']}**:",
+                m_task["categories"],
+                key=f"match_{m_idx}_{item_idx}",
+            )
+        if st.button("Zuordnungen prüfen", key=f"btn_match_{m_idx}"):
+            correct_count = sum(
+                1
+                for item_idx, item in enumerate(m_task["items"])
+                if user_matches[item_idx] == item["correct_cat"]
+            )
+            if correct_count == len(m_task["items"]):
+                st.success("🎉 Perfekt! Alle Zuordnungen stimmen.")
+            else:
+                st.warning(
+                    f"{correct_count} von {len(m_task['items'])} richtig."
+                )
+        st.markdown("---")
+
+elif mode == "✏️ Freitext-Trainer":
+    st.header("✏️ Freitext- & Fachbegriffe-Trainer")
+    for idx, ft in enumerate(FREETEXT_TASKS):
+        st.subheader(f"Aufgabe {idx+1}: {ft['term']}")
+        st.write(ft["prompt"])
+        user_txt = st.text_input("Ihre Antwort:", key=f"ft_in_{idx}")
+        if st.button("Antwort auswerten", key=f"ft_btn_{idx}"):
+            if user_txt.strip():
+                found_keywords = [
+                    kw for kw in ft["keywords"] if kw in user_txt.lower()
+                ]
+                if found_keywords:
+                    st.success("✅ Kernbegriffe erkannt!")
+                else:
+                    st.warning("⚠️ Überprüfen Sie Ihre Eingabe.")
+                st.info(f"**Musterlösung:** {ft['sample']}")
+        st.markdown("---")
+
+elif mode == "📝 Musterklausur":
+    st.header("📝 Generierte Musterklausur")
+    if not ALL_QUESTIONS:
+        st.warning("Keine Fragen vorhanden.")
+    else:
+        if "exam_questions" not in st.session_state or st.button(
+            "🔄 Neue Musterklausur erstellen"
+        ):
+            st.session_state.exam_questions = random.sample(
+                ALL_QUESTIONS, min(10, len(ALL_QUESTIONS))
+            )
+
+        exam_q = st.session_state.exam_questions
+        form = st.form(key="exam_form_xxl")
+        user_answers = {}
+
+        for idx, q in enumerate(exam_q):
+            form.markdown(f"**Frage {idx+1} [{q['lf']}]:** {q['q']}")
+            user_answers[idx] = form.radio(
+                f"Antworten für Frage {idx+1}:",
+                q["options"],
+                key=f"ex_{idx}",
+                label_visibility="collapsed",
+            )
+            form.markdown("---")
+
+        submitted = form.form_submit_button("Klausur auswerten")
+        if submitted:
+            score = sum(
+                1
+                for idx, q in enumerate(exam_q)
+                if user_answers[idx] == q["correct"]
+            )
+            total = len(exam_q)
+            percent = round((score / total) * 100)
+
+            st.subheader(f"Ergebnis: {score} von {total} Punkten ({percent}%)")
+            if percent >= 50:
+                st.balloons()
+                st.success("🎉 Bestanden!")
+            else:
+                st.error("❌ Nicht bestanden. Bitte wiederholen.")
+
+elif mode == "📚 Gesamter Fragenkatalog":
+    st.header("📚 Vollständiger Fragenkatalog")
+    lf_filter = st.selectbox(
+        "Lernfeld filtern:",
+        ["Alle Lernfelder", "LF 1", "LF 2", "LF 3", "LF 4", "LF 5"],
+    )
+    filtered = [
+        q
+        for q in ALL_QUESTIONS
+        if lf_filter == "Alle Lernfelder" or q["lf"] == lf_filter
+    ]
+
+    for idx, q in enumerate(filtered):
+        with st.expander(f"Frage {idx+1} [{q['lf']}]: {q['q']}"):
+            user_sel = st.radio(
+                "Antwort auswählen:", q["options"], key=f"cat_{q['lf']}_{idx}"
+            )
+            if st.button("Prüfen", key=f"btn_{q['lf']}_{idx}"):
+                if user_sel == q["correct"]:
+                    st.success("✅ Richtig!")
+                else:
+                    st.error(f"❌ Falsch. Richtig: {q['correct']}")
+                st.info(f"**Erklärung:** {q['exp']}")
