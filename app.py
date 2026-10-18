@@ -8,7 +8,7 @@ import streamlit as st
 # 1. SEITEN-KONFIGURATION & SETUP
 # ==============================================================================
 st.set_page_config(
-    page_title="MFA Prüfungs-Generator BW (XXL-Vollversion)",
+    page_title="MFA Prüfungs-Generator BW (Streamlit Cloud)",
     page_icon="🩺",
     layout="wide",
 )
@@ -18,7 +18,7 @@ st.caption(
     "Interaktiver Simulator für die Lernfelder 1 bis 5 (MFA Baden-Württemberg)."
 )
 
-# Lade Fragen aus der externen JSON-Datei
+# Robustes Laden der fragen.json (speziell für Streamlit Cloud & Linux)
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 JSON_FILE = os.path.join(BASE_DIR, "fragen.json")
 
@@ -26,13 +26,54 @@ JSON_FILE = os.path.join(BASE_DIR, "fragen.json")
 @st.cache_data
 def load_questions():
     if os.path.exists(JSON_FILE):
-        with open(JSON_FILE, "r", encoding="utf-8") as f:
-            return json.load(f)
+        try:
+            with open(JSON_FILE, "r", encoding="utf-8") as f:
+                return json.load(f)
+        except Exception as e:
+            st.error(f"Fehler beim Lesen der 'fragen.json': {e}")
+            return get_fallback_questions()
     else:
-        st.error(
-            f"⚠️ Datei '{JSON_FILE}' nicht gefunden! Bitte erstellen Sie die Datei im selben Ordner."
+        st.warning(
+            f"⚠️ 'fragen.json' wurde unter `{JSON_FILE}` nicht gefunden. Nutze Notfall-Fragenkatalog."
         )
-        return []
+        return get_fallback_questions()
+
+
+def get_fallback_questions():
+    """Notfall-Fragenkatalog, falls fragen.json nicht geladen werden kann."""
+    return [
+        {
+            "lf": "LF 1",
+            "q": "Welches Schmerzzeichen deutet typischerweise auf eine Appendizitis hin?",
+            "options": [
+                "Kontralateraler Loslassschmerz (Blumberg-Zeichen)",
+                "Homans-Zeichen",
+                "Mundwinkelasymmetrie",
+                "Pupillendifferenz",
+            ],
+            "correct": "Kontralateraler Loslassschmerz (Blumberg-Zeichen)",
+            "exp": "Das Blumberg-Zeichen deutet auf eine Peritonealreizung hin.",
+        },
+        {
+            "lf": "LF 2",
+            "q": "Warum muss ein Citrat-Röhrchen für Gerinnungstests exakt befüllt werden?",
+            "options": [
+                "Um das Mischungsverhältnis 1:9 einzuhalten",
+                "Damit keine Hämolyse entsteht",
+                "Damit die Zentrifuge stabil läuft",
+                "Um den Blutzucker zu stabilisieren",
+            ],
+            "correct": "Um das Mischungsverhältnis 1:9 einzuhalten",
+            "exp": "Bei abweichendem Mischungsverhältnis verfälschen sich Quick und PTT.",
+        },
+        {
+            "lf": "LF 3",
+            "q": "Wie lange dauert die Probezeit nach dem BBiG maximal?",
+            "options": ["4 Monate", "1 Monat", "6 Monate", "12 Monate"],
+            "correct": "4 Monate",
+            "exp": "Laut BBiG gilt: mind. 1 Monat, max. 4 Monate.",
+        },
+    ]
 
 
 ALL_QUESTIONS = load_questions()
@@ -55,7 +96,6 @@ mode = st.sidebar.radio(
     ],
 )
 
-# Anzeige der geladenen Fragen in der Sidebar
 st.sidebar.markdown("---")
 st.sidebar.metric("Geladene Multiple-Choice Fragen", len(ALL_QUESTIONS))
 
@@ -334,7 +374,7 @@ elif mode == "📝 Musterklausur (Zufallsauswahl)":
     )
 
     if len(ALL_QUESTIONS) == 0:
-        st.warning("Keine Fragen in fragen.json geladen.")
+        st.warning("Keine Fragen vorhanden.")
     else:
         if "exam_questions" not in st.session_state or st.button(
             "🔄 Neue Musterklausur zusammenstellen"
