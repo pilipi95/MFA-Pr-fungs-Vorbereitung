@@ -15,9 +15,9 @@ st.set_page_config(
     initial_sidebar_state="expanded",
 )
 
-st.title("🩺 MFA Abschlussprüfung BW – Mit Bild-Fallbeispielen")
+st.title("🩺 MFA Abschlussprüfung BW – Komplex- & Bildfälle")
 st.caption(
-    "Interaktives Lernportal für die Lernfelder 1 bis 5 (MFA Baden-Württemberg)"
+    "Prüfungsnaher Simulator für die Lernfelder 1 bis 5 (MFA Baden-Württemberg)"
 )
 
 # Robuste absolute Pfadberechnung
@@ -39,10 +39,8 @@ def load_questions():
     else:
         questions = get_fallback_questions()
 
-    # Mische die Optionen für jede Frage zufällig durch
     for q in questions:
         if "options" in q and isinstance(q["options"], list):
-            # Erstelle eine Kopie der Liste, um das Original nicht starr zu belassen
             shuffled_options = list(q["options"])
             random.shuffle(shuffled_options)
             q["options"] = shuffled_options
@@ -74,7 +72,7 @@ st.sidebar.header("🎯 Navigation")
 mode = st.sidebar.radio(
     "Lernform wählen:",
     [
-        "🖼️ Bild-Fallbeispiele (Komplex)",
+        "🖼️ Bild- & Komplexaufgaben (Prüfungsnah)",
         "🎲 Dynamische Generatoren",
         "🩸 Laborwert-Diagnostiker",
         "🔄 Zuordnungs-Trainer",
@@ -88,205 +86,321 @@ st.sidebar.markdown("---")
 st.sidebar.metric("📋 Geladene Fragen", len(ALL_QUESTIONS))
 
 # ==============================================================================
-# 2. BILD-GENERATOREN (DYNAMISCHE BILDERZEUGUNG MIT PILLOW)
+# 2. BILD-GENERATOREN (DIREKTER RENDER-CODE OHNE EXTERNE LINKS)
 # ==============================================================================
 
 
 def create_urine_strip_image():
-    """Erzeugt ein Bild eines Urin-Teststreifens mit positiven Feldern."""
-    img = Image.new("RGB", (300, 500), color="#F8FAFC")
+    img = Image.new("RGB", (320, 480), color="#F8FAFC")
     draw = ImageDraw.Draw(img)
+    draw.rectangle([110, 20, 190, 460], fill="#E2E8F0", outline="#94A3B8")
 
-    # Teststreifen-Körper
-    draw.rectangle([110, 20, 190, 480], fill="#E2E8F0", outline="#94A3B8")
-
-    # Testfelder (von oben nach unten)
     fields = [
-        ("LEU (Leukozyten)", "#8B5CF6"),  # Positiv (Lila)
-        ("NIT (Nitrit)", "#EC4899"),  # Positiv (Pink/Rosa)
-        ("PRO (Protein)", "#FACC15"),  # Negativ (Gelb)
-        ("GLU (Glukose)", "#10B981"),  # Negativ (Grün)
-        ("BLO (Blut)", "#F97316"),  # Leicht positiv (Orange)
+        ("LEU (Leukozyten)", "#8B5CF6"),
+        ("NIT (Nitrit)", "#EC4899"),
+        ("PRO (Protein)", "#FACC15"),
+        ("GLU (Glukose)", "#10B981"),
+        ("BLO (Erythrozyten)", "#F97316"),
     ]
 
-    y_start = 50
+    y_start = 40
     for name, color in fields:
         draw.rectangle(
             [125, y_start, 175, y_start + 40], fill=color, outline="#475569"
         )
-        draw.text((195, y_start + 12), name, fill="#1E293B")
+        draw.text((190, y_start + 12), name, fill="#1E293B")
         y_start += 80
-
     return img
 
 
 def create_ekg_image():
-    """Erzeugt ein EKG-Bild mit ST-Hebung (STEMI)."""
-    img = Image.new("RGB", (600, 300), color="#FFF5F5")
+    img = Image.new("RGB", (600, 280), color="#FFF5F5")
     draw = ImageDraw.Draw(img)
-
-    # EKG-Gitter zeichnen
     for x in range(0, 600, 20):
-        draw.line([(x, 0), (x, 300)], fill="#FED7D7", width=1)
-    for y in range(0, 300, 20):
+        draw.line([(x, 0), (x, 280)], fill="#FED7D7", width=1)
+    for y in range(0, 280, 20):
         draw.line([(0, y), (600, y)], fill="#FED7D7", width=1)
 
-    # EKG-Linie mit ST-Hebung
     points = [
         (20, 180),
         (60, 180),
         (70, 190),
         (80, 180),
-        (90, 180),  # P-Welle
+        (90, 180),
         (100, 210),
         (110, 80),
-        (120, 230),  # QRS
-        (130, 120),
-        (180, 120),  # ST-Hebung (Elevated)
+        (120, 230),
+        (130, 110),
+        (180, 110),
         (210, 180),
-        (260, 180),  # T-Welle / Isoelektrisch
+        (260, 180),
         (270, 190),
         (280, 180),
         (290, 180),
         (300, 210),
         (310, 80),
         (320, 230),
-        (330, 120),
-        (380, 120),
+        (330, 110),
+        (380, 110),
         (410, 180),
         (580, 180),
     ]
-
     draw.line(points, fill="#DC2626", width=3)
-    draw.text((20, 20), "Ableitung II - Akuter Befund", fill="#991B1B")
-
+    draw.text((20, 15), "12-Kanal-EKG (Ableitung II) - Notfall", fill="#991B1B")
     return img
 
 
 def create_au_form_image():
-    """Erzeugt eine schematische Muster-1 Arbeitsunfähigkeitsbescheinigung."""
-    img = Image.new("RGB", (500, 350), color="#F0FDF4")
+    img = Image.new("RGB", (520, 320), color="#F0FDF4")
     draw = ImageDraw.Draw(img)
-
-    draw.rectangle([10, 10, 490, 340], fill="#DCFCE7", outline="#16A34A", width=2)
+    draw.rectangle([10, 10, 510, 310], fill="#DCFCE7", outline="#16A34A", width=2)
     draw.text((20, 20), "Muster 1: Arbeitsunfähigkeitsbescheinigung", fill="#15803D")
 
-    draw.rectangle([30, 60, 150, 90], outline="#16A34A")
-    draw.text((35, 68), "[X] Erstbescheinigung", fill="#166534")
+    draw.rectangle([30, 55, 160, 85], outline="#16A34A")
+    draw.text((35, 63), "[X] Erstbescheinigung", fill="#166534")
 
-    draw.rectangle([170, 60, 290, 90], outline="#16A34A")
-    draw.text((175, 68), "[ ] Folgebescheinigung", fill="#166534")
+    draw.rectangle([180, 55, 310, 85], outline="#16A34A")
+    draw.text((185, 63), "[ ] Folgebescheinigung", fill="#166534")
 
-    draw.text((30, 120), "AU begründende Diagnose (ICD-10):", fill="#166534")
-    draw.rectangle([30, 145, 470, 185], fill="#FFFFFF", outline="#16A34A")
-    draw.text((40, 158), "J06.9 G (Akute Infektion der oberen Atemwege)", fill="#0F172A")
+    draw.text((30, 105), "Diagnose (ICD-10-Schlüssel):", fill="#166534")
+    draw.rectangle([30, 125, 490, 165], fill="#FFFFFF", outline="#16A34A")
+    draw.text((40, 138), "N39.0 G (Harnwegsinfektion, Lokalisation nicht näher bezeichnet)", fill="#0F172A")
 
-    draw.text((30, 210), "Arbeitsunfähig seit: 12.10.2026", fill="#166534")
-    draw.text((30, 235), "Voraussichtlich bis: 18.10.2026", fill="#166534")
-    draw.text((30, 260), "Festgestellt am: 12.10.2026", fill="#166534")
+    draw.text((30, 185), "Arbeitsunfähig seit: 14.10.2026", fill="#166534")
+    draw.text((30, 210), "Voraussichtlich bis: 20.10.2026", fill="#166534")
+    draw.text((30, 235), "Festgestellt am: 14.10.2026", fill="#166534")
+    return img
 
+
+def create_impfpass_image():
+    img = Image.new("RGB", (520, 320), color="#FEF3C7")
+    draw = ImageDraw.Draw(img)
+    draw.rectangle([10, 10, 510, 310], fill="#FFFBEB", outline="#D97706", width=2)
+    draw.text((20, 20), "INTERNATIONALER IMPFAUSWEIS - Tetanus/Diphtherie/Pertussis", fill="#B45309")
+
+    draw.rectangle([30, 60, 490, 280], outline="#D97706")
+    draw.text((40, 75), "Datum       | Impfstoff / Ch.-B.       | Arzt / Stempel", fill="#B45309")
+    draw.line([(30, 95), (490, 95)], fill="#D97706")
+
+    draw.text((40, 110), "12.05.2005  | Td-PUR (Ch. 40221)      | Dr. Med. Fischer", fill="#1E293B")
+    draw.text((40, 140), "18.06.2005  | Td-PUR (Ch. 41102)      | Dr. Med. Fischer", fill="#1E293B")
+    draw.text((40, 170), "20.07.2006  | Td-PUR (Ch. 45091)      | Dr. Med. Fischer", fill="#1E293B")
+    draw.text((40, 200), "15.09.2013  | TdaP-IMMUN (Ch. 8812)   | Dr. Med. Fischer", fill="#1E293B")
+    draw.text((40, 240), "[Letzte Eintragung vor über 12 Jahren]", fill="#DC2626")
+    return img
+
+
+def create_nadelstich_image():
+    img = Image.new("RGB", (520, 300), color="#EFF6FF")
+    draw = ImageDraw.Draw(img)
+    draw.rectangle([10, 10, 510, 290], fill="#DBEAFE", outline="#2563EB", width=2)
+    draw.text((20, 20), "UNFALLANZEIGE / UNFALLMELDEBOGEN (BGW)", fill="#1E40AF")
+
+    draw.rectangle([30, 55, 490, 260], fill="#FFFFFF", outline="#2563EB")
+    draw.text((40, 70), "Unfallhergang: Nadelstichverletzung nach venöser Blutentnahme", fill="#1E293B")
+    draw.text((40, 100), "Verletzte Person: MFA Auszubildende (17 Jahre)", fill="#1E293B")
+    draw.text((40, 130), "Indexpatient: Bekannter Hepatitis-B-Träger", fill="#DC2626")
+    draw.text((40, 160), "Erstmaßnahme: Wundblutung angeregt, Desinfektion (5 Min.)", fill="#1E293B")
+    draw.text((40, 190), "Zuständige BG: Berufsgenossenschaft für Gesundheitsdienst (BGW)", fill="#1E40AF")
     return img
 
 
 # ==============================================================================
-# 3. BILD-FALLBEISPIELE (DATENBANK)
+# 3. KOMPLEXE PRÜFUNGS-FALLBEISPIELE (PRÜFUNGSNAHE DATENBANK)
 # ==============================================================================
 IMAGE_CASE_STUDIES = [
     {
         "id": "fall_1",
-        "title": "Fallbeispiel 1: Urindiagnostik bei Harnwegsinfekt",
+        "title": "Fallbeispiel 1: Urindiagnostik & Abrechnung bei HWI (LF 2 & LF 4)",
         "generator": create_urine_strip_image,
-        "caption": "Abb. 1: Ausgewerteter Urin-Teststreifen der Patientin (Morgenurin).",
+        "caption": "Abb. 1: Ausgewerteter Urin-Teststreifen aus der Hausarztpraxis.",
         "scenario": """
-        **Patientenanamnese:**
-        Frau Weber (38 Jahre) kommt mit brennenden Schmerzen beim Wasserlassen (Dysurie) und ständigem Harndrang (Pollakisurie) in die Praxis. 
-        Sie führen eine Urinuntersuchung mittels Teststreifen durch.
+        **Patientenanamnese & Befund:**
+        Frau Schneider (42 Jahre, GKV-versichert) stellt sich in der Praxis vor. Sie klagt seit zwei Tagen über brennende Schmerzen beim Wasserlassen (Dysurie) und krampfartige Unterbauchschmerzen. 
+        Die MFA führt einen Urinstreifentest mit frischem Morgenurin durch.
         """,
         "questions": [
             {
-                "q": "1. Welche zwei Testfelder sind auf dem Teststreifen oben eindeutig positiv verändert?",
+                "q": "1. Welche Befundkonstellation auf dem Teststreifen ist pathognomonisch für einen bakteriellen Harnwegsinfekt?",
                 "options": [
-                    "Glukose und Ketone",
-                    "Leukozyten und Nitrit",
-                    "Bilirubin und Urobilinogen",
-                    "Protein und pH-Wert",
+                    "Bilirubin und Urobilinogen positiv",
+                    "Leukozyten und Nitrit positiv",
+                    "Glukose und Ketone positiv",
+                    "Ausschließlich pH-Wert von 8,0",
                 ],
-                "correct": "Leukozyten und Nitrit",
-                "exp": "Leukozyten zeigen die Entzündung an; Nitrit weist auf nitratreduzierende Bakterien (z.B. E. coli) hin.",
+                "correct": "Leukozyten und Nitrit positiv",
+                "exp": "Leukozyten zeigen die Entzündung der Ableitenden Harnwege; Nitrit entsteht durch die Reduktion von pflanzlichem Nitrat durch nitratreduzierende Bakterien (z. B. E. coli).",
             },
             {
-                "q": "2. Welche Bedingung muss für eine verlässliche Nitritbestimmung erfüllt sein?",
+                "q": "2. Aus welchem Grund muss für einen verlässlichen Nitritnachweis zwingend Morgenurin verwendet werden?",
                 "options": [
-                    "Der Urin muss vor der Messung auf 37 °C erwärmt werden.",
-                    "Es muss zwingend Katheterurin verwendet werden.",
-                    "Der Urin muss mindestens 4 Stunden in der Blase verweilt haben (Morgenurin).",
-                    "Die Patientin muss zuvor 1 Liter Wasser trinken.",
+                    "Bakterien benötigen mindestens 4 Stunden Verweilzeit in der Blase zur Nitratumwandlung.",
+                    "Der pH-Wert fällt morgens schlagartig unter 4,0.",
+                    "Glukose stört nachmittags die Enzymreaktion des Teststreifens.",
+                    "Weil der Urin morgens absolut steril sein muss.",
                 ],
-                "correct": "Der Urin muss mindestens 4 Stunden in der Blase verweilt haben (Morgenurin).",
-                "exp": "Bakterien benötigen Verweilzeit im Urin, um Nitrat zu Nitrit zu reduzieren.",
+                "correct": "Bakterien benötigen mindestens 4 Stunden Verweilzeit in der Blase zur Nitratumwandlung.",
+                "exp": "Die bakterielle Nitratreduktase benötigt mehrere Stunden Verweilzeit im Blasenurin, um nachweisbare Mengen Nitrit zu bilden.",
             },
             {
-                "q": "3. Welche EBM-Ziffer rechnet die Hausarztpraxis für den Urinstreifen-Schnelltest ab?",
-                "options": ["EBM 03000", "EBM 32033", "EBM 03220", "EBM 32001"],
+                "q": "3. Welcher EBM-GOP-Ziffer rechnet die Praxis für die Durchführung des Urinstreifen-Schnelltests ab?",
+                "options": ["EBM 03000", "EBM 32033", "EBM 32001", "EBM 03220"],
                 "correct": "EBM 32033",
-                "exp": "Die EBM 32033 ist die Gebührenordnungsposition für den Harnstreifentest.",
+                "exp": "Die EBM 32033 deckt die Auswertung von Harn-Mehrfach-Teststreifen im Praxislabor ab.",
             },
         ],
     },
     {
         "id": "fall_2",
-        "title": "Fallbeispiel 2: EKG-Befundung bei Brustschmerz",
+        "title": "Fallbeispiel 2: Akuter Brustschmerz / Notfallmanagement (LF 1 & LF 2)",
         "generator": create_ekg_image,
-        "caption": "Abb. 2: 12-Kanal-EKG bei Ankunft des Patienten (Ausschnitt Ableitung II).",
+        "caption": "Abb. 2: Erstes 12-Kanal-EKG bei Eintreffen des Patienten.",
         "scenario": """
-        **Patientenanamnese:**
-        Herr Huber (58 Jahre) klagt über plötzlich aufgetretenen, retrosternalen Vernichtungsschmerz mit Ausstrahlung in den linken Arm und Kaltschweißigkeit. 
-        Sie schreiben unverzüglich ein 12-Kanal-EKG.
+        **Patientenanamnese & Notfall:**
+        Herr Kowalski (56 Jahre) betritt bleich und kaltschweißig die Praxis. Er greift sich an die Brust und klagt über Vernichtungsschmerz mit Ausstrahlung in den Unterkiefer und den linken Arm. 
+        Die MFA schreibt sofort ein 12-Kanal-EKG.
         """,
         "questions": [
             {
-                "q": "1. Welche auffällige Pathologie zeigt das EKG im Kurvenverlauf?",
+                "q": "1. Welche Befundveränderung zeigt das EKG im Kurvenverlauf?",
                 "options": [
-                    "Verlängerte PQ-Zeit (AV-Block I°)",
+                    "Verlängerung der PQ-Zeit über 0,22 Sekunden",
                     "Signifikante ST-Streckenhebung (STEMI)",
-                    "Absolute Arrhythmie bei Vorhofflimmern",
-                    "Ablaufende Ventrikuläre Tachykardie",
+                    "Vollständiges Fehlen von P-Zacken bei absoluter Arrhythmie",
+                    "Schenkelblock mit sägezahnartigen Flatterwellen",
                 ],
                 "correct": "Signifikante ST-Streckenhebung (STEMI)",
-                "exp": "Die Hebung der ST-Strecke direkt aus dem absteigenden Schenkel der R-Zacke zeigt einen akuten Infarkt.",
+                "exp": "Die Hebung der ST-Strecke aus dem absteigenden Schenkel der R-Zacke zeigt einen transmuralen Herzinfarkt.",
             },
             {
-                "q": "2. Welche Erstmaßnahmen leiten Sie als MFA unverzüglich ein?",
-                "solution": "1. Notarzt rufen (112).\n2. Oberkörper hochlagern (Herzentlastung).\n3. Vitalwerte (BD, Puls, SpO2) überwachen.\n4. Sauerstoffgabe vorbereiten & Notfallkoffer bereitstellen.",
+                "q": "2. Welche Maßnahme steht bei dieser Erstdiagnose an allererster Stelle?",
+                "options": [
+                    "Unverzügliche Alarmierung des Notarztes (112) und Oberkörperhochlagerung",
+                    "Durchführung eines Belastungs-EKGs zur Leistungsmessung",
+                    "Beine hochlagern (Schocklage) und Patient alleine ruhen lassen",
+                    "Blutentnahme für das Labor abwarten, bevor Maßnahmen ergriffen werden",
+                ],
+                "correct": "Unverzügliche Alarmierung des Notarztes (112) und Oberkörperhochlagerung",
+                "exp": "Bei Verdacht auf STEMI hat die Notrufabsetzung und Herzentlastung durch Oberkörperhochlagerung oberste Priorität.",
+            },
+            {
+                "q": "3. Welcher Laborwert gilt im Kliniklabor als hochspezifischer Goldstandard zum Nachweis von Herzmuskelschäden?",
+                "options": ["Troponin T / I", "HbA1c", "Gamma-GT", "Quick-Wert / INR"],
+                "correct": "Troponin T / I",
+                "exp": "Kardiologisches Troponin T und I steigt bei Herzmuskelnekrosen hochspezifisch an.",
             },
         ],
     },
     {
         "id": "fall_3",
-        "title": "Fallbeispiel 3: Formularkunde & AU-Bescheinigung (Muster 1)",
+        "title": "Fallbeispiel 3: Arbeitsunfähigkeit & Formularkunde Muster 1 (LF 3 & LF 4)",
         "generator": create_au_form_image,
-        "caption": "Abb. 3: Ausgestelltes Muster 1 Formular zur Überprüfung.",
+        "caption": "Abb. 3: Vorgelegtes Formular Muster 1.",
         "scenario": """
         **Patientenanamnese:**
-        Ein Patient erscheint am Freitag in der Praxis zur Verlängerung seiner Arbeitsunfähigkeit. Im System liegt bereits eine Erstbescheinigung vor.
+        Ein GKV-Patient erscheint in der Sprechstunde. Der Arzt stellt eine akute Harnwegsinfektion fest und schreibt den Patienten arbeitsunfähig.
         """,
         "questions": [
             {
-                "q": "1. Welche Zusatzbuchstabe im ICD-10-Code bedeutet 'Gesicherte Diagnose'?",
-                "options": ["V (Verdacht)", "A (Ausschluss)", "G (Gesichert)", "G (Grad)"],
-                "correct": "G (Gesichert)",
-                "exp": "In der ambulanten Versorgung steht 'G' für gesichert, 'V' für Verdacht auf und 'A' für Ausschluss.",
+                "q": "1. Was bedeutet die Zusatzkennzeichnung 'G' hinter dem ICD-10-Diagnosecode N39.0?",
+                "options": [
+                    "Ausschluss der Diagnose",
+                    "Gesicherte Diagnose",
+                    "Verdacht auf Diagnose",
+                    "Zustand nach Ausheilung",
+                ],
+                "correct": "Gesicherte Diagnose",
+                "exp": "In der ambulanten Abrechnung steht 'G' für gesichert, 'V' für Verdacht auf, 'A' für Ausschluss und 'Z' für symptomfreien Zustand nach.",
             },
             {
-                "q": "2. Bis zu wie vielen Tagen darf eine AU-Bescheinigung in Ausnahmefällen rückdatiert werden?",
+                "q": "2. Unter welcher Bedingung darf eine Rückdatierung des AU-Beginns ausnahmsweise erfolgen?",
                 "options": [
-                    "Bis zu 7 Tage",
-                    "Maximal 3 Tage nach gründlicher ärztlicher Untersuchung",
-                    "Rückdatierung ist gesetzlich streng verboten",
-                    "Unbegrenzt nach Ermessen des Arztes",
+                    "Unbegrenzt, wenn der Patient krank war",
+                    "Maximal 3 Tage nach eingehender ärztlicher Begründung",
+                    "Rückdatierungen sind gesetzlich absolut verboten",
+                    "Immer bis zu 14 Tage rückwirkend",
                 ],
-                "correct": "Maximal 3 Tage nach gründlicher ärztlicher Untersuchung",
-                "exp": "Eine Rückdatierung ist nur ausnahmsweise und nach ärztlicher Rücksprache für max. 3 Tage zulässig.",
+                "correct": "Maximal 3 Tage nach eingehender ärztlicher Begründung",
+                "exp": "Nach den Arbeitsunfähigkeits-Richtlinien ist eine Rückdatierung nur ausnahmsweise und nur bis zu 3 Tage zulässig.",
+            },
+        ],
+    },
+    {
+        "id": "fall_4",
+        "title": "Fallbeispiel 4: Impfmanagement & Tetanus-Schutz (LF 1 & LF 3)",
+        "generator": create_impfpass_image,
+        "caption": "Abb. 4: Einträge im Impfausweis eines 35-jährigen Patienten.",
+        "scenario": """
+        **Patientenanamnese:**
+        Herr Bauer (35 Jahre) hat sich bei Gartenarbeiten an einem verrosteten Draht eine tiefere Schnittwunde am Unterarm zugezogen. Er legt seinen Impfpass vor.
+        """,
+        "questions": [
+            {
+                "q": "1. Wie ist der aktuelle Tetanus-Impfschutz des Patienten laut Ausweis zu beurteilen?",
+                "options": [
+                    "Ablaufender Schutz: Die letzte Auffrischung liegt über 10 Jahre zurück.",
+                    "Perfekt geschützt: Tetanus hält lebenslang nach Grundimmunisierung.",
+                    "Kein Schutz: Es liegt überhaupt keine Grundimmunisierung vor.",
+                    "Sofortige Quarantäne notwendig.",
+                ],
+                "correct": "Ablaufender Schutz: Die letzte Auffrischung liegt über 10 Jahre zurück.",
+                "exp": "Tetanus-Auffrischimpfungen sind regulär alle 10 Jahre erforderlich. Bei verschmutzten Wunden gilt die Auffrischung bereits ab 5 Jahren.",
+            },
+            {
+                "q": "2. Welche Impfmaßnahme ist bei dieser tiefen, verschmutzten Wunde indiziert?",
+                "options": [
+                    "Sofortige Auffrischimpfung mit einem Tetanus-Kombinationsimpfstoff (Td / TdaP)",
+                    "Keine Impfung notwendig, Wundsalbe reicht aus",
+                    "Nur Gabe von Schmerzmitteln",
+                    "Ausschließliche Gabe von Penicillin",
+                ],
+                "correct": "Sofortige Auffrischimpfung mit einem Tetanus-Kombinationsimpfstoff (Td / TdaP)",
+                "exp": "Bei Verletzungen und einer Impfung, die länger als 5 Jahre zurückliegt, muss unverzüglich aufgefrischt werden.",
+            },
+        ],
+    },
+    {
+        "id": "fall_5",
+        "title": "Fallbeispiel 5: Nadelstichverletzung & BG-Unfallmeldung (LF 3 & LF 5)",
+        "generator": create_nadelstich_image,
+        "caption": "Abb. 5: Dokumentation der Unfallanzeige im Praxislabor.",
+        "scenario": """
+        **Unfallereignis:**
+        Eine 17-jährige MFA-Auszubildende sticht sich nach einer Blutentnahme versehentlich an einer gebrauchten Kanüle in den Finger. Der Patient ist als Hepatitis-B-Träger bekannt.
+        """,
+        "questions": [
+            {
+                "q": "1. Welche Sofortmaßnahme muss direkt an der Einstichstelle durchgeführt werden?",
+                "options": [
+                    "Blutung anregen (nicht quetschen) und gründlich desinfizieren/spülen",
+                    "Wunde sofort fest abbinden und abwarten",
+                    "Wunde mit Eisspray kühlen und weiterarbeiten",
+                    "Einstichstelle tief aufschneiden",
+                ],
+                "correct": "Blutung anregen (nicht quetschen) und gründlich desinfizieren/spülen",
+                "exp": "Der Blutfluss schwemmt Erreger aus. Quetschen ist verboten, da Gewebe geschädigt wird und Erreger tiefer ins Gewebe gedrückt werden.",
+            },
+            {
+                "q": "2. Welcher Arzt muss nach einer Nadelstichverletzung im Betrieb zwingend aufgesucht werden?",
+                "options": [
+                    "Durchgangsarzt (D-Arzt)",
+                    "Amtsarzt des Gesundheitsamts",
+                    "Zahnarzt",
+                    "Radiologe",
+                ],
+                "correct": "Durchgangsarzt (D-Arzt)",
+                "exp": "Arbeits- und Wegeunfälle müssen zur Absicherung über die Berufsgenossenschaft durch den D-Arzt dokumentiert werden.",
+            },
+            {
+                "q": "3. Welche Körperschaft ist der Träger der gesetzlichen Unfallversicherung für Arztpraxen?",
+                "options": [
+                    "BGW (Berufsgenossenschaft für Gesundheitsdienst und Wohlfahrtspflege)",
+                    "AOK Baden-Württemberg",
+                    "Deutsche Rentenversicherung Bund",
+                    "Kassenärztliche Vereinigung (KV)",
+                ],
+                "correct": "BGW (Berufsgenossenschaft für Gesundheitsdienst und Wohlfahrtspflege)",
+                "exp": "Die BGW ist die zuständige Berufsgenossenschaft für medizinische und pflegerische Berufe.",
             },
         ],
     },
@@ -342,7 +456,17 @@ def generate_lab_value():
             "high_thresh": 6.0,
             "diag_high": "Verdacht auf / Schlecht eingestellten Diabetes mellitus",
             "diag_low": "Physiologisch / Selten Hypoglykämie-Neigung",
-        }
+        },
+        {
+            "parameter": "Kalium",
+            "unit": "mmol/l",
+            "norm": "3.5 - 5.0 mmol/l",
+            "val": round(random.uniform(2.8, 6.8), 1),
+            "low_thresh": 3.5,
+            "high_thresh": 5.0,
+            "diag_high": "Hyperkalämie (Gefahr von Herzrhythmusstörungen)",
+            "diag_low": "Hypokalämie (z.B. durch Diuretika, Erbrechen)",
+        },
     ]
     return random.choice(labs)
 
@@ -353,6 +477,8 @@ MATCHING_TASKS = [
         "items": [
             {"term": "Versichertenpauschale 03000", "correct_cat": "EBM (GKV)"},
             {"term": "Regelhöchstsatz 2,3-fach", "correct_cat": "GOÄ (PKV)"},
+            {"term": "Schwellenwert 1,8-fach für Sachleistungen", "correct_cat": "GOÄ (PKV)"},
+            {"term": "Chronikerpauschale 03220", "correct_cat": "EBM (GKV)"},
         ],
         "categories": ["EBM (GKV)", "GOÄ (PKV)"],
     }
@@ -360,10 +486,10 @@ MATCHING_TASKS = [
 
 FREETEXT_TASKS = [
     {
-        "term": "Naegele-Regel (einfach)",
-        "prompt": "Formel für die einfache Naegele-Regel:",
-        "keywords": ["7 tage", "3 monate", "1 jahr"],
-        "sample": "1. Tag der letzten Regel + 7 Tage - 3 Monate + 1 Jahr",
+        "term": "Naegele-Regel (erweitert)",
+        "prompt": "Formel für die erweiterte Naegele-Regel bei abweichender Zykluslänge:",
+        "keywords": ["7 tage", "3 monate", "1 jahr", "zyklus"],
+        "sample": "1. Tag der letzten Regel + 7 Tage - 3 Monate + 1 Jahr +/- Abweichung von 28 Tagen",
     }
 ]
 
@@ -371,14 +497,14 @@ FREETEXT_TASKS = [
 # 5. MODUS-STEUERUNG
 # ==============================================================================
 
-if mode == "🖼️ Bild-Fallbeispiele (Komplex)":
-    st.header("🖼️ Bild-Fallbeispiele aus der Praxis")
+if mode == "🖼️ Bild- & Komplexaufgaben (Prüfungsnah)":
+    st.header("🖼️ Komplexe Fallbeispiele aus der Praxis")
     st.write(
-        "Analysieren Sie das Befundbild und beantworten Sie die dazugehörigen Prüfungsfragen:"
+        "Analysieren Sie die Situation und das Befundbild, um die Prüfungsfragen zu lösen:"
     )
 
     case_title = st.selectbox(
-        "Wählen Sie ein Bild-Fallbeispiel aus:",
+        "Wählen Sie einen Fall aus:",
         [c["title"] for c in IMAGE_CASE_STUDIES],
     )
     selected_img_case = next(
@@ -497,114 +623,4 @@ elif mode == "🩸 Laborwert-Diagnostiker":
         if user_eval == correct_eval:
             st.success(f"✅ Richtig! Wert ist {correct_eval}.")
         else:
-            st.error(f"❌ Falsch. Richtig: **{correct_eval}**.")
-
-elif mode == "🔄 Zuordnungs-Trainer":
-    st.header("🔄 Zuordnungs-Trainer (Matching)")
-    for m_idx, m_task in enumerate(MATCHING_TASKS):
-        st.subheader(f"{m_idx+1}. {m_task['title']}")
-        user_matches = {}
-        for item_idx, item in enumerate(m_task["items"]):
-            user_matches[item_idx] = st.selectbox(
-                f"Kategorie für **{item['term']}**:",
-                m_task["categories"],
-                key=f"match_{m_idx}_{item_idx}",
-            )
-        if st.button("Zuordnungen prüfen", key=f"btn_match_{m_idx}"):
-            correct_count = sum(
-                1
-                for item_idx, item in enumerate(m_task["items"])
-                if user_matches[item_idx] == item["correct_cat"]
-            )
-            if correct_count == len(m_task["items"]):
-                st.success("🎉 Perfekt! Alle Zuordnungen stimmen.")
-            else:
-                st.warning(
-                    f"{correct_count} von {len(m_task['items'])} richtig."
-                )
-        st.markdown("---")
-
-elif mode == "✏️ Freitext-Trainer":
-    st.header("✏️ Freitext- & Fachbegriffe-Trainer")
-    for idx, ft in enumerate(FREETEXT_TASKS):
-        st.subheader(f"Aufgabe {idx+1}: {ft['term']}")
-        st.write(ft["prompt"])
-        user_txt = st.text_input("Ihre Antwort:", key=f"ft_in_{idx}")
-        if st.button("Antwort auswerten", key=f"ft_btn_{idx}"):
-            if user_txt.strip():
-                found_keywords = [
-                    kw for kw in ft["keywords"] if kw in user_txt.lower()
-                ]
-                if found_keywords:
-                    st.success("✅ Kernbegriffe erkannt!")
-                else:
-                    st.warning("⚠️ Überprüfen Sie Ihre Eingabe.")
-                st.info(f"**Musterlösung:** {ft['sample']}")
-        st.markdown("---")
-
-elif mode == "📝 Musterklausur":
-    st.header("📝 Generierte Musterklausur")
-    if not ALL_QUESTIONS:
-        st.warning("Keine Fragen vorhanden.")
-    else:
-        if "exam_questions" not in st.session_state or st.button(
-            "🔄 Neue Musterklausur erstellen"
-        ):
-            st.session_state.exam_questions = random.sample(
-                ALL_QUESTIONS, min(10, len(ALL_QUESTIONS))
-            )
-
-        exam_q = st.session_state.exam_questions
-        form = st.form(key="exam_form_xxl")
-        user_answers = {}
-
-        for idx, q in enumerate(exam_q):
-            form.markdown(f"**Frage {idx+1} [{q['lf']}]:** {q['q']}")
-            user_answers[idx] = form.radio(
-                f"Antworten für Frage {idx+1}:",
-                q["options"],
-                key=f"ex_{idx}",
-                label_visibility="collapsed",
-            )
-            form.markdown("---")
-
-        submitted = form.form_submit_button("Klausur auswerten")
-        if submitted:
-            score = sum(
-                1
-                for idx, q in enumerate(exam_q)
-                if user_answers[idx] == q["correct"]
-            )
-            total = len(exam_q)
-            percent = round((score / total) * 100)
-
-            st.subheader(f"Ergebnis: {score} von {total} Punkten ({percent}%)")
-            if percent >= 50:
-                st.balloons()
-                st.success("🎉 Bestanden!")
-            else:
-                st.error("❌ Nicht bestanden. Bitte wiederholen.")
-
-elif mode == "📚 Gesamter Fragenkatalog":
-    st.header("📚 Vollständiger Fragenkatalog")
-    lf_filter = st.selectbox(
-        "Lernfeld filtern:",
-        ["Alle Lernfelder", "LF 1", "LF 2", "LF 3", "LF 4", "LF 5"],
-    )
-    filtered = [
-        q
-        for q in ALL_QUESTIONS
-        if lf_filter == "Alle Lernfelder" or q["lf"] == lf_filter
-    ]
-
-    for idx, q in enumerate(filtered):
-        with st.expander(f"Frage {idx+1} [{q['lf']}]: {q['q']}"):
-            user_sel = st.radio(
-                "Antwort auswählen:", q["options"], key=f"cat_{q['lf']}_{idx}"
-            )
-            if st.button("Prüfen", key=f"btn_{q['lf']}_{idx}"):
-                if user_sel == q["correct"]:
-                    st.success("✅ Richtig!")
-                else:
-                    st.error(f"❌ Falsch. Richtig: {q['correct']}")
-                st.info(f"**Erklärung:** {q['exp']}")
+            st.error(f"❌
