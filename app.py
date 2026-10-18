@@ -19,9 +19,10 @@ st.caption(
     "Interaktives Lernportal für die Lernfelder 1 bis 5 (MFA Baden-Württemberg)"
 )
 
-# Robuste absolute Pfadberechnung für fragen.json
+# Robuste absolute Pfadberechnung
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 JSON_FILE = os.path.join(BASE_DIR, "fragen.json")
+IMAGE_DIR = os.path.join(BASE_DIR, "bilder")
 
 
 @st.cache_data
@@ -41,7 +42,6 @@ def load_questions():
 
 
 def get_fallback_questions():
-    """Notfall-Fragenkatalog, falls fragen.json nicht geladen werden kann."""
     return [
         {
             "lf": "LF 1",
@@ -54,26 +54,7 @@ def get_fallback_questions():
             ],
             "correct": "Kontralateraler Loslassschmerz (Blumberg-Zeichen)",
             "exp": "Das Blumberg-Zeichen deutet auf eine Peritonealreizung hin.",
-        },
-        {
-            "lf": "LF 2",
-            "q": "Warum muss ein Citrat-Röhrchen für Gerinnungstests exakt befüllt werden?",
-            "options": [
-                "Um das Mischungsverhältnis 1:9 einzuhalten",
-                "Damit keine Hämolyse entsteht",
-                "Damit die Zentrifuge stabil läuft",
-                "Um den Blutzucker zu stabilisieren",
-            ],
-            "correct": "Um das Mischungsverhältnis 1:9 einzuhalten",
-            "exp": "Bei abweichendem Mischungsverhältnis verfälschen sich Quick und PTT.",
-        },
-        {
-            "lf": "LF 3",
-            "q": "Wie lange dauert die Probezeit nach dem BBiG maximal?",
-            "options": ["4 Monate", "1 Monat", "6 Monate", "12 Monate"],
-            "correct": "4 Monate",
-            "exp": "Laut BBiG gilt: mind. 1 Monat, max. 4 Monate.",
-        },
+        }
     ]
 
 
@@ -98,13 +79,14 @@ st.sidebar.markdown("---")
 st.sidebar.metric("📋 Geladene Fragen", len(ALL_QUESTIONS))
 
 # ==============================================================================
-# 2. BILD-FALLBEISPIELE (DATENBANK)
+# 2. BILD-FALLBEISPIELE (DATENBANK MIT LOKALEN PFADEN & WEB-FALLBACKS)
 # ==============================================================================
 IMAGE_CASE_STUDIES = [
     {
         "id": "fall_1",
         "title": "Fallbeispiel 1: Urindiagnostik bei Harnwegsinfekt",
-        "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d0/Urine_test_strip.jpg/640px-Urine_test_strip.jpg",
+        "local_file": "urin_test.jpg",
+        "fallback_url": "https://placehold.co/600x400/e2e8f0/1e293b?text=Urin-Teststreifen+Befund",
         "caption": "Abb. 1: Ausgewerteter Urin-Teststreifen aus der Praxis (Morgenurin).",
         "scenario": """
         **Patientenanamnese:**
@@ -145,7 +127,8 @@ IMAGE_CASE_STUDIES = [
     {
         "id": "fall_2",
         "title": "Fallbeispiel 2: EKG-Befundung bei Brustschmerz",
-        "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Anterior_AMI.svg/640px-Anterior_AMI.svg.png",
+        "local_file": "ekg.png",
+        "fallback_url": "https://placehold.co/600x400/e2e8f0/1e293b?text=12-Kanal-EKG+STEMI",
         "caption": "Abb. 2: 12-Kanal-EKG bei Ankunft des Patienten.",
         "scenario": """
         **Patientenanamnese:**
@@ -163,36 +146,10 @@ IMAGE_CASE_STUDIES = [
             },
         ],
     },
-    {
-        "title": "Fallbeispiel 3: Wundversorgung & Tetanusschutz",
-        "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1d/Laceration_of_the_finger_with_stictches.jpg/640px-Laceration_of_the_finger_with_stictches.jpg",
-        "caption": "Abb. 3: Versorgte Schnittwunde am Finger.",
-        "scenario": """
-        **Patientenanamnese:**
-        Ein 24-jähriger Patient hat sich bei Gartenarbeiten an einer verschmutzten Gartenhalle tief am Zeigefinger geschnitten. Die Wunde ist glattrandig und 2 Stunden alt.
-        """,
-        "questions": [
-            {
-                "q": "1. Welches Zeitfenster gilt maximal für eine primäre Wundnaht?",
-                "options": [
-                    "Innerhalb von 6 Stunden",
-                    "Innerhalb von 12 Stunden",
-                    "Innerhalb von 24 Stunden",
-                    "Immer möglich unabhängig von der Zeit",
-                ],
-                "correct": "Innerhalb von 6 Stunden",
-                "exp": "Nach 6 Stunden gilt eine Wunde als primär besiedelt/infiziert und darf nicht mehr primär verschlossen werden.",
-            },
-            {
-                "q": "2. Welche Impfung muss bei verunreinigten Wunden zwingend im Impfpass überprüft werden?",
-                "solution": "Tetanus-Impfschutz (Wundstarrkrampf). Bei unvollständigem Schutz oder > 10 Jahren Auffrischung ggf. Simultanimpfung (Aktiv + Passiv).",
-            },
-        ],
-    },
 ]
 
 # ==============================================================================
-# 3. HELPER-FUNKTIONEN FÜR ANDERE MODI
+# 3. GENERATOREN & DIAGNOSTIK
 # ==============================================================================
 
 
@@ -241,17 +198,7 @@ def generate_lab_value():
             "high_thresh": 6.0,
             "diag_high": "Verdacht auf / Schlecht eingestellten Diabetes mellitus",
             "diag_low": "Physiologisch / Selten Hypoglykämie-Neigung",
-        },
-        {
-            "parameter": "Kalium",
-            "unit": "mmol/l",
-            "norm": "3.5 - 5.0 mmol/l",
-            "val": round(random.uniform(2.8, 6.8), 1),
-            "low_thresh": 3.5,
-            "high_thresh": 5.0,
-            "diag_high": "Hyperkalämie (Gefahr von Herzrhythmusstörungen)",
-            "diag_low": "Hypokalämie (z.B. durch Diuretika, Erbrechen)",
-        },
+        }
     ]
     return random.choice(labs)
 
@@ -297,11 +244,24 @@ if mode == "🖼️ Bild-Fallbeispiele (Komplex)":
     col1, col2 = st.columns([1, 1])
 
     with col1:
-        st.image(
-            selected_img_case["image_url"],
-            caption=selected_img_case["caption"],
-            use_container_width=True,
+        # Pfad zum lokalen Bild prüfen
+        local_img_path = os.path.join(
+            IMAGE_DIR, selected_img_case["local_file"]
         )
+
+        if os.path.exists(local_img_path):
+            st.image(
+                local_img_path,
+                caption=selected_img_case["caption"],
+                use_container_width=True,
+            )
+        else:
+            # Falls Bild lokal noch nicht vorhanden ist, Platzhalter/URL nutzen
+            st.image(
+                selected_img_case["fallback_url"],
+                caption=f"{selected_img_case['caption']} (Hinweis: Bild '{selected_img_case['local_file']}' im Ordner 'bilder' hochladen)",
+                use_container_width=True,
+            )
 
     with col2:
         st.markdown(selected_img_case["scenario"])
@@ -310,7 +270,6 @@ if mode == "🖼️ Bild-Fallbeispiele (Komplex)":
         for q_idx, q_item in enumerate(selected_img_case["questions"]):
             st.markdown(f"**{q_item['q']}**")
 
-            # Unterscheidung Multiple Choice vs. Freitext
             if "options" in q_item:
                 user_ans = st.radio(
                     "Antwort wählen:",
