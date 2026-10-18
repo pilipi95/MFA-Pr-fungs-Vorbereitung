@@ -8,17 +8,89 @@ import streamlit as st
 # 1. SEITEN-KONFIGURATION & SETUP
 # ==============================================================================
 st.set_page_config(
-    page_title="MFA Prüfungs-Generator BW (XXL Interaktiv)",
+    page_title="MFA Prüfungs-Trainer BW",
     page_icon="🩺",
     layout="wide",
+    initial_sidebar_state="expanded",
 )
 
-st.title("🩺 MFA Abschlussprüfung BW – XXL Prüfungs-Generator")
+# Custom CSS für modernes, angenehmes Design
+st.markdown(
+    """
+    <style>
+    /* Haupt-Hintergrund und Schriftart */
+    .main {
+        background-color: #F7FAFC;
+    }
+    
+    /* Header-Styling */
+    h1 {
+        color: #2C5282;
+        font-weight: 700;
+        font-size: 2.2rem !important;
+        margin-bottom: 0.2rem !important;
+    }
+    
+    /* Subtitle / Captions */
+    .stCaption {
+        color: #4A5568;
+        font-size: 1rem;
+        margin-bottom: 1.5rem !important;
+    }
+
+    /* Info-Boxen & Cards */
+    .css-1r6slb0, .stAlert {
+        border-radius: 10px !important;
+    }
+    
+    /* Custom Card Design */
+    .custom-card {
+        background-color: #FFFFFF;
+        padding: 1.5rem;
+        border-radius: 12px;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+        border: 1px solid #E2E8F0;
+        margin-bottom: 1.2rem;
+    }
+
+    /* Buttons Veredelung */
+    .stButton>button {
+        border-radius: 8px !important;
+        background-color: #3182CE !important;
+        color: white !important;
+        border: none !important;
+        font-weight: 600 !important;
+        padding: 0.5rem 1rem !important;
+        transition: all 0.2s ease-in-out;
+    }
+    
+    .stButton>button:hover {
+        background-color: #2B6CB0 !important;
+        box-shadow: 0 4px 12px rgba(49, 130, 206, 0.3);
+    }
+
+    /* Radio Buttons / Formulare entzerren */
+    .stRadio > label {
+        font-weight: 600;
+        color: #2D3748;
+    }
+    
+    /* Sidebar Optik */
+    section[data-testid="stSidebar"] {
+        background-color: #EDF2F7;
+    }
+    </style>
+""",
+    unsafe_allow_html=True,
+)
+
+# Header-Bereich
+st.title("🩺 MFA Abschlussprüfung BW")
 st.caption(
-    "Interaktiver Simulator mit allen Übungsformen für die Lernfelder 1 bis 5 (MFA Baden-Württemberg)."
+    "Interaktives Lernportal für die Lernfelder 1 bis 5 (MFA Baden-Württemberg)"
 )
 
-# Robustes Laden der fragen.json (speziell für Streamlit Cloud & Linux)
+# Robustes Laden der fragen.json
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 JSON_FILE = os.path.join(BASE_DIR, "fragen.json")
 
@@ -78,26 +150,23 @@ def get_fallback_questions():
 
 ALL_QUESTIONS = load_questions()
 
-# Session State Initialisierung
-if "score" not in st.session_state:
-    st.session_state.score = 0
-
-# Sidebar Navigation (Erweitert um Zuordnungen & Labor-Diagnostik)
+# Sidebar Navigation
+st.sidebar.header("🎯 Navigation")
 mode = st.sidebar.radio(
-    "Lernform / Modus wählen:",
+    "Lernform wählen:",
     [
-        "🎲 Dynamische Generatoren (Naegele, GOÄ, BBiG)",
-        "🩸 Interaktiver Laborwert-Diagnostiker",
-        "🔄 Zuordnungs-Trainer (Matching)",
-        "📑 Original-Fallstudien (Komplexaufgaben)",
-        "✏️ Freitext- & Fachbegriffe-Trainer",
-        "📝 Musterklausur (Zufallsauswahl)",
-        "📚 Gesamter Fragenkatalog (LF 1 – 5)",
+        "🎲 Dynamische Generatoren",
+        "🩸 Laborwert-Diagnostiker",
+        "🔄 Zuordnungs-Trainer",
+        "📑 Original-Fallstudien",
+        "✏️ Freitext-Trainer",
+        "📝 Musterklausur",
+        "📚 Gesamter Fragenkatalog",
     ],
 )
 
 st.sidebar.markdown("---")
-st.sidebar.metric("Geladene Multiple-Choice Fragen", len(ALL_QUESTIONS))
+st.sidebar.metric("📋 Geladene Fragen", len(ALL_QUESTIONS))
 
 # ==============================================================================
 # 2. DYNAMISCHE AUFGABEN-GENERATOREN
@@ -153,7 +222,6 @@ def generate_urlaub_task():
 
 
 def generate_lab_value():
-    """Generiert zufällige Patientendaten und Laborwerte für die Diagnostik."""
     labs = [
         {
             "parameter": "HbA1c",
@@ -200,28 +268,19 @@ def generate_lab_value():
 
 
 # ==============================================================================
-# 3. ZUORDNUNGS-DATENBANK (MATCHING)
+# 3. ZUORDNUNGS-DATENBANK & FALLSTUDIEN
 # ==============================================================================
 MATCHING_TASKS = [
     {
         "title": "Zuordnung: EBM vs. GOÄ Regelungen",
         "items": [
-            {
-                "term": "Versichertenpauschale 03000",
-                "correct_cat": "EBM (GKV)",
-            },
-            {
-                "term": "Regelhöchstsatz 2,3-fach",
-                "correct_cat": "GOÄ (PKV)",
-            },
+            {"term": "Versichertenpauschale 03000", "correct_cat": "EBM (GKV)"},
+            {"term": "Regelhöchstsatz 2,3-fach", "correct_cat": "GOÄ (PKV)"},
             {
                 "term": "Schwellenwert 1,8-fach für Sachleistungen",
                 "correct_cat": "GOÄ (PKV)",
             },
-            {
-                "term": "Chronikerpauschale 03220",
-                "correct_cat": "EBM (GKV)",
-            },
+            {"term": "Chronikerpauschale 03220", "correct_cat": "EBM (GKV)"},
         ],
         "categories": ["EBM (GKV)", "GOÄ (PKV)"],
     },
@@ -246,16 +305,13 @@ MATCHING_TASKS = [
     },
 ]
 
-# ==============================================================================
-# 4. KOMPLEXE FALLSTUDIEN & FREITEXT
-# ==============================================================================
 CASE_STUDIES = [
     {
         "title": "Fallstudie 1: Akuter Notfall in der Praxis (Anaphylaxie)",
         "scenario": """
         **Ausgangslage:** Herr Müller (45 Jahre) erhält in Ihrer Praxis eine intramuskuläre Injektion eines Antibiotikums.
         3 Minuten nach der Injektion klagt der Patient über plötzlichen Juckreiz an den Handflächen, Atemnot, Schwindel und Hitzegefühl.
-        Sein Gesicht wächst an (Angioödem), die Haut zeigt Urtikaria.
+        Sein Gesicht schwillt an (Angioödem), die Haut zeigt Urtikaria.
         """,
         "questions": [
             {
@@ -323,144 +379,109 @@ FREETEXT_TASKS = [
 ]
 
 # ==============================================================================
-# 5. BENUTZEROBERFLÄCHE & MODUS-STEUERUNG
+# 4. BENUTZEROBERFLÄCHE & MODUS-STEUERUNG
 # ==============================================================================
 
-if mode == "🎲 Dynamische Generatoren (Naegele, GOÄ, BBiG)":
-    st.header("🎲 Dynamische Rechen- & Fallaufgaben")
-    st.info(
-        "Diese Aufgaben generieren bei jedem Klick neue Zufallswerte – perfekt zum Einüben von Rechenwegen!"
-    )
+if mode == "🎲 Dynamische Generatoren":
+    st.markdown("### 🎲 Dynamische Rechen- & Fallaufgaben")
+    st.info("Diese Aufgaben generieren bei jedem Klick neue Zufallswerte.")
 
-    st.subheader("1. Naegele-Regel (LF 1 - Gynäkologie)")
-    if "naegele" not in st.session_state or st.button(
-        "🔄 Neue Naegele-Aufgabe"
-    ):
-        st.session_state.naegele = generate_naegele_task()
+    col1, col2 = st.columns(2)
 
-    n_task = st.session_state.naegele
-    st.write(
-        f"**Fallbeispiel:** Der 1. Tag der letzten Regel (LMP) war der **{n_task['lmp']}**."
-    )
-    st.write(
-        f"Die Patientin hat einen regelmäßigen Zyklus von **{n_task['cycle']} Tagen**."
-    )
+    with col1:
+        st.markdown(
+            '<div class="custom-card"><h4>1. Naegele-Regel (Gynäkologie)</h4>',
+            unsafe_allow_html=True,
+        )
+        if "naegele" not in st.session_state or st.button(
+            "🔄 Neue Naegele-Aufgabe"
+        ):
+            st.session_state.naegele = generate_naegele_task()
 
-    u_date = st.text_input(
-        "Berechnen Sie den voraussichtlichen Entbindungstermin (Format: TT.MM.YYYY):"
-    )
-    if st.button("Termin prüfen"):
-        if u_date.strip() == n_task["correct_date"]:
-            st.success(
-                f"✅ Richtig! Der errechnete Geburtstermin ist der {n_task['correct_date']}."
-            )
-        else:
-            st.error(f"❌ Falsch. Richtig wäre: {n_task['correct_date']}.")
-            st.info(
-                f"**Rechenweg:** {n_task['lmp']} + 7 Tage - 3 Monate + 1 Jahr + ({n_task['cycle']} - 28) Tage."
-            )
+        n_task = st.session_state.naegele
+        st.write(f"**Letzte Regel (LMP):** {n_task['lmp']}")
+        st.write(f"**Zykluslänge:** {n_task['cycle']} Tage")
 
-    st.markdown("---")
+        u_date = st.text_input(
+            "Entbindungstermin (TT.MM.YYYY):", key="naegele_in"
+        )
+        if st.button("Termin prüfen"):
+            if u_date.strip() == n_task["correct_date"]:
+                st.success(f"✅ Richtig! Errechnet: {n_task['correct_date']}")
+            else:
+                st.error(f"❌ Falsch. Richtig: {n_task['correct_date']}")
+        st.markdown("</div>", unsafe_allow_html=True)
 
-    st.subheader("2. GOÄ-Honorare (LF 4 - Abrechnung)")
-    if "goae" not in st.session_state or st.button("🔄 Neue GOÄ-Aufgabe"):
-        st.session_state.goae = generate_goae_task()
+    with col2:
+        st.markdown(
+            '<div class="custom-card"><h4>2. GOÄ-Honorare (Abrechnung)</h4>',
+            unsafe_allow_html=True,
+        )
+        if "goae" not in st.session_state or st.button("🔄 Neue GOÄ-Aufgabe"):
+            st.session_state.goae = generate_goae_task()
 
-    g_task = st.session_state.goae
-    st.write(f"Einfacher Gebührensatz der Ziffer: **{g_task['base']:.2f} €**")
-    st.write(f"Angewandter Steigerungsfaktor: **{g_task['factor']:.2f}**")
+        g_task = st.session_state.goae
+        st.write(f"**Einfacher Satz:** {g_task['base']:.2f} €")
+        st.write(f"**Steigerungsfaktor:** {g_task['factor']:.2f}")
 
-    u_price = st.number_input(
-        "Berechnen Sie den Rechnungsbetrag (€):", step=0.01, format="%.2f"
-    )
-    if st.button("GOÄ Betrag prüfen"):
-        if abs(u_price - g_task["total"]) < 0.05:
-            st.success(
-                f"✅ Korrekt! Der Rechnungsbetrag ist {g_task['total']:.2f} €."
-            )
-        else:
-            st.error(
-                f"❌ Falsch. Richtig ist: {g_task['base']:.2f} € × {g_task['factor']} = {g_task['total']:.2f} €."
-            )
+        u_price = st.number_input(
+            "Rechnungsbetrag (€):", step=0.01, format="%.2f", key="goae_in"
+        )
+        if st.button("GOÄ Betrag prüfen"):
+            if abs(u_price - g_task["total"]) < 0.05:
+                st.success(f"✅ Korrekt! Ergebnis: {g_task['total']:.2f} €")
+            else:
+                st.error(f"❌ Falsch. Richtig ist: {g_task['total']:.2f} €")
+        st.markdown("</div>", unsafe_allow_html=True)
 
-    st.markdown("---")
-
-    st.subheader("3. Urlaubsanspruch nach JArbSchG (LF 3 / LF 5)")
-    if "urlaub" not in st.session_state or st.button(
-        "🔄 Neue Urlaubs-Aufgabe"
-    ):
-        st.session_state.urlaub = generate_urlaub_task()
-
-    u_task = st.session_state.urlaub
-    st.write(
-        f"**Fallbeispiel:** Ein Auszubildender ist zu Beginn des Kalenderjahres **{u_task['alter']} Jahre** alt."
-    )
-
-    u_ans = st.number_input(
-        "Wie viele Werktage Mindesturlaub stehen ihm laut JArbSchG pro Jahr zu?",
-        step=1,
-    )
-    if st.button("Urlaub prüfen"):
-        if u_ans == u_task["urlaub"]:
-            st.success(
-                f"✅ Richtig! Mit {u_task['alter']} Jahren stehen ihm mindestens {u_task['urlaub']} Werktage zu."
-            )
-        else:
-            st.error(
-                f"❌ Falsch. Der gesetzliche Mindestanspruch beträgt {u_task['urlaub']} Werktage."
-            )
-
-elif mode == "🩸 Interaktiver Laborwert-Diagnostiker":
-    st.header("🩸 Interaktiver Laborwert-Diagnostiker (LF 2)")
-    st.write(
-        "Bewerten Sie den vorgegebenen Befund und wählen Sie die passende Verdachtsdiagnose:"
-    )
+elif mode == "🩸 Laborwert-Diagnostiker":
+    st.markdown("### 🩸 Interaktiver Laborwert-Diagnostiker (LF 2)")
 
     if "lab_task" not in st.session_state or st.button(
-        "🔄 Neubeitrag / Nächster Laborbefund"
+        "🔄 Nächster Laborbefund"
     ):
         st.session_state.lab_task = generate_lab_value()
 
     l_task = st.session_state.lab_task
 
+    st.markdown('<div class="custom-card">', unsafe_allow_html=True)
     st.subheader(f"Laborparameter: {l_task['parameter']}")
-    col1, col2 = st.columns(2)
-    col1.metric("Gemessener Wert", f"{l_task['val']} {l_task['unit']}")
-    col2.metric("Referenzbereich (Norm)", l_task["norm"])
+
+    col_a, col_b = st.columns(2)
+    col_a.metric("Gemessener Wert", f"{l_task['val']} {l_task['unit']}")
+    col_b.metric("Referenzbereich (Norm)", l_task["norm"])
 
     user_eval = st.radio(
-        "1. Bewertung des Meßwertes:",
+        "Bewertung des Messwertes:",
         ["Erhöht", "Erniedrigt", "Normalbefund"],
         key="lab_eval",
+        horizontal=True,
     )
 
-    if user_eval == "Erhöht":
-        correct_eval = "Erhöht" if l_task["val"] > l_task["high_thresh"] else ("Erniedrigt" if l_task["val"] < l_task["low_thresh"] else "Normalbefund")
-    elif user_eval == "Erniedrigt":
-        correct_eval = "Erniedrigt" if l_task["val"] < l_task["low_thresh"] else ("Erhöht" if l_task["val"] > l_task["high_thresh"] else "Normalbefund")
-    else:
-        correct_eval = "Normalbefund" if l_task["low_thresh"] <= l_task["val"] <= l_task["high_thresh"] else ("Erhöht" if l_task["val"] > l_task["high_thresh"] else "Erniedrigt")
-
-    if st.button("Befund-Bewertung überprüfen"):
-        if (
-            (l_task["val"] > l_task["high_thresh"] and user_eval == "Erhöht")
-            or (l_task["val"] < l_task["low_thresh"] and user_eval == "Erniedrigt")
-            or (l_task["low_thresh"] <= l_task["val"] <= l_task["high_thresh"] and user_eval == "Normalbefund")
-        ):
+    if st.button("Befund bewerten"):
+        correct_eval = (
+            "Erhöht"
+            if l_task["val"] > l_task["high_thresh"]
+            else (
+                "Erniedrigt"
+                if l_task["val"] < l_task["low_thresh"]
+                else "Normalbefund"
+            )
+        )
+        if user_eval == correct_eval:
             st.success(f"✅ Richtig! Der Wert ist {correct_eval}.")
             st.info(
                 f"**Klinische Einordnung:** {l_task['diag_high'] if user_eval == 'Erhöht' else (l_task['diag_low'] if user_eval == 'Erniedrigt' else 'Unauffälliger Befund')}"
             )
         else:
-            st.error(f"❌ Falsch. Der Wert ist physiologisch: **{correct_eval}**.")
+            st.error(f"❌ Falsch. Richtig wäre: **{correct_eval}**.")
+    st.markdown("</div>", unsafe_allow_html=True)
 
-elif mode == "🔄 Zuordnungs-Trainer (Matching)":
-    st.header("🔄 Zuordnungs-Trainer (Matching)")
-    st.write(
-        "Ordnen Sie die Begriffe den passenden Oberkategorien zu:"
-    )
+elif mode == "🔄 Zuordnungs-Trainer":
+    st.markdown("### 🔄 Zuordnungs-Trainer (Matching)")
 
     for m_idx, m_task in enumerate(MATCHING_TASKS):
+        st.markdown('<div class="custom-card">', unsafe_allow_html=True)
         st.subheader(f"{m_idx+1}. {m_task['title']}")
         user_matches = {}
 
@@ -472,81 +493,71 @@ elif mode == "🔄 Zuordnungs-Trainer (Matching)":
             )
 
         if st.button("Zuordnungen prüfen", key=f"btn_match_{m_idx}"):
-            correct_count = 0
-            for item_idx, item in enumerate(m_task["items"]):
-                if user_matches[item_idx] == item["correct_cat"]:
-                    correct_count += 1
-
+            correct_count = sum(
+                1
+                for item_idx, item in enumerate(m_task["items"])
+                if user_matches[item_idx] == item["correct_cat"]
+            )
             if correct_count == len(m_task["items"]):
-                st.success("🎉 Perfekt! Alle Zuordnungen sind richtig.")
+                st.success("🎉 Perfekt! Alle Zuordnungen stimmen.")
             else:
                 st.warning(
-                    f"Sie haben {correct_count} von {len(m_task['items'])} Zuordnungen richtig."
+                    f"{correct_count} von {len(m_task['items'])} richtig."
                 )
-        st.markdown("---")
+        st.markdown("</div>", unsafe_allow_html=True)
 
-elif mode == "📑 Original-Fallstudien (Komplexaufgaben)":
-    st.header("📑 Original-Fallstudien & Komplexaufgaben")
-    st.write(
-        "Wie in der praktischen & schriftlichen Prüfung: Bearbeiten Sie zusammenhängende Praxisfälle Schritt für Schritt."
-    )
+elif mode == "📑 Original-Fallstudien":
+    st.markdown("### 📑 Original-Fallstudien & Komplexaufgaben")
 
     case_choice = st.selectbox(
-        "Wählen Sie einen Fall zur Bearbeitung aus:",
-        [c["title"] for c in CASE_STUDIES],
+        "Fall auswählen:", [c["title"] for c in CASE_STUDIES]
     )
     selected_case = next(c for c in CASE_STUDIES if c["title"] == case_choice)
 
+    st.markdown('<div class="custom-card">', unsafe_allow_html=True)
     st.markdown(selected_case["scenario"])
-    st.markdown("---")
+    st.markdown("</div>", unsafe_allow_html=True)
 
     for idx, q_item in enumerate(selected_case["questions"]):
         st.markdown(f"**{q_item['q']}**")
-        user_input = st.text_area(
-            "Ihre Lösung / Vorgehensweise:", key=f"cs_{case_choice}_{idx}"
+        st.text_area(
+            "Ihre Lösung:", key=f"cs_{case_choice}_{idx}", height=100
         )
-
-        with st.expander("💡 Musterlösung & Prüfungskriterien anzeigen"):
+        with st.expander("💡 Musterlösung anzeigen"):
             st.markdown(q_item["solution"])
+        st.markdown("---")
 
-elif mode == "✏️ Freitext- & Fachbegriffe-Trainer":
-    st.header("✏️ Freitext- & Fachbegriffe-Trainer")
-    st.write(
-        "Testen Sie Ihr Wissen ohne vorgegebene Antwortmöglichkeiten. Geben Sie die Antwort frei ein:"
-    )
+elif mode == "✏️ Freitext-Trainer":
+    st.markdown("### ✏️ Freitext- & Fachbegriffe-Trainer")
 
     for idx, ft in enumerate(FREETEXT_TASKS):
+        st.markdown('<div class="custom-card">', unsafe_allow_html=True)
         st.subheader(f"Aufgabe {idx+1}: {ft['term']}")
         st.write(ft["prompt"])
         user_txt = st.text_input("Ihre Antwort:", key=f"ft_in_{idx}")
 
         if st.button("Antwort auswerten", key=f"ft_btn_{idx}"):
-            if user_txt.strip() != "":
+            if user_txt.strip():
                 found_keywords = [
                     kw for kw in ft["keywords"] if kw in user_txt.lower()
                 ]
-                if len(found_keywords) > 0:
-                    st.success("✅ Sehr gut! Kernbegriffe richtig erkannt.")
+                if found_keywords:
+                    st.success("✅ Kernbegriffe erkannt!")
                 else:
-                    st.warning(
-                        "⚠️ Überprüfen Sie Ihre Eingabe anhand der Musterlösung."
-                    )
+                    st.warning("⚠️ Überprüfen Sie Ihre Eingabe.")
                 st.info(f"**Musterlösung:** {ft['sample']}")
             else:
-                st.error("Bitte geben Sie zuerst eine Antwort ein.")
-        st.markdown("---")
+                st.error("Bitte geben Sie eine Antwort ein.")
+        st.markdown("</div>", unsafe_allow_html=True)
 
-elif mode == "📝 Musterklausur (Zufallsauswahl)":
-    st.header("📝 Generierte Musterklausur")
-    st.write(
-        "Es werden zufällig 10 Fragen aus allen 5 Lernfeldern ausgewählt. Viel Erfolg!"
-    )
+elif mode == "📝 Musterklausur":
+    st.markdown("### 📝 Generierte Musterklausur")
 
-    if len(ALL_QUESTIONS) == 0:
+    if not ALL_QUESTIONS:
         st.warning("Keine Fragen vorhanden.")
     else:
         if "exam_questions" not in st.session_state or st.button(
-            "🔄 Neue Musterklausur zusammenstellen"
+            "🔄 Neue Musterklausur erstellen"
         ):
             st.session_state.exam_questions = random.sample(
                 ALL_QUESTIONS, min(10, len(ALL_QUESTIONS))
@@ -559,7 +570,7 @@ elif mode == "📝 Musterklausur (Zufallsauswahl)":
         for idx, q in enumerate(exam_q):
             form.markdown(f"**Frage {idx+1} [{q['lf']}]:** {q['q']}")
             user_answers[idx] = form.radio(
-                f"Antworten für Frage {idx+1}:",
+                f"Antwort währen für Frage {idx+1}:",
                 q["options"],
                 key=f"ex_{idx}",
                 label_visibility="collapsed",
@@ -569,14 +580,15 @@ elif mode == "📝 Musterklausur (Zufallsauswahl)":
         submitted = form.form_submit_button("Klausur auswerten")
 
         if submitted:
-            score = 0
+            score = sum(
+                1
+                for idx, q in enumerate(exam_q)
+                if user_answers[idx] == q["correct"]
+            )
             total = len(exam_q)
-
-            for idx, q in enumerate(exam_q):
-                if user_answers[idx] == q["correct"]:
-                    score += 1
-
             percent = round((score / total) * 100)
+
+            st.markdown('<div class="custom-card">', unsafe_allow_html=True)
             st.subheader(f"Ergebnis: {score} von {total} Punkten ({percent}%)")
 
             if percent >= 50:
@@ -584,14 +596,12 @@ elif mode == "📝 Musterklausur (Zufallsauswahl)":
                 st.success("🎉 Bestanden! Hervorragendes Ergebnis.")
             else:
                 st.error(
-                    "❌ Leider nicht bestanden (unter 50 %). Nutzen Sie den Fragenkatalog zum gezielten Wiederholen."
+                    "❌ Leider nicht bestanden. Wiederholen Sie die Themen im Fragenkatalog."
                 )
+            st.markdown("</div>", unsafe_allow_html=True)
 
-elif mode == "📚 Gesamter Fragenkatalog (LF 1 – 5)":
-    st.header("📚 Vollständiger Fragenkatalog")
-    st.write(
-        "Wählen Sie ein Lernfeld aus, um alle verfügbaren Prüfungsfragen gezielt zu üben:"
-    )
+elif mode == "📚 Gesamter Fragenkatalog":
+    st.markdown("### 📚 Vollständiger Fragenkatalog")
 
     lf_filter = st.selectbox(
         "Lernfeld filtern:",
@@ -607,11 +617,9 @@ elif mode == "📚 Gesamter Fragenkatalog (LF 1 – 5)":
     for idx, q in enumerate(filtered):
         with st.expander(f"Frage {idx+1} [{q['lf']}]: {q['q']}"):
             user_sel = st.radio(
-                "Wählen Sie eine Antwort:",
-                q["options"],
-                key=f"cat_{q['lf']}_{idx}",
+                "Antwort auswählen:", q["options"], key=f"cat_{q['lf']}_{idx}"
             )
-            if st.button("Antwort kontrollieren", key=f"btn_{q['lf']}_{idx}"):
+            if st.button("Prüfen", key=f"btn_{q['lf']}_{idx}"):
                 if user_sel == q["correct"]:
                     st.success("✅ Richtig!")
                 else:
