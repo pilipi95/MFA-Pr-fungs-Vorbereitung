@@ -27,25 +27,16 @@ JSON_FILE = os.path.join(BASE_DIR, "fragen.json")
 
 @st.cache_data
 def load_questions():
-    """Lädt die Fragen und mischt die Antwortoptionen zufällig durch."""
-    questions = []
+    """Lädt die Rohdaten aus der fragen.json."""
     if os.path.exists(JSON_FILE):
         try:
             with open(JSON_FILE, "r", encoding="utf-8") as f:
-                questions = json.load(f)
+                return json.load(f)
         except Exception as e:
             st.error(f"Fehler beim Lesen der 'fragen.json': {e}")
-            questions = get_fallback_questions()
+            return get_fallback_questions()
     else:
-        questions = get_fallback_questions()
-
-    for q in questions:
-        if "options" in q and isinstance(q["options"], list):
-            shuffled_options = list(q["options"])
-            random.shuffle(shuffled_options)
-            q["options"] = shuffled_options
-
-    return questions
+        return get_fallback_questions()
 
 
 def get_fallback_questions():
@@ -54,8 +45,8 @@ def get_fallback_questions():
             "lf": "LF 1",
             "q": "Welches Schmerzzeichen deutet typischerweise auf eine Appendizitis hin?",
             "options": [
-                "Homans-Zeichen",
                 "Kontralateraler Loslassschmerz (Blumberg-Zeichen)",
+                "Homans-Zeichen",
                 "Mundwinkelasymmetrie",
                 "Pupillendifferenz",
             ],
@@ -85,8 +76,19 @@ mode = st.sidebar.radio(
 st.sidebar.markdown("---")
 st.sidebar.metric("📋 Geladene Fragen", len(ALL_QUESTIONS))
 
+# Helper-Funktion zum Mischen von Optionen ohne Cache-Probleme
+def get_shuffled_options(options_list, key_identifier):
+    """Mische Optionen für eine spezifische Frage und speichere sie pro Session."""
+    state_key = f"shuffled_opt_{key_identifier}"
+    if state_key not in st.session_state:
+        opts = list(options_list)
+        random.shuffle(opts)
+        st.session_state[state_key] = opts
+    return st.session_state[state_key]
+
+
 # ==============================================================================
-# 2. BILD-GENERATOREN (DIREKTER RENDER-CODE OHNE EXTERNE LINKS)
+# 2. BILD-GENERATOREN
 # ==============================================================================
 
 
@@ -206,7 +208,7 @@ def create_nadelstich_image():
 
 
 # ==============================================================================
-# 3. KOMPLEXE PRÜFUNGS-FALLBEISPIELE (PRÜFUNGSNAHE DATENBANK)
+# 3. KOMPLEXE PRÜFUNGS-FALLBEISPIELE (DATENBANK)
 # ==============================================================================
 IMAGE_CASE_STUDIES = [
     {
@@ -529,9 +531,11 @@ if mode == "🖼️ Bild- & Komplexaufgaben (Prüfungsnah)":
             st.markdown(f"**{q_item['q']}**")
 
             if "options" in q_item:
+                # Optionen dynamsich mischen
+                shuffled_opts = get_shuffled_options(q_item["options"], f"{case_title}_{q_idx}")
                 user_ans = st.radio(
                     "Antwort wählen:",
-                    q_item["options"],
+                    shuffled_opts,
                     key=f"img_q_{case_title}_{q_idx}",
                 )
                 if st.button(
@@ -676,6 +680,10 @@ elif mode == "📝 Musterklausur":
         if "exam_questions" not in st.session_state or st.button(
             "🔄 Neue Musterklausur erstellen"
         ):
+            # Lösche alte Mischergebnisse beim Erstellen einer neuen Klausur
+            for k in list(st.session_state.keys()):
+                if k.startswith("shuffled_opt_"):
+                    del st.session_state[k]
             st.session_state.exam_questions = random.sample(
                 ALL_QUESTIONS, min(10, len(ALL_QUESTIONS))
             )
@@ -686,9 +694,10 @@ elif mode == "📝 Musterklausur":
 
         for idx, q in enumerate(exam_q):
             form.markdown(f"**Frage {idx+1} [{q['lf']}]:** {q['q']}")
+            shuffled_opts = get_shuffled_options(q["options"], f"exam_{idx}")
             user_answers[idx] = form.radio(
                 f"Antworten für Frage {idx+1}:",
-                q["options"],
+                shuffled_opts,
                 key=f"ex_{idx}",
                 label_visibility="collapsed",
             )
@@ -725,8 +734,9 @@ elif mode == "📚 Gesamter Fragenkatalog":
 
     for idx, q in enumerate(filtered):
         with st.expander(f"Frage {idx+1} [{q['lf']}]: {q['q']}"):
+            shuffled_opts = get_shuffled_options(q["options"], f"cat_{q['lf']}_{idx}")
             user_sel = st.radio(
-                "Antwort auswählen:", q["options"], key=f"cat_{q['lf']}_{idx}"
+                "Antwort auswählen:", shuffled_opts, key=f"cat_{q['lf']}_{idx}"
             )
             if st.button("Prüfen", key=f"btn_{q['lf']}_{idx}"):
                 if user_sel == q["correct"]:
