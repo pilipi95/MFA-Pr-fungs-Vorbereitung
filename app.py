@@ -14,9 +14,9 @@ st.set_page_config(
     initial_sidebar_state="expanded",
 )
 
-st.title("🩺 MFA Abschlussprüfung BW")
+st.title("🩺 MFA Abschlussprüfung BW – Mit Bild-Fallbeispielen")
 st.caption(
-    "Interaktiver Simulator für die Lernfelder 1 bis 5 (MFA Baden-Württemberg)"
+    "Interaktives Lernportal für die Lernfelder 1 bis 5 (MFA Baden-Württemberg)"
 )
 
 # Robuste absolute Pfadberechnung für fragen.json
@@ -84,10 +84,10 @@ st.sidebar.header("🎯 Navigation")
 mode = st.sidebar.radio(
     "Lernform wählen:",
     [
+        "🖼️ Bild-Fallbeispiele (Komplex)",
         "🎲 Dynamische Generatoren",
         "🩸 Laborwert-Diagnostiker",
         "🔄 Zuordnungs-Trainer",
-        "📑 Original-Fallstudien",
         "✏️ Freitext-Trainer",
         "📝 Musterklausur",
         "📚 Gesamter Fragenkatalog",
@@ -98,7 +98,101 @@ st.sidebar.markdown("---")
 st.sidebar.metric("📋 Geladene Fragen", len(ALL_QUESTIONS))
 
 # ==============================================================================
-# 2. GENERATOREN & DIAGNOSTIK
+# 2. BILD-FALLBEISPIELE (DATENBANK)
+# ==============================================================================
+IMAGE_CASE_STUDIES = [
+    {
+        "id": "fall_1",
+        "title": "Fallbeispiel 1: Urindiagnostik bei Harnwegsinfekt",
+        "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d0/Urine_test_strip.jpg/640px-Urine_test_strip.jpg",
+        "caption": "Abb. 1: Ausgewerteter Urin-Teststreifen aus der Praxis (Morgenurin).",
+        "scenario": """
+        **Patientenanamnese:**
+        Frau Weber (38 Jahre) kommt mit brennenden Schmerzen beim Wasserlassen (Dysurie) und ständigem Harndrang (Pollakisurie) in die Praxis. 
+        Sie führen eine Urinuntersuchung mittels Teststreifen durch.
+        """,
+        "questions": [
+            {
+                "q": "1. Welche zwei Testfelder sind bei einem bakteriellen Harnwegsinfekt klassischerweise positiv?",
+                "options": [
+                    "Leukozyten und Nitrit",
+                    "Glukose und Ketone",
+                    "Bilirubin und Urobilinogen",
+                    "Protein und pH-Wert 9.0",
+                ],
+                "correct": "Leukozyten und Nitrit",
+                "exp": "Leukozyten weisen auf eine Entzündungsreaktion hin; Nitrit zeigt die Anwesenheit nitratreduzierender Bakterien (z.B. E. coli) an.",
+            },
+            {
+                "q": "2. Welche Bedingung muss für eine verlässliche Nitritbestimmung im Urin erfüllt sein?",
+                "options": [
+                    "Der Urin muss mindestens 4 Stunden in der Blase verweilt haben (Morgenurin).",
+                    "Der Urin muss vor der Messung auf 37 °C erwärmt werden.",
+                    "Es muss zwingend Katheterurin verwendet werden.",
+                    "Die Patientin muss zuvor 1 Liter Wasser trinken.",
+                ],
+                "correct": "Der Urin muss mindestens 4 Stunden in der Blase verweilt haben (Morgenurin).",
+                "exp": "Bakterien benötigen Zeit, um im Urin vorhandenes Nitrat zu Nitrit zu reduzieren.",
+            },
+            {
+                "q": "3. Welche EBM-Ziffer rechnet die Hausarztpraxis für den Urinstreifen-Schnelltest ab?",
+                "options": ["EBM 32033", "EBM 03000", "EBM 03220", "EBM 32001"],
+                "correct": "EBM 32033",
+                "exp": "Die EBM 32033 ist die Gebührenordnungsposition für den Harnstreifentest in der Kassenpraxis.",
+            },
+        ],
+    },
+    {
+        "id": "fall_2",
+        "title": "Fallbeispiel 2: EKG-Befundung bei Brustschmerz",
+        "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Anterior_AMI.svg/640px-Anterior_AMI.svg.png",
+        "caption": "Abb. 2: 12-Kanal-EKG bei Ankunft des Patienten.",
+        "scenario": """
+        **Patientenanamnese:**
+        Herr Huber (58 Jahre) klagt über plötzlich aufgetretenen, retrosternalen Vernichtungsschmerz mit Ausstrahlung in den linken Arm und Kaltschweißigkeit. 
+        Sie schreiben unverzüglich ein 12-Kanal-EKG.
+        """,
+        "questions": [
+            {
+                "q": "1. Welche Pathologie zeigt das EKG im Falle eines akuten Herzinfarkts?",
+                "solution": "ST-Streckenhebung in mindestens zwei korrespondierenden Ableitungen (STEMI).",
+            },
+            {
+                "q": "2. Welche Erstmaßnahmen leiten Sie als MFA unverzüglich ein?",
+                "solution": "1. Notarzt rufen (112).\n2. Oberkörper hochlagern (Herzentlastung).\n3. Vitalwerte (BD, Puls, SpO2) überwachen.\n4. Sauerstoffgabe vorbereiten & Notfallkoffer bereitstellen.",
+            },
+        ],
+    },
+    {
+        "title": "Fallbeispiel 3: Wundversorgung & Tetanusschutz",
+        "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1d/Laceration_of_the_finger_with_stictches.jpg/640px-Laceration_of_the_finger_with_stictches.jpg",
+        "caption": "Abb. 3: Versorgte Schnittwunde am Finger.",
+        "scenario": """
+        **Patientenanamnese:**
+        Ein 24-jähriger Patient hat sich bei Gartenarbeiten an einer verschmutzten Gartenhalle tief am Zeigefinger geschnitten. Die Wunde ist glattrandig und 2 Stunden alt.
+        """,
+        "questions": [
+            {
+                "q": "1. Welches Zeitfenster gilt maximal für eine primäre Wundnaht?",
+                "options": [
+                    "Innerhalb von 6 Stunden",
+                    "Innerhalb von 12 Stunden",
+                    "Innerhalb von 24 Stunden",
+                    "Immer möglich unabhängig von der Zeit",
+                ],
+                "correct": "Innerhalb von 6 Stunden",
+                "exp": "Nach 6 Stunden gilt eine Wunde als primär besiedelt/infiziert und darf nicht mehr primär verschlossen werden.",
+            },
+            {
+                "q": "2. Welche Impfung muss bei verunreinigten Wunden zwingend im Impfpass überprüft werden?",
+                "solution": "Tetanus-Impfschutz (Wundstarrkrampf). Bei unvollständigem Schutz oder > 10 Jahren Auffrischung ggf. Simultanimpfung (Aktiv + Passiv).",
+            },
+        ],
+    },
+]
+
+# ==============================================================================
+# 3. HELPER-FUNKTIONEN FÜR ANDERE MODI
 # ==============================================================================
 
 
@@ -158,16 +252,6 @@ def generate_lab_value():
             "diag_high": "Hyperkalämie (Gefahr von Herzrhythmusstörungen)",
             "diag_low": "Hypokalämie (z.B. durch Diuretika, Erbrechen)",
         },
-        {
-            "parameter": "Leukozyten",
-            "unit": "/µl",
-            "norm": "4.000 - 10.000 /µl",
-            "val": random.randint(2000, 22000),
-            "low_thresh": 4000,
-            "high_thresh": 10000,
-            "diag_high": "Leukozytose (Bakterielle Infektion / Entzündung)",
-            "diag_low": "Leukopentie (Agranulozytose / Virale Infektion)",
-        },
     ]
     return random.choice(labs)
 
@@ -178,30 +262,8 @@ MATCHING_TASKS = [
         "items": [
             {"term": "Versichertenpauschale 03000", "correct_cat": "EBM (GKV)"},
             {"term": "Regelhöchstsatz 2,3-fach", "correct_cat": "GOÄ (PKV)"},
-            {
-                "term": "Schwellenwert 1,8-fach für Sachleistungen",
-                "correct_cat": "GOÄ (PKV)",
-            },
-            {"term": "Chronikerpauschale 03220", "correct_cat": "EBM (GKV)"},
         ],
         "categories": ["EBM (GKV)", "GOÄ (PKV)"],
-    }
-]
-
-CASE_STUDIES = [
-    {
-        "title": "Fallstudie 1: Akuter Notfall in der Praxis (Anaphylaxie)",
-        "scenario": "**Ausgangslage:** Herr Müller (45 Jahre) erhält eine Injektion. 3 Minuten später klagt er über Juckreiz, Atemnot und Schwindel. Das Gesicht schwillt an.",
-        "questions": [
-            {
-                "q": "1. Welches Krankheitsbild liegt vor?",
-                "solution": "Anaphylaktischer Schock (Anaphylaxie Typ I).",
-            },
-            {
-                "q": "2. Welches Medikament ist Mittel der 1. Wahl?",
-                "solution": "Adrenalin (Epinephrin) i.m.",
-            },
-        ],
     }
 ]
 
@@ -215,10 +277,66 @@ FREETEXT_TASKS = [
 ]
 
 # ==============================================================================
-# 3. MODUS-STEUERUNG
+# 4. MODUS-STEUERUNG
 # ==============================================================================
 
-if mode == "🎲 Dynamische Generatoren":
+if mode == "🖼️ Bild-Fallbeispiele (Komplex)":
+    st.header("🖼️ Bild-Fallbeispiele aus der Praxis")
+    st.write(
+        "Analysieren Sie das Befundbild und beantworten Sie die dazugehörigen Prüfungsfragen:"
+    )
+
+    case_title = st.selectbox(
+        "Wählen Sie ein Bild-Fallbeispiel aus:",
+        [c["title"] for c in IMAGE_CASE_STUDIES],
+    )
+    selected_img_case = next(
+        c for c in IMAGE_CASE_STUDIES if c["title"] == case_title
+    )
+
+    col1, col2 = st.columns([1, 1])
+
+    with col1:
+        st.image(
+            selected_img_case["image_url"],
+            caption=selected_img_case["caption"],
+            use_container_width=True,
+        )
+
+    with col2:
+        st.markdown(selected_img_case["scenario"])
+        st.markdown("---")
+
+        for q_idx, q_item in enumerate(selected_img_case["questions"]):
+            st.markdown(f"**{q_item['q']}**")
+
+            # Unterscheidung Multiple Choice vs. Freitext
+            if "options" in q_item:
+                user_ans = st.radio(
+                    "Antwort wählen:",
+                    q_item["options"],
+                    key=f"img_q_{case_title}_{q_idx}",
+                )
+                if st.button(
+                    "Antwort prüfen", key=f"img_btn_{case_title}_{q_idx}"
+                ):
+                    if user_ans == q_item["correct"]:
+                        st.success("✅ Richtig!")
+                    else:
+                        st.error(f"❌ Falsch. Richtig ist: {q_item['correct']}")
+                    st.info(f"**Erklärung:** {q_item['exp']}")
+            else:
+                st.text_area(
+                    "Ihre Antwort:",
+                    key=f"img_txt_{case_title}_{q_idx}",
+                    height=80,
+                )
+                with st.expander("💡 Musterlösung anzeigen"):
+                    st.markdown(q_item["solution"])
+
+            st.markdown("---")
+
+elif mode == "🎲 Dynamische Generatoren":
     st.header("🎲 Dynamische Rechen- & Fallaufgaben")
     col1, col2 = st.columns(2)
 
@@ -303,116 +421,3 @@ elif mode == "🔄 Zuordnungs-Trainer":
             )
         if st.button("Zuordnungen prüfen", key=f"btn_match_{m_idx}"):
             correct_count = sum(
-                1
-                for item_idx, item in enumerate(m_task["items"])
-                if user_matches[item_idx] == item["correct_cat"]
-            )
-            if correct_count == len(m_task["items"]):
-                st.success("🎉 Perfekt! Alle Zuordnungen stimmen.")
-            else:
-                st.warning(
-                    f"{correct_count} von {len(m_task['items'])} richtig."
-                )
-        st.markdown("---")
-
-elif mode == "📑 Original-Fallstudien":
-    st.header("📑 Original-Fallstudien & Komplexaufgaben")
-    case_choice = st.selectbox(
-        "Fall auswählen:", [c["title"] for c in CASE_STUDIES]
-    )
-    selected_case = next(c for c in CASE_STUDIES if c["title"] == case_choice)
-    st.info(selected_case["scenario"])
-
-    for idx, q_item in enumerate(selected_case["questions"]):
-        st.markdown(f"**{q_item['q']}**")
-        st.text_area(
-            "Ihre Lösung:", key=f"cs_{case_choice}_{idx}", height=80
-        )
-        with st.expander("💡 Musterlösung anzeigen"):
-            st.markdown(q_item["solution"])
-        st.markdown("---")
-
-elif mode == "✏️ Freitext-Trainer":
-    st.header("✏️ Freitext- & Fachbegriffe-Trainer")
-    for idx, ft in enumerate(FREETEXT_TASKS):
-        st.subheader(f"Aufgabe {idx+1}: {ft['term']}")
-        st.write(ft["prompt"])
-        user_txt = st.text_input("Ihre Antwort:", key=f"ft_in_{idx}")
-        if st.button("Antwort auswerten", key=f"ft_btn_{idx}"):
-            if user_txt.strip():
-                found_keywords = [
-                    kw for kw in ft["keywords"] if kw in user_txt.lower()
-                ]
-                if found_keywords:
-                    st.success("✅ Kernbegriffe erkannt!")
-                else:
-                    st.warning("⚠️ Überprüfen Sie Ihre Eingabe.")
-                st.info(f"**Musterlösung:** {ft['sample']}")
-        st.markdown("---")
-
-elif mode == "📝 Musterklausur":
-    st.header("📝 Generierte Musterklausur")
-    if not ALL_QUESTIONS:
-        st.warning("Keine Fragen vorhanden.")
-    else:
-        if "exam_questions" not in st.session_state or st.button(
-            "🔄 Neue Musterklausur erstellen"
-        ):
-            st.session_state.exam_questions = random.sample(
-                ALL_QUESTIONS, min(10, len(ALL_QUESTIONS))
-            )
-
-        exam_q = st.session_state.exam_questions
-        form = st.form(key="exam_form_xxl")
-        user_answers = {}
-
-        for idx, q in enumerate(exam_q):
-            form.markdown(f"**Frage {idx+1} [{q['lf']}]:** {q['q']}")
-            user_answers[idx] = form.radio(
-                f"Antworten für Frage {idx+1}:",
-                q["options"],
-                key=f"ex_{idx}",
-                label_visibility="collapsed",
-            )
-            form.markdown("---")
-
-        submitted = form.form_submit_button("Klausur auswerten")
-        if submitted:
-            score = sum(
-                1
-                for idx, q in enumerate(exam_q)
-                if user_answers[idx] == q["correct"]
-            )
-            total = len(exam_q)
-            percent = round((score / total) * 100)
-
-            st.subheader(f"Ergebnis: {score} von {total} Punkten ({percent}%)")
-            if percent >= 50:
-                st.balloons()
-                st.success("🎉 Bestanden!")
-            else:
-                st.error("❌ Nicht bestanden. Bitte wiederholen.")
-
-elif mode == "📚 Gesamter Fragenkatalog":
-    st.header("📚 Vollständiger Fragenkatalog")
-    lf_filter = st.selectbox(
-        "Lernfeld filtern:",
-        ["Alle Lernfelder", "LF 1", "LF 2", "LF 3", "LF 4", "LF 5"],
-    )
-    filtered = [
-        q
-        for q in ALL_QUESTIONS
-        if lf_filter == "Alle Lernfelder" or q["lf"] == lf_filter
-    ]
-
-    for idx, q in enumerate(filtered):
-        with st.expander(f"Frage {idx+1} [{q['lf']}]: {q['q']}"):
-            user_sel = st.radio(
-                "Antwort auswählen:", q["options"], key=f"cat_{q['lf']}_{idx}"
-            )
-            if st.button("Prüfen", key=f"btn_{q['lf']}_{idx}"):
-                if user_sel == q["correct"]:
-                    st.success("✅ Richtig!")
-                else:
-                    st.error(f"❌ Falsch. Richtig: {q['correct']}")
-                st.info(f"**Erklärung:** {q['exp']}")
