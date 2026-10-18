@@ -6,7 +6,7 @@ from PIL import Image, ImageDraw
 import streamlit as st
 
 # ==============================================================================
-# 1. SEITEN-KONFIGURATION & STYLING
+# 1. SEITEN-KONFIGURATION & SETUP
 # ==============================================================================
 st.set_page_config(
     page_title="MFA Prüfungs-Trainer BW (Freitext-Edition)",
@@ -17,10 +17,10 @@ st.set_page_config(
 
 st.title("🩺 MFA Prüfungstrainer BW – Active Recall & Freitext-Evaluation")
 st.caption(
-    "Professionelle Software zur Vorbereitung auf die MFA-Abschlussprüfung (LF 1 - LF 5)"
+    "Professionelle Software zur Vorbereitung auf die MFA-Abschlussprüfung (Lernfelder 1 bis 5)"
 )
 
-# Pfadberechnung
+# Pfadberechnung für fragen.json
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 JSON_FILE = os.path.join(BASE_DIR, "fragen.json")
 
@@ -42,11 +42,39 @@ def get_fallback_questions():
     return [
         {
             "lf": "LF 1",
-            "q": "Welches Schmerzzeichen deutet typischerweise auf eine Appendizitis hin?",
+            "q": "Eine Patientin klagt über stechende Schmerzen im rechten Unterbauch. Welches spezifische Schmerzzeichen bei der Palpation des linken Unterbauchs deutet typischerweise auf eine Appendizitis hin?",
             "sample": "Kontralateraler Loslassschmerz (Blumberg-Zeichen).",
-            "keywords": ["blumberg", "loslassschmerz"],
-            "exp": "Das Blumberg-Zeichen deutet auf eine Peritonealreizung hin.",
-        }
+            "keywords": ["blumberg", "loslassschmerz", "kontralateral"],
+            "exp": "Das Blumberg-Zeichen (Loslassschmerz nach Druck auf den linken Unterbauch) entsteht durch die fortgeleitete Reizung des Peritoneums bei Appendizitis.",
+        },
+        {
+            "lf": "LF 2",
+            "q": "Warum muss ein Citrat-Röhrchen für Gerinnungstests (Quick/INR, PTT) exakt bis zur Markierung befüllt werden?",
+            "sample": "Um das exakte Mischungsverhältnis von 1 Teil Natriumcitrat zu 9 Teilen Blut (1:9) einzuhalten.",
+            "keywords": ["1:9", "mischungsverhältnis", "citrat"],
+            "exp": "Ein Abweichen vom Mischungsverhältnis 1:9 verändert die Calciumbindung im Probenröhrchen und führt zu verfälschten Gerinnungszeiten.",
+        },
+        {
+            "lf": "LF 3",
+            "q": "Welcher Arzt muss nach einer betrieblichen Nadelstichverletzung zwingend aufgesucht werden und welche Berufsgenossenschaft ist für Arztpraxen zuständig?",
+            "sample": "Vorstellung beim Durchgangsarzt (D-Arzt). Zuständig ist die BGW (Berufsgenossenschaft für Gesundheitsdienst und Wohlfahrtspflege).",
+            "keywords": ["d-arzt", "durchgangsarzt", "bgw"],
+            "exp": "Arbeits- und Wegeunfälle müssen zur Absicherung über die gesetzliche Unfallversicherung durch den D-Arzt erfasst werden.",
+        },
+        {
+            "lf": "LF 4",
+            "q": "Was bedeutet der Zusatzbuchstabe 'G' hinter einem ICD-10-Diagnosecode im ambulanten Bereich?",
+            "sample": "G steht für 'Gesicherte Diagnose'.",
+            "keywords": ["gesichert", "gesicherte diagnose"],
+            "exp": "In der ambulanten Abrechnung steht 'G' für gesichert, 'V' für Verdacht auf, 'A' für Ausschluss und 'Z' für symptomfreien Zustand nach.",
+        },
+        {
+            "lf": "LF 5",
+            "q": "In welchem Paragrafen des BGB ist geregelt, dass Käufe Minderjähriger mit eigenen Mitteln (Taschengeld) ohne Zustimmung der Eltern wirksam sind?",
+            "sample": "Paragraph 110 BGB ('Taschengeldparagraf').",
+            "keywords": ["110", "taschengeld"],
+            "exp": "Nach § 110 BGB gilt ein von einem Minderjährigen geschlossener Vertrag als von Anfang an wirksam, wenn er die Leistung mit eigenen Mitteln bewirkt.",
+        },
     ]
 
 
@@ -68,27 +96,48 @@ mode = st.sidebar.radio(
 st.sidebar.markdown("---")
 st.sidebar.metric("📋 Geladene Prüfungsfragen", len(ALL_QUESTIONS))
 
+
 # ==============================================================================
-# HELPER-FUNKTION: EIGENE ANTWORT GEGENPRÜFEN
+# ROBUSTE EVALUIERUNG FÜR FREITEXT-ANTWORTEN
 # ==============================================================================
-def evaluate_user_answer(user_text, keywords, sample_solution, explanation):
-    """Überprüft die Freitextantwort des Nutzers auf essenzielle Schlüsselwörter."""
-    if not user_text.strip():
-        st.warning("⚠️ Bitte geben Sie zuerst Ihre Antwort ein.")
+def evaluate_user_answer(user_text, keywords, sample_solution, explanation=""):
+    """Überprüft die Freitextantwort des Nutzers flexibel auf Schlüsselwörter."""
+    if not user_text or not user_text.strip():
+        st.warning("⚠️ Bitte geben Sie zuerst Ihre Antwort in das Textfeld ein.")
         return
 
-    user_text_lower = user_text.lower()
-    found_keywords = [kw for kw in keywords if kw.lower() in user_text_lower]
+    user_text_lower = user_text.lower().strip()
+
+    # Teilwort-Matching für flexiblere Erkennung
+    found_keywords = []
+    for kw in keywords:
+        kw_lower = kw.lower().strip()
+        # Prüft sowohl exakte Treffer als auch Wortstämme/Teilbegriffe
+        if kw_lower in user_text_lower or any(
+            part in user_text_lower
+            for part in kw_lower.split()
+            if len(part) > 2
+        ):
+            found_keywords.append(kw)
+
     score = len(found_keywords)
     total = len(keywords)
 
+    st.markdown("---")
     st.markdown("#### 📊 Auswertung Ihrer Antwort:")
-    if score == total:
-        st.success(f"🎉 **Ausgezeichnet!** Alle essenziellen Fachbegriffe wurden erkannt ({score}/{total}).")
+
+    if score == total and total > 0:
+        st.success(
+            f"🎉 **Ausgezeichnet!** Alle Kernbegriffe wurden erkannt ({score}/{total})."
+        )
     elif score > 0:
-        st.warning(f"⚠️ **Teilweise korrekt:** Sie haben {score} von {total} Wichtigen Schlüsselwörtern genannt.")
+        st.warning(
+            f"⚠️ **Teilweise korrekt:** {score} von {total} Kernbegriffen erkannt."
+        )
     else:
-        st.error("❌ **Unvollständig / Unkorrekt:** Es wurden keine zentralen Fachbegriffe erkannt.")
+        st.info(
+            "💡 **Vergleich mit der Musterlösung:** Keine direkten Schlüsselwörter erkannt. Vergleichen Sie Ihre Antwort bitte manuell:"
+        )
 
     col1, col2 = st.columns(2)
     with col1:
@@ -96,12 +145,13 @@ def evaluate_user_answer(user_text, keywords, sample_solution, explanation):
     with col2:
         st.success(f"**Musterlösung:**\n\n{sample_solution}")
 
-    with st.expander("💡 Detaillierte fachliche Erklärung & Hintergrundwissen"):
-        st.write(explanation)
+    if explanation:
+        with st.expander("💡 Detaillierte fachliche Erklärung & Hintergründe"):
+            st.write(explanation)
 
 
 # ==============================================================================
-# 2. BILD-GENERATOREN FOR KOMPLEXAUFGABEN
+# 2. BILD-GENERATOREN FÜR KOMPLEXAUFGABEN
 # ==============================================================================
 def create_urine_strip_image():
     img = Image.new("RGB", (320, 480), color="#F8FAFC")
@@ -116,10 +166,13 @@ def create_urine_strip_image():
     ]
     y_start = 40
     for name, color in fields:
-        draw.rectangle([125, y_start, 175, y_start + 40], fill=color, outline="#475569")
+        draw.rectangle(
+            [125, y_start, 175, y_start + 40], fill=color, outline="#475569"
+        )
         draw.text((190, y_start + 12), name, fill="#1E293B")
         y_start += 80
     return img
+
 
 def create_ekg_image():
     img = Image.new("RGB", (600, 280), color="#FFF5F5")
@@ -129,14 +182,33 @@ def create_ekg_image():
     for y in range(0, 280, 20):
         draw.line([(0, y), (600, y)], fill="#FED7D7", width=1)
     points = [
-        (20, 180), (60, 180), (70, 190), (80, 180), (90, 180),
-        (100, 210), (110, 80), (120, 230), (130, 110), (180, 110),
-        (210, 180), (260, 180), (270, 190), (280, 180), (290, 180),
-        (300, 210), (310, 80), (320, 230), (330, 110), (380, 110), (410, 180), (580, 180)
+        (20, 180),
+        (60, 180),
+        (70, 190),
+        (80, 180),
+        (90, 180),
+        (100, 210),
+        (110, 80),
+        (120, 230),
+        (130, 110),
+        (180, 110),
+        (210, 180),
+        (260, 180),
+        (270, 190),
+        (280, 180),
+        (290, 180),
+        (300, 210),
+        (310, 80),
+        (320, 230),
+        (330, 110),
+        (380, 110),
+        (410, 180),
+        (580, 180),
     ]
     draw.line(points, fill="#DC2626", width=3)
     draw.text((20, 15), "12-Kanal-EKG (Ableitung II) - Notfall", fill="#991B1B")
     return img
+
 
 def create_au_form_image():
     img = Image.new("RGB", (520, 320), color="#F0FDF4")
@@ -149,7 +221,11 @@ def create_au_form_image():
     draw.text((185, 63), "[ ] Folgebescheinigung", fill="#166534")
     draw.text((30, 105), "Diagnose (ICD-10-Schlüssel):", fill="#166534")
     draw.rectangle([30, 125, 490, 165], fill="#FFFFFF", outline="#16A34A")
-    draw.text((40, 138), "N39.0 G (Harnwegsinfektion, Lokalisation nicht näher bezeichnet)", fill="#0F172A")
+    draw.text(
+        (40, 138),
+        "N39.0 G (Harnwegsinfektion, Lokalisation nicht näher bezeichnet)",
+        fill="#0F172A",
+    )
     draw.text((30, 185), "Arbeitsunfähig seit: 14.10.2026", fill="#166534")
     draw.text((30, 210), "Voraussichtlich bis: 20.10.2026", fill="#166534")
     draw.text((30, 235), "Festgestellt am: 14.10.2026", fill="#166534")
@@ -216,7 +292,32 @@ IMAGE_CASE_STUDIES = [
             },
         ],
     },
+    {
+        "id": "fall_3",
+        "title": "Fallbeispiel 3: Arbeitsunfähigkeit & Formularkunde Muster 1 (LF 3 & LF 4)",
+        "generator": create_au_form_image,
+        "caption": "Abb. 3: Vorgelegtes Formular Muster 1.",
+        "scenario": """
+        **Patientenanamnese:**
+        Ein GKV-Patient erscheint in der Sprechstunde. Der Arzt stellt eine akute Harnwegsinfektion fest und schreibt den Patienten arbeitsunfähig.
+        """,
+        "questions": [
+            {
+                "q": "1. Was bedeutet die Zusatzkennzeichnung 'G' hinter dem ICD-10-Diagnosecode N39.0?",
+                "sample": "Gesicherte Diagnose.",
+                "keywords": ["gesichert", "gesicherte diagnose"],
+                "exp": "In der ambulanten Abrechnung steht 'G' für gesichert, 'V' für Verdacht auf, 'A' für Ausschluss und 'Z' für symptomfreien Zustand nach.",
+            },
+            {
+                "q": "2. Unter welcher Bedingung darf eine Rückdatierung des AU-Beginns ausnahmsweise erfolgen?",
+                "sample": "Maximal 3 Tage nach eingehender ärztlicher Untersuchung.",
+                "keywords": ["3 tage", "ausnahmsweise"],
+                "exp": "Nach den Arbeitsunfähigkeits-Richtlinien ist eine Rückdatierung nur ausnahmsweise und nur bis zu 3 Tage zulässig.",
+            },
+        ],
+    },
 ]
+
 
 # ==============================================================================
 # 4. RECHEN-GENERATOREN
@@ -244,6 +345,7 @@ def generate_naegele_task():
         "correct_date": correct_edd.strftime("%d.%m.%Y"),
     }
 
+
 def generate_goae_task():
     base_price = round(random.uniform(10.0, 120.0), 2)
     factor = random.choice([1.0, 1.15, 1.8, 2.3, 3.5])
@@ -253,42 +355,64 @@ def generate_goae_task():
         "total": round(base_price * factor, 2),
     }
 
+
 # ==============================================================================
 # 5. MODUS-STEUERUNG
 # ==============================================================================
 
 if mode == "✍️ Freitext-Fragenkatalog":
     st.header("✍️ Freitext-Fragenkatalog (Eigenformulierung)")
-    st.write("Formulieren Sie Ihre Antwort frei im Textfeld. Das System gleicht Ihre Antwort anschließend mit der Fachmusterlösung ab:")
+    st.write(
+        "Formulieren Sie Ihre Antwort frei im Textfeld. Das System gleicht Ihre Antwort anschließend mit der Fachmusterlösung ab:"
+    )
 
     lf_filter = st.selectbox(
         "Lernfeld filtern:",
         ["Alle Lernfelder", "LF 1", "LF 2", "LF 3", "LF 4", "LF 5"],
     )
     filtered = [
-        q for q in ALL_QUESTIONS
-        if lf_filter == "Alle Lernfelder" or q["lf"] == lf_filter
+        q
+        for q in ALL_QUESTIONS
+        if lf_filter == "Alle Lernfelder" or q.get("lf") == lf_filter
     ]
 
     for idx, q in enumerate(filtered):
-        with st.expander(f"Frage {idx+1} [{q['lf']}]: {q['q']}"):
-            user_input = st.text_area("Ihre Antwort:", key=f"cat_txt_{q['lf']}_{idx}", height=90)
-            if st.button("Antwort einreichen & Gegenprüfen", key=f"btn_cat_{q['lf']}_{idx}"):
-                evaluate_user_answer(user_input, q["keywords"], q["sample"], q["exp"])
+        with st.expander(f"Frage {idx+1} [{q.get('lf', 'LF')}]: {q['q']}"):
+            user_input = st.text_area(
+                "Ihre Antwort:", key=f"cat_txt_{q.get('lf', 'LF')}_{idx}", height=90
+            )
+            if st.button(
+                "Antwort einreichen & Gegenprüfen",
+                key=f"btn_cat_{q.get('lf', 'LF')}_{idx}",
+            ):
+                evaluate_user_answer(
+                    user_text=user_input,
+                    keywords=q.get("keywords", []),
+                    sample_solution=q.get("sample", "Keine Musterlösung hinterlegt."),
+                    explanation=q.get("exp", ""),
+                )
 
 elif mode == "🖼️ Komplexe Bild- & Praxisfälle":
     st.header("🖼️ Komplexe Praxis-Fallstudien")
-    st.write("Analysieren Sie das Befundbild und beantworten Sie die praxisnahen Prüfungsfragen:")
+    st.write(
+        "Analysieren Sie das Befundbild und beantworten Sie die praxisnahen Prüfungsfragen:"
+    )
 
     case_title = st.selectbox(
         "Wählen Sie einen Fall aus:",
         [c["title"] for c in IMAGE_CASE_STUDIES],
     )
-    selected_case = next(c for c in IMAGE_CASE_STUDIES if c["title"] == case_title)
+    selected_case = next(
+        c for c in IMAGE_CASE_STUDIES if c["title"] == case_title
+    )
 
     col1, col2 = st.columns([1, 1])
     with col1:
-        st.image(selected_case["generator"](), caption=selected_case["caption"], use_container_width=True)
+        st.image(
+            selected_case["generator"](),
+            caption=selected_case["caption"],
+            use_container_width=True,
+        )
 
     with col2:
         st.markdown(selected_case["scenario"])
@@ -296,9 +420,18 @@ elif mode == "🖼️ Komplexe Bild- & Praxisfälle":
 
         for q_idx, q_item in enumerate(selected_case["questions"]):
             st.markdown(f"**{q_item['q']}**")
-            u_ans = st.text_area("Ihre Lösung:", key=f"img_txt_{case_title}_{q_idx}", height=80)
-            if st.button("Lösung überprüfen", key=f"img_btn_{case_title}_{q_idx}"):
-                evaluate_user_answer(u_ans, q_item["keywords"], q_item["sample"], q_item["exp"])
+            u_ans = st.text_area(
+                "Ihre Lösung:", key=f"img_txt_{case_title}_{q_idx}", height=80
+            )
+            if st.button(
+                "Lösung überprüfen", key=f"img_btn_{case_title}_{q_idx}"
+            ):
+                evaluate_user_answer(
+                    user_text=u_ans,
+                    keywords=q_item.get("keywords", []),
+                    sample_solution=q_item.get("sample", ""),
+                    explanation=q_item.get("exp", ""),
+                )
             st.markdown("---")
 
 elif mode == "🎲 Dynamische Rechen-Generatoren":
@@ -307,17 +440,25 @@ elif mode == "🎲 Dynamische Rechen-Generatoren":
 
     with col1:
         st.subheader("1. Naegele-Regel (Gynäkologie)")
-        if "naegele" not in st.session_state or st.button("🔄 Neue Naegele-Aufgabe"):
+        if "naegele" not in st.session_state or st.button(
+            "🔄 Neue Naegele-Aufgabe"
+        ):
             st.session_state.naegele = generate_naegele_task()
         n_task = st.session_state.naegele
         st.write(f"**Letzte Regel (LMP):** {n_task['lmp']}")
         st.write(f"**Zykluslänge:** {n_task['cycle']} Tage")
-        u_date = st.text_input("Berechneter Entbindungstermin (TT.MM.YYYY):", key="naegele_in")
+        u_date = st.text_input(
+            "Berechneter Entbindungstermin (TT.MM.YYYY):", key="naegele_in"
+        )
         if st.button("Termin prüfen"):
             if u_date.strip() == n_task["correct_date"]:
-                st.success(f"✅ Richtig! Berechneter Termin: {n_task['correct_date']}")
+                st.success(
+                    f"✅ Richtig! Berechneter Termin: {n_task['correct_date']}"
+                )
             else:
-                st.error(f"❌ Falsch. Korrekter Termin: {n_task['correct_date']}")
+                st.error(
+                    f"❌ Falsch. Korrekter Termin: {n_task['correct_date']}"
+                )
 
     with col2:
         st.subheader("2. GOÄ-Honorare (Abrechnung)")
@@ -326,42 +467,64 @@ elif mode == "🎲 Dynamische Rechen-Generatoren":
         g_task = st.session_state.goae
         st.write(f"**Einfacher Satz:** {g_task['base']:.2f} €")
         st.write(f"**Steigerungsfaktor:** {g_task['factor']:.2f}")
-        u_price = st.number_input("Rechnungsbetrag (€):", step=0.01, format="%.2f", key="goae_in")
+        u_price = st.number_input(
+            "Rechnungsbetrag (€):", step=0.01, format="%.2f", key="goae_in"
+        )
         if st.button("GOÄ Betrag prüfen"):
             if abs(u_price - g_task["total"]) < 0.05:
-                st.success(f"✅ Korrekt! Rechnungsbetrag: {g_task['total']:.2f} €")
+                st.success(
+                    f"✅ Korrekt! Rechnungsbetrag: {g_task['total']:.2f} €"
+                )
             else:
-                st.error(f"❌ Falsch. Korrekter Betrag: {g_task['total']:.2f} €")
+                st.error(
+                    f"❌ Falsch. Korrekter Betrag: {g_task['total']:.2f} €"
+                )
 
 elif mode == "🩸 Laborwert-Diagnostiker":
     st.header("🩸 Interaktiver Laborwert-Diagnostiker")
-    st.write("Analysieren Sie den Befund und formulieren Sie Ihre Verdachtsdiagnose frei:")
+    st.write(
+        "Analysieren Sie den Befund und formulieren Sie Ihre Verdachtsdiagnose frei:"
+    )
 
-    lab_param = "HbA1c"
     lab_val = 8.5
     st.metric("Gemessener HbA1c-Wert", f"{lab_val} %", "Norm: 4.0 - 6.0 %")
 
-    u_diag = st.text_area("Ihre medizinische Bewertung & Verdachtsdiagnose:", height=100)
+    u_diag = st.text_area(
+        "Ihre medizinische Bewertung & Verdachtsdiagnose:", height=100
+    )
     if st.button("Befund-Auswertung einreichen"):
         evaluate_user_answer(
-            u_diag,
-            ["diabetes", "erhöht", "blutzucker"],
-            "Deutlich erhöhter HbA1c-Wert: Verdacht auf Diabetes mellitus bzw. unzureichend eingestellter Blutzucker.",
-            "Der HbA1c-Wert spiegelt den durchschnittlichen Blutzuckerspiegel der letzten 8 bis 12 Wochen wider."
+            user_text=u_diag,
+            keywords=["diabetes", "erhöht", "blutzucker"],
+            sample_solution="Deutlich erhöhter HbA1c-Wert: Verdacht auf Diabetes mellitus bzw. unzureichend eingestellten Blutzucker.",
+            explanation="Der HbA1c-Wert spiegelt den durchschnittlichen Blutzuckerspiegel der letzten 8 bis 12 Wochen wider.",
         )
 
 elif mode == "📝 Freitext-Musterklausur":
     st.header("📝 Generierte Freitext-Musterklausur")
     if not ALL_QUESTIONS:
-        st.warning("Keine Fragen vorhanden.")
+        st.warning("Keine Fragen geladen. Bitte überprüfen Sie 'fragen.json'.")
     else:
-        if "exam_questions" not in st.session_state or st.button("🔄 Neue Musterklausur zusammenstellen"):
-            st.session_state.exam_questions = random.sample(ALL_QUESTIONS, min(5, len(ALL_QUESTIONS)))
+        if "exam_questions" not in st.session_state or st.button(
+            "🔄 Neue Musterklausur zusammenstellen"
+        ):
+            st.session_state.exam_questions = random.sample(
+                ALL_QUESTIONS, min(5, len(ALL_QUESTIONS))
+            )
 
         exam_q = st.session_state.exam_questions
         for idx, q in enumerate(exam_q):
-            st.markdown(f"### Frage {idx+1} [{q['lf']}]: {q['q']}")
-            u_ans = st.text_area("Ihre Ausarbeitung:", key=f"ex_txt_{idx}", height=100)
+            st.markdown(f"### Frage {idx+1} [{q.get('lf', 'LF')}]: {q['q']}")
+
+            u_ans = st.text_area(
+                "Ihre Ausarbeitung:", key=f"ex_txt_{idx}", height=100
+            )
+
             if st.button(f"Frage {idx+1} gegenprüfen", key=f"ex_btn_{idx}"):
-                evaluate_user_answer(u_ans, q["keywords"], q["sample"], q["exp"])
+                evaluate_user_answer(
+                    user_text=u_ans,
+                    keywords=q.get("keywords", []),
+                    sample_solution=q.get("sample", "Keine Musterlösung vorhanden."),
+                    explanation=q.get("exp", ""),
+                )
             st.markdown("---")
