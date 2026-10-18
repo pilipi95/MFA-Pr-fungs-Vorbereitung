@@ -19,7 +19,8 @@ st.caption(
 )
 
 # Lade Fragen aus der externen JSON-Datei
-JSON_FILE = "fragen.json"
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+JSON_FILE = os.path.join(BASE_DIR, "fragen.json")
 
 
 @st.cache_data
