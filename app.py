@@ -1,9 +1,8 @@
 import datetime
-import io
 import json
 import os
 import random
-from PIL import Image, ImageDraw, ImageFont
+from PIL import Image, ImageDraw
 import streamlit as st
 
 # ==============================================================================
@@ -28,15 +27,27 @@ JSON_FILE = os.path.join(BASE_DIR, "fragen.json")
 
 @st.cache_data
 def load_questions():
+    """Lädt die Fragen und mischt die Antwortoptionen zufällig durch."""
+    questions = []
     if os.path.exists(JSON_FILE):
         try:
             with open(JSON_FILE, "r", encoding="utf-8") as f:
-                return json.load(f)
+                questions = json.load(f)
         except Exception as e:
             st.error(f"Fehler beim Lesen der 'fragen.json': {e}")
-            return get_fallback_questions()
+            questions = get_fallback_questions()
     else:
-        return get_fallback_questions()
+        questions = get_fallback_questions()
+
+    # Mische die Optionen für jede Frage zufällig durch
+    for q in questions:
+        if "options" in q and isinstance(q["options"], list):
+            # Erstelle eine Kopie der Liste, um das Original nicht starr zu belassen
+            shuffled_options = list(q["options"])
+            random.shuffle(shuffled_options)
+            q["options"] = shuffled_options
+
+    return questions
 
 
 def get_fallback_questions():
@@ -45,8 +56,8 @@ def get_fallback_questions():
             "lf": "LF 1",
             "q": "Welches Schmerzzeichen deutet typischerweise auf eine Appendizitis hin?",
             "options": [
-                "Kontralateraler Loslassschmerz (Blumberg-Zeichen)",
                 "Homans-Zeichen",
+                "Kontralateraler Loslassschmerz (Blumberg-Zeichen)",
                 "Mundwinkelasymmetrie",
                 "Pupillendifferenz",
             ],
@@ -134,7 +145,6 @@ def create_ekg_image():
         (180, 120),  # ST-Hebung (Elevated)
         (210, 180),
         (260, 180),  # T-Welle / Isoelektrisch
-        # Wiederholung
         (270, 190),
         (280, 180),
         (290, 180),
@@ -158,18 +168,15 @@ def create_au_form_image():
     img = Image.new("RGB", (500, 350), color="#F0FDF4")
     draw = ImageDraw.Draw(img)
 
-    # Formular-Rahmen
     draw.rectangle([10, 10, 490, 340], fill="#DCFCE7", outline="#16A34A", width=2)
     draw.text((20, 20), "Muster 1: Arbeitsunfähigkeitsbescheinigung", fill="#15803D")
 
-    # Kästchen Erst-/Folgemeldung
     draw.rectangle([30, 60, 150, 90], outline="#16A34A")
     draw.text((35, 68), "[X] Erstbescheinigung", fill="#166534")
 
     draw.rectangle([170, 60, 290, 90], outline="#16A34A")
     draw.text((175, 68), "[ ] Folgebescheinigung", fill="#166534")
 
-    # Diagnosenfeld
     draw.text((30, 120), "AU begründende Diagnose (ICD-10):", fill="#166534")
     draw.rectangle([30, 145, 470, 185], fill="#FFFFFF", outline="#16A34A")
     draw.text((40, 158), "J06.9 G (Akute Infektion der oberen Atemwege)", fill="#0F172A")
@@ -199,8 +206,8 @@ IMAGE_CASE_STUDIES = [
             {
                 "q": "1. Welche zwei Testfelder sind auf dem Teststreifen oben eindeutig positiv verändert?",
                 "options": [
-                    "Leukozyten und Nitrit",
                     "Glukose und Ketone",
+                    "Leukozyten und Nitrit",
                     "Bilirubin und Urobilinogen",
                     "Protein und pH-Wert",
                 ],
@@ -210,9 +217,9 @@ IMAGE_CASE_STUDIES = [
             {
                 "q": "2. Welche Bedingung muss für eine verlässliche Nitritbestimmung erfüllt sein?",
                 "options": [
-                    "Der Urin muss mindestens 4 Stunden in der Blase verweilt haben (Morgenurin).",
                     "Der Urin muss vor der Messung auf 37 °C erwärmt werden.",
                     "Es muss zwingend Katheterurin verwendet werden.",
+                    "Der Urin muss mindestens 4 Stunden in der Blase verweilt haben (Morgenurin).",
                     "Die Patientin muss zuvor 1 Liter Wasser trinken.",
                 ],
                 "correct": "Der Urin muss mindestens 4 Stunden in der Blase verweilt haben (Morgenurin).",
@@ -220,7 +227,7 @@ IMAGE_CASE_STUDIES = [
             },
             {
                 "q": "3. Welche EBM-Ziffer rechnet die Hausarztpraxis für den Urinstreifen-Schnelltest ab?",
-                "options": ["EBM 32033", "EBM 03000", "EBM 03220", "EBM 32001"],
+                "options": ["EBM 03000", "EBM 32033", "EBM 03220", "EBM 32001"],
                 "correct": "EBM 32033",
                 "exp": "Die EBM 32033 ist die Gebührenordnungsposition für den Harnstreifentest.",
             },
@@ -240,8 +247,8 @@ IMAGE_CASE_STUDIES = [
             {
                 "q": "1. Welche auffällige Pathologie zeigt das EKG im Kurvenverlauf?",
                 "options": [
-                    "Signifikante ST-Streckenhebung (STEMI)",
                     "Verlängerte PQ-Zeit (AV-Block I°)",
+                    "Signifikante ST-Streckenhebung (STEMI)",
                     "Absolute Arrhythmie bei Vorhofflimmern",
                     "Ablaufende Ventrikuläre Tachykardie",
                 ],
@@ -266,15 +273,15 @@ IMAGE_CASE_STUDIES = [
         "questions": [
             {
                 "q": "1. Welche Zusatzbuchstabe im ICD-10-Code bedeutet 'Gesicherte Diagnose'?",
-                "options": ["G (Gesichert)", "V (Verdacht)", "A (Ausschluss)", "G (Grad)"],
+                "options": ["V (Verdacht)", "A (Ausschluss)", "G (Gesichert)", "G (Grad)"],
                 "correct": "G (Gesichert)",
                 "exp": "In der ambulanten Versorgung steht 'G' für gesichert, 'V' für Verdacht auf und 'A' für Ausschluss.",
             },
             {
                 "q": "2. Bis zu wie vielen Tagen darf eine AU-Bescheinigung in Ausnahmefällen rückdatiert werden?",
                 "options": [
-                    "Maximal 3 Tage nach gründlicher ärztlicher Untersuchung",
                     "Bis zu 7 Tage",
+                    "Maximal 3 Tage nach gründlicher ärztlicher Untersuchung",
                     "Rückdatierung ist gesetzlich streng verboten",
                     "Unbegrenzt nach Ermessen des Arztes",
                 ],
@@ -381,7 +388,6 @@ if mode == "🖼️ Bild-Fallbeispiele (Komplex)":
     col1, col2 = st.columns([1, 1])
 
     with col1:
-        # Dynamisch erzeugtes Bild anzeigen
         generated_img = selected_img_case["generator"]()
         st.image(
             generated_img,
