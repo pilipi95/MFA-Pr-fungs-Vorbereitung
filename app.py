@@ -5,7 +5,7 @@ import random
 import streamlit as st
 
 # ==============================================================================
-# 1. SEITEN-KONFIGURATION & SCHLANKES, HOCHKONTRASTREICHES DESIGN
+# 1. SEITEN-KONFIGURATION & SETUP
 # ==============================================================================
 st.set_page_config(
     page_title="MFA Prüfungs-Trainer BW",
@@ -14,67 +14,12 @@ st.set_page_config(
     initial_sidebar_state="expanded",
 )
 
-# Überarbeitetes CSS für maximale Lesbarkeit und ein ruhiges Erscheinungsbild
-st.markdown(
-    """
-    <style>
-    /* Grund-Layout & Schriften */
-    .stApp {
-        background-color: #FFFFFF !important;
-        color: #1A202C !important;
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-    }
-    
-    /* Hauptüberschriften */
-    h1, h2, h3, h4 {
-        color: #1A365D !important;
-        font-weight: 700 !important;
-    }
-
-    /* Karten / Container für Aufgaben */
-    .content-box {
-        background-color: #FAFAFA;
-        border: 1px solid #CBD5E0;
-        border-radius: 8px;
-        padding: 1.5rem;
-        margin-bottom: 1.2rem;
-    }
-
-    /* Buttons: Dezent, gut lesbar und schlicht */
-    .stButton>button {
-        background-color: #2B6CB0 !important;
-        color: #FFFFFF !important;
-        border: none !important;
-        border-radius: 6px !important;
-        font-weight: 600 !important;
-        padding: 0.5rem 1.2rem !important;
-    }
-    
-    .stButton>button:hover {
-        background-color: #2C5282 !important;
-    }
-
-    /* Sidebar Anpassen */
-    section[data-testid="stSidebar"] {
-        background-color: #F7FAFC !important;
-        border-right: 1px solid #E2E8F0;
-    }
-    
-    /* Text in Eingabefeldern und Auswahlboxen */
-    .stTextInput input, .stSelectbox div, .stNumberInput input {
-        color: #1A202C !important;
-        background-color: #FFFFFF !important;
-        border-radius: 6px !important;
-    }
-    </style>
-""",
-    unsafe_allow_html=True,
+st.title("🩺 MFA Abschlussprüfung BW")
+st.caption(
+    "Interaktiver Simulator für die Lernfelder 1 bis 5 (MFA Baden-Württemberg)"
 )
 
-st.title("🩺 MFA Abschlussprüfung BW")
-st.caption("Interaktiver Prüfungssimulator (Lernfelder 1 bis 5)")
-
-# Robuster Pfad zur fragen.json
+# Robuste absolute Pfadberechnung für fragen.json
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 JSON_FILE = os.path.join(BASE_DIR, "fragen.json")
 
@@ -96,6 +41,7 @@ def load_questions():
 
 
 def get_fallback_questions():
+    """Notfall-Fragenkatalog, falls fragen.json nicht geladen werden kann."""
     return [
         {
             "lf": "LF 1",
@@ -245,7 +191,7 @@ MATCHING_TASKS = [
 CASE_STUDIES = [
     {
         "title": "Fallstudie 1: Akuter Notfall in der Praxis (Anaphylaxie)",
-        "scenario": "<strong>Ausgangslage:</strong> Herr Müller (45 Jahre) erhält eine Injektion. 3 Minuten später klagt er über Juckreiz, Atemnot und Schwindel. Das Gesicht schwillt an.",
+        "scenario": "**Ausgangslage:** Herr Müller (45 Jahre) erhält eine Injektion. 3 Minuten später klagt er über Juckreiz, Atemnot und Schwindel. Das Gesicht schwillt an.",
         "questions": [
             {
                 "q": "1. Welches Krankheitsbild liegt vor?",
@@ -273,14 +219,11 @@ FREETEXT_TASKS = [
 # ==============================================================================
 
 if mode == "🎲 Dynamische Generatoren":
-    st.markdown("### 🎲 Dynamische Rechen- & Fallaufgaben")
+    st.header("🎲 Dynamische Rechen- & Fallaufgaben")
     col1, col2 = st.columns(2)
 
     with col1:
-        st.markdown(
-            '<div class="content-box"><h4>1. Naegele-Regel (Gynäkologie)</h4>',
-            unsafe_allow_html=True,
-        )
+        st.subheader("1. Naegele-Regel (Gynäkologie)")
         if "naegele" not in st.session_state or st.button(
             "🔄 Neue Naegele-Aufgabe"
         ):
@@ -296,13 +239,9 @@ if mode == "🎲 Dynamische Generatoren":
                 st.success(f"✅ Richtig! {n_task['correct_date']}")
             else:
                 st.error(f"❌ Falsch. Richtig: {n_task['correct_date']}")
-        st.markdown("</div>", unsafe_allow_html=True)
 
     with col2:
-        st.markdown(
-            '<div class="content-box"><h4>2. GOÄ-Honorare (Abrechnung)</h4>',
-            unsafe_allow_html=True,
-        )
+        st.subheader("2. GOÄ-Honorare (Abrechnung)")
         if "goae" not in st.session_state or st.button("🔄 Neue GOÄ-Aufgabe"):
             st.session_state.goae = generate_goae_task()
         g_task = st.session_state.goae
@@ -316,17 +255,15 @@ if mode == "🎲 Dynamische Generatoren":
                 st.success(f"✅ Korrekt! {g_task['total']:.2f} €")
             else:
                 st.error(f"❌ Falsch. Richtig: {g_task['total']:.2f} €")
-        st.markdown("</div>", unsafe_allow_html=True)
 
 elif mode == "🩸 Laborwert-Diagnostiker":
-    st.markdown("### 🩸 Interaktiver Laborwert-Diagnostiker")
+    st.header("🩸 Interaktiver Laborwert-Diagnostiker")
     if "lab_task" not in st.session_state or st.button(
         "🔄 Nächster Laborbefund"
     ):
         st.session_state.lab_task = generate_lab_value()
     l_task = st.session_state.lab_task
 
-    st.markdown('<div class="content-box">', unsafe_allow_html=True)
     st.subheader(f"Laborparameter: {l_task['parameter']}")
     col_a, col_b = st.columns(2)
     col_a.metric("Gemessener Wert", f"{l_task['val']} {l_task['unit']}")
@@ -352,12 +289,10 @@ elif mode == "🩸 Laborwert-Diagnostiker":
             st.success(f"✅ Richtig! Wert ist {correct_eval}.")
         else:
             st.error(f"❌ Falsch. Richtig: **{correct_eval}**.")
-    st.markdown("</div>", unsafe_allow_html=True)
 
 elif mode == "🔄 Zuordnungs-Trainer":
-    st.markdown("### 🔄 Zuordnungs-Trainer (Matching)")
+    st.header("🔄 Zuordnungs-Trainer (Matching)")
     for m_idx, m_task in enumerate(MATCHING_TASKS):
-        st.markdown('<div class="content-box">', unsafe_allow_html=True)
         st.subheader(f"{m_idx+1}. {m_task['title']}")
         user_matches = {}
         for item_idx, item in enumerate(m_task["items"]):
@@ -378,17 +313,15 @@ elif mode == "🔄 Zuordnungs-Trainer":
                 st.warning(
                     f"{correct_count} von {len(m_task['items'])} richtig."
                 )
-        st.markdown("</div>", unsafe_allow_html=True)
+        st.markdown("---")
 
 elif mode == "📑 Original-Fallstudien":
-    st.markdown("### 📑 Original-Fallstudien & Komplexaufgaben")
+    st.header("📑 Original-Fallstudien & Komplexaufgaben")
     case_choice = st.selectbox(
         "Fall auswählen:", [c["title"] for c in CASE_STUDIES]
     )
     selected_case = next(c for c in CASE_STUDIES if c["title"] == case_choice)
-    st.markdown('<div class="content-box">', unsafe_allow_html=True)
-    st.markdown(selected_case["scenario"], unsafe_allow_html=True)
-    st.markdown("</div>", unsafe_allow_html=True)
+    st.info(selected_case["scenario"])
 
     for idx, q_item in enumerate(selected_case["questions"]):
         st.markdown(f"**{q_item['q']}**")
@@ -397,11 +330,11 @@ elif mode == "📑 Original-Fallstudien":
         )
         with st.expander("💡 Musterlösung anzeigen"):
             st.markdown(q_item["solution"])
+        st.markdown("---")
 
 elif mode == "✏️ Freitext-Trainer":
-    st.markdown("### ✏️ Freitext- & Fachbegriffe-Trainer")
+    st.header("✏️ Freitext- & Fachbegriffe-Trainer")
     for idx, ft in enumerate(FREETEXT_TASKS):
-        st.markdown('<div class="content-box">', unsafe_allow_html=True)
         st.subheader(f"Aufgabe {idx+1}: {ft['term']}")
         st.write(ft["prompt"])
         user_txt = st.text_input("Ihre Antwort:", key=f"ft_in_{idx}")
@@ -415,10 +348,10 @@ elif mode == "✏️ Freitext-Trainer":
                 else:
                     st.warning("⚠️ Überprüfen Sie Ihre Eingabe.")
                 st.info(f"**Musterlösung:** {ft['sample']}")
-        st.markdown("</div>", unsafe_allow_html=True)
+        st.markdown("---")
 
 elif mode == "📝 Musterklausur":
-    st.markdown("### 📝 Generierte Musterklausur")
+    st.header("📝 Generierte Musterklausur")
     if not ALL_QUESTIONS:
         st.warning("Keine Fragen vorhanden.")
     else:
@@ -453,17 +386,15 @@ elif mode == "📝 Musterklausur":
             total = len(exam_q)
             percent = round((score / total) * 100)
 
-            st.markdown('<div class="content-box">', unsafe_allow_html=True)
             st.subheader(f"Ergebnis: {score} von {total} Punkten ({percent}%)")
             if percent >= 50:
                 st.balloons()
                 st.success("🎉 Bestanden!")
             else:
                 st.error("❌ Nicht bestanden. Bitte wiederholen.")
-            st.markdown("</div>", unsafe_allow_html=True)
 
 elif mode == "📚 Gesamter Fragenkatalog":
-    st.markdown("### 📚 Vollständiger Fragenkatalog")
+    st.header("📚 Vollständiger Fragenkatalog")
     lf_filter = st.selectbox(
         "Lernfeld filtern:",
         ["Alle Lernfelder", "LF 1", "LF 2", "LF 3", "LF 4", "LF 5"],
