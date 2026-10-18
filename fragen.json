@@ -522,7 +522,7 @@
       "Mindestens 2 persönliche Arzt-Patienten-Kontakte in den letzten 4 Quartalen wegen derselben lebensverändernden Erkrankung",
       "Einmaliger Kontakt pro Kalenderjahr bei Patienten über 60 Jahren",
       "Tägliche Blutdruckmessung über einen Zeitraum von 4 Wochen",
-      "Ausschliesslich die Diagnose Diabetes mellitus Typ 2"
+      "Ausschließlich die Diagnose Diabetes mellitus Typ 2"
     ],
     "correct": "Mindestens 2 persönliche Arzt-Patienten-Kontakte in den letzten 4 Quartalen wegen derselben lebensverändernden Erkrankung",
     "exp": "Die 4-3-2-1 Regel bestimmt die kontinuierliche Betreuung chronisch Kranker im EBM."
