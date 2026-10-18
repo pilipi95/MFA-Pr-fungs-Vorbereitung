@@ -8,14 +8,14 @@ import streamlit as st
 # 1. SEITEN-KONFIGURATION & SETUP
 # ==============================================================================
 st.set_page_config(
-    page_title="MFA Prüfungs-Generator BW (Streamlit Cloud)",
+    page_title="MFA Prüfungs-Generator BW (XXL Interaktiv)",
     page_icon="🩺",
     layout="wide",
 )
 
 st.title("🩺 MFA Abschlussprüfung BW – XXL Prüfungs-Generator")
 st.caption(
-    "Interaktiver Simulator für die Lernfelder 1 bis 5 (MFA Baden-Württemberg)."
+    "Interaktiver Simulator mit allen Übungsformen für die Lernfelder 1 bis 5 (MFA Baden-Württemberg)."
 )
 
 # Robustes Laden der fragen.json (speziell für Streamlit Cloud & Linux)
@@ -81,14 +81,14 @@ ALL_QUESTIONS = load_questions()
 # Session State Initialisierung
 if "score" not in st.session_state:
     st.session_state.score = 0
-if "submitted" not in st.session_state:
-    st.session_state.submitted = False
 
-# Sidebar Navigation
+# Sidebar Navigation (Erweitert um Zuordnungen & Labor-Diagnostik)
 mode = st.sidebar.radio(
     "Lernform / Modus wählen:",
     [
         "🎲 Dynamische Generatoren (Naegele, GOÄ, BBiG)",
+        "🩸 Interaktiver Laborwert-Diagnostiker",
+        "🔄 Zuordnungs-Trainer (Matching)",
         "📑 Original-Fallstudien (Komplexaufgaben)",
         "✏️ Freitext- & Fachbegriffe-Trainer",
         "📝 Musterklausur (Zufallsauswahl)",
@@ -152,8 +152,102 @@ def generate_urlaub_task():
     return {"alter": alter, "urlaub": urlaub}
 
 
+def generate_lab_value():
+    """Generiert zufällige Patientendaten und Laborwerte für die Diagnostik."""
+    labs = [
+        {
+            "parameter": "HbA1c",
+            "unit": "%",
+            "norm": "4.0 - 6.0 %",
+            "val": round(random.uniform(4.5, 11.0), 1),
+            "low_thresh": 4.0,
+            "high_thresh": 6.0,
+            "diag_high": "Verdacht auf / Schlecht eingestellter Diabetes mellitus",
+            "diag_low": "Physiologisch / Selten Hypoglykämie-Neigung",
+        },
+        {
+            "parameter": "Kalium",
+            "unit": "mmol/l",
+            "norm": "3.5 - 5.0 mmol/l",
+            "val": round(random.uniform(2.8, 6.8), 1),
+            "low_thresh": 3.5,
+            "high_thresh": 5.0,
+            "diag_high": "Hyperkalämie (Gefahr von Herzrhythmusstörungen / Niereninsuffizienz)",
+            "diag_low": "Hypokalämie (z.B. durch Diuretika, Erbrechen, Laxanzien)",
+        },
+        {
+            "parameter": "Leukozyten",
+            "unit": "/µl",
+            "norm": "4.000 - 10.000 /µl",
+            "val": random.randint(2000, 22000),
+            "low_thresh": 4000,
+            "high_thresh": 10000,
+            "diag_high": "Leukozytose (Bakterielle Infektion / Entzündung)",
+            "diag_low": "Leukopentie (Agranulozytose / Virale Infektion / Knochenmarkschädigung)",
+        },
+        {
+            "parameter": "CRP (C-reaktives Protein)",
+            "unit": "mg/l",
+            "norm": "< 5.0 mg/l",
+            "val": round(random.uniform(1.0, 85.0), 1),
+            "low_thresh": 0.0,
+            "high_thresh": 5.0,
+            "diag_high": "Akute bakterielle Entzündung / Gewebsnekrose",
+            "diag_low": "Normalbefund (keine akute Entzündung)",
+        },
+    ]
+    return random.choice(labs)
+
+
 # ==============================================================================
-# 3. KOMPLEXE FALLSTUDIEN & FREITEXT
+# 3. ZUORDNUNGS-DATENBANK (MATCHING)
+# ==============================================================================
+MATCHING_TASKS = [
+    {
+        "title": "Zuordnung: EBM vs. GOÄ Regelungen",
+        "items": [
+            {
+                "term": "Versichertenpauschale 03000",
+                "correct_cat": "EBM (GKV)",
+            },
+            {
+                "term": "Regelhöchstsatz 2,3-fach",
+                "correct_cat": "GOÄ (PKV)",
+            },
+            {
+                "term": "Schwellenwert 1,8-fach für Sachleistungen",
+                "correct_cat": "GOÄ (PKV)",
+            },
+            {
+                "term": "Chronikerpauschale 03220",
+                "correct_cat": "EBM (GKV)",
+            },
+        ],
+        "categories": ["EBM (GKV)", "GOÄ (PKV)"],
+    },
+    {
+        "title": "Zuordnung: Injektionsarten & Injektionswinkel",
+        "items": [
+            {"term": "Intrakutan (i.c.)", "correct_cat": "10° - 15° (Quaddel)"},
+            {
+                "term": "Subkutan (s.c.)",
+                "correct_cat": "45° - 90° (Fettgewebe)",
+            },
+            {
+                "term": "Intramuskulär (i.m.)",
+                "correct_cat": "90° (Muskelgewebe)",
+            },
+        ],
+        "categories": [
+            "10° - 15° (Quaddel)",
+            "45° - 90° (Fettgewebe)",
+            "90° (Muskelgewebe)",
+        ],
+    },
+]
+
+# ==============================================================================
+# 4. KOMPLEXE FALLSTUDIEN & FREITEXT
 # ==============================================================================
 CASE_STUDIES = [
     {
@@ -229,7 +323,7 @@ FREETEXT_TASKS = [
 ]
 
 # ==============================================================================
-# 4. BENUTZEROBERFLÄCHE & MODUS-STEUERUNG
+# 5. BENUTZEROBERFLÄCHE & MODUS-STEUERUNG
 # ==============================================================================
 
 if mode == "🎲 Dynamische Generatoren (Naegele, GOÄ, BBiG)":
@@ -315,6 +409,81 @@ if mode == "🎲 Dynamische Generatoren (Naegele, GOÄ, BBiG)":
             st.error(
                 f"❌ Falsch. Der gesetzliche Mindestanspruch beträgt {u_task['urlaub']} Werktage."
             )
+
+elif mode == "🩸 Interaktiver Laborwert-Diagnostiker":
+    st.header("🩸 Interaktiver Laborwert-Diagnostiker (LF 2)")
+    st.write(
+        "Bewerten Sie den vorgegebenen Befund und wählen Sie die passende Verdachtsdiagnose:"
+    )
+
+    if "lab_task" not in st.session_state or st.button(
+        "🔄 Neubeitrag / Nächster Laborbefund"
+    ):
+        st.session_state.lab_task = generate_lab_value()
+
+    l_task = st.session_state.lab_task
+
+    st.subheader(f"Laborparameter: {l_task['parameter']}")
+    col1, col2 = st.columns(2)
+    col1.metric("Gemessener Wert", f"{l_task['val']} {l_task['unit']}")
+    col2.metric("Referenzbereich (Norm)", l_task["norm"])
+
+    user_eval = st.radio(
+        "1. Bewertung des Meßwertes:",
+        ["Erhöht", "Erniedrigt", "Normalbefund"],
+        key="lab_eval",
+    )
+
+    if user_eval == "Erhöht":
+        correct_eval = "Erhöht" if l_task["val"] > l_task["high_thresh"] else ("Erniedrigt" if l_task["val"] < l_task["low_thresh"] else "Normalbefund")
+    elif user_eval == "Erniedrigt":
+        correct_eval = "Erniedrigt" if l_task["val"] < l_task["low_thresh"] else ("Erhöht" if l_task["val"] > l_task["high_thresh"] else "Normalbefund")
+    else:
+        correct_eval = "Normalbefund" if l_task["low_thresh"] <= l_task["val"] <= l_task["high_thresh"] else ("Erhöht" if l_task["val"] > l_task["high_thresh"] else "Erniedrigt")
+
+    if st.button("Befund-Bewertung überprüfen"):
+        if (
+            (l_task["val"] > l_task["high_thresh"] and user_eval == "Erhöht")
+            or (l_task["val"] < l_task["low_thresh"] and user_eval == "Erniedrigt")
+            or (l_task["low_thresh"] <= l_task["val"] <= l_task["high_thresh"] and user_eval == "Normalbefund")
+        ):
+            st.success(f"✅ Richtig! Der Wert ist {correct_eval}.")
+            st.info(
+                f"**Klinische Einordnung:** {l_task['diag_high'] if user_eval == 'Erhöht' else (l_task['diag_low'] if user_eval == 'Erniedrigt' else 'Unauffälliger Befund')}"
+            )
+        else:
+            st.error(f"❌ Falsch. Der Wert ist physiologisch: **{correct_eval}**.")
+
+elif mode == "🔄 Zuordnungs-Trainer (Matching)":
+    st.header("🔄 Zuordnungs-Trainer (Matching)")
+    st.write(
+        "Ordnen Sie die Begriffe den passenden Oberkategorien zu:"
+    )
+
+    for m_idx, m_task in enumerate(MATCHING_TASKS):
+        st.subheader(f"{m_idx+1}. {m_task['title']}")
+        user_matches = {}
+
+        for item_idx, item in enumerate(m_task["items"]):
+            user_matches[item_idx] = st.selectbox(
+                f"Kategorie für **{item['term']}**:",
+                m_task["categories"],
+                key=f"match_{m_idx}_{item_idx}",
+            )
+
+        if st.button("Zuordnungen prüfen", key=f"btn_match_{m_idx}"):
+            correct_count = 0
+            for item_idx, item in enumerate(m_task["items"]):
+                if user_matches[item_idx] == item["correct_cat"]:
+                    correct_count += 1
+
+            if correct_count == len(m_task["items"]):
+                st.success("🎉 Perfekt! Alle Zuordnungen sind richtig.")
+            else:
+                st.warning(
+                    f"Sie haben {correct_count} von {len(m_task['items'])} Zuordnungen richtig."
+                )
+        st.markdown("---")
 
 elif mode == "📑 Original-Fallstudien (Komplexaufgaben)":
     st.header("📑 Original-Fallstudien & Komplexaufgaben")
