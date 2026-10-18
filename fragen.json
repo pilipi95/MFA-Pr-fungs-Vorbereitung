@@ -1,240 +1,568 @@
 [
   {
     "lf": "LF 1",
-    "q": "Eine Patientin klagt über stechende Schmerzen im rechten Unterbauch. Welches Schmerzzeichen deutet typischerweise auf eine Appendizitis hin?",
-    "options": ["Kontralateraler Loslassschmerz (Blumberg-Zeichen)", "Positive Homans-Zeichen am Unterschenkel", "Mundwinkelasymmetrie und Zungenabweichung", "Einseitige Schwellung und Rötung der Fußsohle"],
-    "correct": "Kontralateraler Loslassschmerz (Blumberg-Zeichen)",
-    "exp": "Das Blumberg-Zeichen (Loslassschmerz nach Druck auf den linken Unterbauch) ist ein klassisches Indiz für eine Reizung des Peritoneums bei Appendizitis."
+    "q": "Welche Ableitung gehört bei einem Standard-12-Kanal-EKG zu den Brustwandableitungen nach Wilson?",
+    "options": ["Ableitungen V1 bis V6", "Ableitungen I, II und III", "Ableitungen aVR, aVL und aVF", "Ableitungen V1 bis V3 und aVF"],
+    "correct": "Ableitungen V1 bis V6",
+    "exp": "Die Ableitungen V1–V6 sind die unipolaren Brustwandableitungen nach Wilson."
   },
   {
     "lf": "LF 1",
-    "q": "Wie wird der voraussichtliche Geburtstermin berechnet, wenn die Patientin einen regelmäßigen Zyklus von 30 Tagen angibt?",
-    "options": ["1. Tag der letzten Regel + 7 Tage - 3 Monate + 1 Jahr + 2 Tage", "1. Tag der letzten Regel + 7 Tage - 3 Monate + 1 Jahr - 2 Tage", "1. Tag der letzten Regel + 14 Tage - 3 Monate + 1 Jahr", "1. Tag der letzten Regel + 7 Tage - 4 Monate + 1 Jahr"],
-    "correct": "1. Tag der letzten Regel + 7 Tage - 3 Monate + 1 Jahr + 2 Tage",
-    "exp": "Bei einem 30-Tage-Zyklus werden zur erweiterten Naegele-Regel zusätzlich 2 Tage hinzugerechnet (+2 Tage Abweichung vom 28-Tage-Standard)."
+    "q": "Wo wird die EKG-Elektrode V4 anatomisch korrekt platziert?",
+    "options": ["5. Interkostalraum (ICR) in der linken Medioklavikularlinie", "4. Interkostalraum (ICR) rechts parasternal", "4. Interkostalraum (ICR) links parasternal", "5. Interkostalraum (ICR) in der vorderen Axillarlinie"],
+    "correct": "5. Interkostalraum (ICR) in der linken Medioklavikularlinie",
+    "exp": "V4 sitzt im 5. ICR auf der Medioklavikularlinie (Schnittpunkt Schlüsselbeinmitte)."
   },
   {
     "lf": "LF 1",
-    "q": "Welche Erstreaktion ist bei einem Patienten mit Verdacht auf einen akuten ST-Hebungsinfarkt (STEMI) korrekt?",
-    "options": ["Notarzt (112) rufen, Oberkörper hochlagern, EKG schreiben, Vitalwerte überwachen", "Patienten flach auf den Rücken legen und Beine hochlagern (Schocklage)", "Sofortige Durchführung eines Belastungs-EKGs zur Bestätigung", "Patienten nach Hause schicken und zur Blutabnahme am Folgetag einbestellen"],
-    "correct": "Notarzt (112) rufen, Oberkörper hochlagern, EKG schreiben, Vitalwerte überwachen",
-    "exp": "Bei Herzinfarkt gilt Herzentlastung durch Oberkörperhochlagerung, sofortiger Notruf und engmaschige Überwachung (EKG, SpO2, BD)."
+    "q": "Welches Symptom ist charakteristisch für einen epileptischen Grand-Mal-Anfall in der tonischen Phase?",
+    "options": ["Plötzliche Muskulaturversteifung des gesamten Körpers mit Bewusstseinsverlust", "Rhythmische Muskelzuckungen an Armen und Beinen", "Verwirrtheit ohne Bewusstseinsverlust", "Kurze Abwesenheit ohne Sturz (Absence)"],
+    "correct": "Plötzliche Muskulaturversteifung des gesamten Körpers mit Bewusstseinsverlust",
+    "exp": "Die tonische Phase zeichnet sich durch dauerhafte Muskelanspannung und Bewusstlosigkeit aus; danach folgt die klonische Phase (Zuckungen)."
   },
   {
     "lf": "LF 1",
-    "q": "Welches Symptom gehört zur klassischen Trias des akuten Myokardinfarkts (STEMI)?",
-    "options": ["Retrosternaler Vernichtungsschmerz, Kaltschweißigkeit und Atemnot", "Stechender Schmerz im rechten Unterbauch und Fieber", "Einseitige Pupillenerweiterung und Lähmung", "Plötzlicher Sehverlust auf beiden Augen"],
-    "correct": "Retrosternaler Vernichtungsschmerz, Kaltschweißigkeit und Atemnot",
-    "exp": "Der Herzinfarkt zeigt sich klassisch durch Engegefühl (Angina Pectoris), Ausstrahlung in den linken Arm/Kiefer und Kaltschweißigkeit."
+    "q": "Welches Notfallmedikament wird bei einem hypoglykämischen Schock eines bewussten Patienten verabreicht?",
+    "options": ["Schnell wirksame Kohlenhydrate oral (z. B. Traubenzucker, Apfelsaft)", "Glukagon i.m. oder Dextrose i.v.", "Subkutanes Insulin", "Beta-Blocker oral"],
+    "correct": "Schnell wirksame Kohlenhydrate oral (z. B. Traubenzucker, Apfelsaft)",
+    "exp": "Ist der Patient ansprechbar und schluckfähig, werden rasch resorbierbare Kohlenhydrate oral gegeben."
   },
   {
     "lf": "LF 1",
-    "q": "Welche EKG-Veränderung ist pathognomonisch für einen akuten ST-Hebungsinfarkt?",
-    "options": ["ST-Streckenhebung in mindestens zwei korrespondierenden Ableitungen", "Verlängerte PQ-Zeit über 0,20 Sekunden", "Fehlen von P-Zacken bei absoluter Arrhythmie", "Negative T-Welle in allen Ableitungen"],
-    "correct": "ST-Streckenhebung in mindestens zwei korrespondierenden Ableitungen",
-    "exp": "Eine Hebung der ST-Strecke aus dem absteigenden Schenkel der R-Zacke weist auf einen transmuralen Infarkt hin."
+    "q": "Was versteht man unter einer TIA (Transitorische Ischämische Attacke)?",
+    "options": ["Eine vorübergehende neurologische Störung durch eine Durchblutungsstörung des Gehirns, die sich innerhalb von 24 Stunden vollständig zurückbildet", "Einen dauerhaften Gehirninfarkt mit bleibenden Lähmungen", "Eine Hirnblutung nach Schädel-Hirn-Trauma", "Einen epileptischen Anfall im Schläfenlappen"],
+    "correct": "Eine vorübergehende neurologische Störung durch eine Durchblutungsstörung des Gehirns, die sich innerhalb von 24 Stunden vollständig zurückbildet",
+    "exp": "Die TIA ist ein Warnzeichen für einen drohenden Schlaganfall; die Symptome bilden sich rasch zurück."
   },
   {
     "lf": "LF 1",
-    "q": "Welche Injektionsart wird gewählt, wenn ein Arzneimittel besonders langsam und gleichmäßig ins Fettgewebe aufgenommen werden soll?",
-    "options": ["Subkutane Injektion (s.c.)", "Intramuskuläre Injektion (i.m.)", "Intrakutane Injektion (i.c.)", "Intraarterielle Injektion (i.a.)"],
-    "correct": "Subkutane Injektion (s.c.)",
-    "exp": "Subkutan gespritzte Substanzen (z. B. Heparin, Insulin) werden aus dem gut durchbluteten Fettgewebe langsam resorbiert."
+    "q": "Welche Untersuchung dient der Bestimmung des Lungenvolumens und der Atemwegswiderstände?",
+    "options": ["Spirometrie / Ganzkörperplethysmografie", "Ergometrie", "Bronchoskopie", "Thorax-Sonografie"],
+    "correct": "Spirometrie / Ganzkörperplethysmografie",
+    "exp": "Mit der Lungenfunktionsprüfung (Spirometrie) werden FVC, FEV1 und Atemwiderstände gemessen."
   },
   {
     "lf": "LF 1",
-    "q": "Wann darf eine frische Wunde per primärer Wundnaht verschlossen werden?",
-    "options": ["Bei glatten, sauberen Wundrändern und einer Verletzungsdauer unter 6 Stunden", "Bei stark zerklüfteten und verschmutzten Bisswunden", "Bei infizierten Wunden mit eitriger Sekretion", "Ausschließlich bei Verletzungen, die älter als 24 Stunden sind"],
-    "correct": "Bei glatten, sauberen Wundrändern und einer Verletzungsdauer unter 6 Stunden",
-    "exp": "Die primäre Wundheilung erfordert saubere Wundverhältnisse und ein Wundalter unter 6 Stunden (ohne Infektionszeichen)."
+    "q": "Was gibt der FEV1-Wert bei der Spirometrie an?",
+    "options": ["Die Einsekundenkapazität (Volumen, das nach maximaler Einatmung in der ersten Sekunde ausgetatmet werden kann)", "Das gesamte Lungenvolumen nach ruhiger Ausatmung", "Das nach maximaler Ausatmung in der Lunge verbleibende Restvolumen", "Die Atemfrequenz pro Minute"],
+    "correct": "Die Einsekundenkapazität (Volumen, das nach maximaler Einatmung in der ersten Sekunde ausgetatmet werden kann)",
+    "exp": "FEV1 steht für 'Forced Expiratory Volume in 1 Second' und ist wichtig zur Abklärung obstruktiver Atemwegserkrankungen."
   },
   {
     "lf": "LF 1",
-    "q": "Wann muss eine Rhesus-Prophylaxe bei einer schwangeren Frau durchgeführt werden?",
-    "options": ["Rh-negative Mutter mit Rh-positivem Kind in der 28.–30. SSW und < 72h post partum", "Rh-positive Mutter mit Rh-negativem Kind direkt nach der Geburt", "Bei allen Schwangeren unabhängig vom Rhesusfaktor in der 12. SSW", "Nur bei Nachweis von Anti-D-Antikörpern im mütterlichen Blut"],
-    "correct": "Rh-negative Mutter mit Rh-positivem Kind in der 28.–30. SSW und < 72h post partum",
-    "exp": "Anti-D-Immunglobulin verhindert die Sensibilisierung der Rhesus-negativen Mutter gegen Rh-positive fötale Erythrozyten."
+    "q": "Welches Organsystem ist von einer Pyelonephritis betroffen?",
+    "options": ["Nierenbecken und Nierengewebe", "Harnblase", "Harnröhre", "Gallenblase"],
+    "correct": "Nierenbecken und Nierengewebe",
+    "exp": "Eine Pyelonephritis ist eine eitrige Entzündung des Nierenbeckens und des Nierenparenchyms."
   },
   {
     "lf": "LF 1",
-    "q": "Was unterscheidet Asthma bronchiale klinisch von einer COPD?",
-    "options": ["Asthma zeigt eine reversible Atemwegsobstruktion; COPD ist weitgehend irreversibel und progredient", "COPD tritt nur bei Kindern auf; Asthma nur im Alter", "Asthma wird mit Antibiotika geheilt; COPD durch Impfungen", "Bei COPD gibt es keine Atemnot bei Belastung"],
-    "correct": "Asthma zeigt eine reversible Atemwegsobstruktion; COPD ist weitgehend irreversibel und progredient",
-    "exp": "Asthma verläuft anfallsartig und ist medikamentös reversibel, während die COPD eine chronisch fortschreitende Einengung zeigt."
+    "q": "Welche Leitsymptome sprechen für eine akute Zystitis?",
+    "options": ["Dysurie (Schmerzen beim Wasserlassen), Pollakisurie (häufiger Harndrang) und Algurie", "Flankenschmerz mit hohem Fieber und Schüttelfrost", "Gallengangskolik mit Ikterus", "Brustschmerz mit Ausstrahlung in den Kiefer"],
+    "correct": "Dysurie (Schmerzen beim Wasserlassen), Pollakisurie (häufiger Harndrang) und Algurie",
+    "exp": "Die unkomplizierte Blasenentzündung (Zystitis) zeigt typische lokale Reizsymptome der unteren Harnwege."
   },
   {
     "lf": "LF 1",
-    "q": "Welches Medikament ist das Mittel der 1. Wahl bei einem akuten anaphylaktischen Schock?",
-    "options": ["Adrenalin (i.m.)", "Ibuprofen (p.o.)", "Amoxicillin (i.v.)", "Metformin (p.o.)"],
-    "correct": "Adrenalin (i.m.)",
-    "exp": "Adrenalin wirkt im anaphylaktischen Schock sofort bronchodilatatorisch und kreislaufstützend."
+    "q": "Was versteht man unter einer Arthrographie?",
+    "options": ["Radiologische Darstellung eines Gelenksraums mit Kontrastmittel", "Ultraschalluntersuchung der Schilddrüse", "Spiegelung der Magenschleimhaut", "Messung der Knochendichte mittels DXA"],
+    "correct": "Radiologische Darstellung eines Gelenksraums mit Kontrastmittel",
+    "exp": "Bei der Arthrographie wird Kontrastmittel direkt in die Gelenkhöhle injiziert."
   },
   {
     "lf": "LF 1",
-    "q": "Welches Verfahren dient der optischen Untersuchung des Dickdarms?",
-    "options": ["Koloskopie", "Gastroskopie", "Bronchoskopie", "Zystoskopie"],
-    "correct": "Koloskopie",
-    "exp": "Die Koloskopie bezeichnet die endoskopische Spiegelung des Dickdarms."
+    "q": "Welche Frakturform zeigt eine Knochenunterbrechung ohne Verschiebung der Fragmente?",
+    "options": ["Undislozierte Fraktur", "Dislozierte Fraktur", "Trümmerfraktur", "Offene Fraktur Grad III"],
+    "correct": "Undislozierte Fraktur",
+    "exp": "Disloziert bedeutet verschoben; eine undislozierte Fraktur steht noch in achsengerechter Stellung."
   },
   {
     "lf": "LF 1",
-    "q": "Welcher Herzklappenfehler beschreibt eine Verengung der Klappe zwischen linksseitigem Vorhof und Herzkammer?",
-    "options": ["Mitralklappenstenose", "Aortenklappeninsuffizienz", "Trikuspidalklappenstenose", "Pulmonalklappeninsuffizienz"],
-    "correct": "Mitralklappenstenose",
-    "exp": "Die Mitralklappe liegt zwischen linkem Vorhof und linker Kammer."
+    "q": "Welche Injektionstechnik wird bei der intramuskulären Injektion in den M. gluteus medius angewendet?",
+    "options": ["Injektion nach von Hochstetter (Ventrogluteale Injektion)", "Injektion in die Armbeuge", "Injektion nach Riva-Rocci", "Injektion in die Bauchhaut"],
+    "correct": "Injektion nach von Hochstetter (Ventrogluteale Injektion)",
+    "exp": "Die Injektion nach Hochstetter schont den N. ischiadicus und große Blutgefäße."
+  },
+  {
+    "lf": "LF 1",
+    "q": "Welches Enzym wird bei Verdacht auf eine akute Pankreatitis im Blut und Urin bestimmt?",
+    "options": ["Lipase und Alpha-Amylase", "Troponin T", "GOT und GPT", "Kreatinin"],
+    "correct": "Lipase und Alpha-Amylase",
+    "exp": "Lipase ist der spezifischere Laborparameter zur Diagnostik der Bauchspeicheldrüsenentzündung."
+  },
+  {
+    "lf": "LF 1",
+    "q": "Welches Impfschema gilt als Standard für die Tetanus-Grundimmunisierung im Säuglingsalter nach STIKO?",
+    "options": ["3 Impfdosen im Alter von 2, 4 und 11 Monaten (6-fach-Impfstoff)", "Eine einmalige Impfung im Alter von 12 Monaten", "Jährliche Nachimpfung ab dem 6. Lebensmonat", "2 Impfungen im Abstand von 10 Jahren"],
+    "correct": "3 Impfdosen im Alter von 2, 4 und 11 Monaten (6-fach-Impfstoff)",
+    "exp": "Das 2+1-Impfschema wird routinemäßig mit dem 6-fach-Impfstoff angewendet."
+  },
+  {
+    "lf": "LF 1",
+    "q": "Wie verhalten Sie sich bei einer Verätzung des Auges mit einer Lauge als Ersthelfer?",
+    "options": ["Auge sofort mindestens 10–15 Minuten von innen nach außen mit fließendem Wasser spülen und Augenarzt aufsuchen", "Auge verbindlich reiben und mit Salbe bedecken", "Neutralisation mit einer Säure versuchen", "Das Auge trocken verbinden und abwarten"],
+    "correct": "Auge sofort mindestens 10–15 Minuten von innen nach außen mit fließendem Wasser spülen und Augenarzt aufsuchen",
+    "exp": "Laugenverätzungen dringen tief ins Gewebe ein; kontinuierliches, ausgiebiges Spülen ist die entscheidende Erstmaßnahme."
+  },
+  {
+    "lf": "LF 1",
+    "q": "Welcher Blutdruckwert definiert eine Arterielle Hypertonie Grad 1 nach den Leitlinien?",
+    "options": ["140–159 mmHg systolisch und/oder 90–99 mmHg diastolisch", "120–129 mmHg systolisch und 80–84 mmHg diastolisch", "130–139 mmHg systolisch und/oder 85–89 mmHg diastolisch", "≥ 180 mmHg systolisch und/oder ≥ 110 mmHg diastolisch"],
+    "correct": "140–159 mmHg systolisch und/oder 90–99 mmHg diastolisch",
+    "exp": "Ab 140/90 mmHg spricht man klinisch von einer manifesten arteriellen Hypertonie."
+  },
+  {
+    "lf": "LF 1",
+    "q": "Welches Krankheitsbild liegt vor, wenn sich eine Venenwand zusammen mit einer oberflächlichen Thrombenbildung entzündet?",
+    "options": ["Thrombophlebitis", "Tiefe Venenthrombose (TVT)", "Arterielle Embolie", "Krampfaderbildung (Varikosis)"],
+    "correct": "Thrombophlebitis",
+    "exp": "Eine Thrombophlebitis betrifft das oberflächliche Venensystem (schmerzhafter, rötlicher Strang)."
+  },
+  {
+    "lf": "LF 1",
+    "q": "Welche Lagerung ist bei einem Patienten mit Verdacht auf einen kardiogenen Schock mit Lungenödem indiziert?",
+    "options": ["Herz-Lagerung (Oberkörper hoch, Beine tief)", "Schocklagerung (Oberkörper flach, Beine hoch)", "Stabile Seitenlage", "Flachlagerung auf hartem Untergrund"],
+    "correct": "Herz-Lagerung (Oberkörper hoch, Beine tief)",
+    "exp": "Das Tieferlegen der Beine verringert den venösen Rückfluss zum überlasteten Herzen (Vorlastsenkung)."
+  },
+  {
+    "lf": "LF 1",
+    "q": "Welches Symptom deutet auf eine Otitis media acuta (akute Mittelohrentzündung) hin?",
+    "options": ["Stechende, pulsierende Ohrenschmerzen, Schwerhörigkeit und Fieber", "Schmerzloser Ausfluss aus dem Gehörgang ohne Fieber", "Drehschwindel ohne Hörminderung", "Juckreiz im äußeren Gehörgang"],
+    "correct": "Stechende, pulsierende Ohrenschmerzen, Schwerhörigkeit und Fieber",
+    "exp": "Die akute Mittelohrentzündung geht mit starkem Druckschmerz, Trommelfellrötung und Fieber einher."
+  },
+  {
+    "lf": "LF 1",
+    "q": "Was ist die Otoskopie?",
+    "options": ["Spiegelung des äußeren Gehörgangs und des Trommelfells mit einem Otoskop", "Messung der Hörweite mit der Stimmgabel", "Ultraschalluntersuchung des Innenohrs", "Druckmessung im Mittelohr (Tympanometrie)"],
+    "correct": "Spiegelung des äußeren Gehörgangs und des Trommelfells mit einem Otoskop",
+    "exp": "Die Ohrspiegelung ermöglicht die Beurteilung von Gehörgang, Trommelfell und Lichtreflex."
+  },
+
+  {
+    "lf": "LF 2",
+    "q": "Welches Desinfektionsmittelprinzip wird zur Händedesinfektion vor invasiven Eingriffen genutzt?",
+    "options": ["Alkoholbasierte Händedesinfektionsmittel zur Einreibung", "Flächendesinfektionsmittel mit Chlorgas", "Seifenwaschung unter fließendem Wasser ohne Alkohol", "Wunddesinfektionsmittel auf Jodbasis"],
+    "correct": "Alkoholbasierte Händedesinfektionsmittel zur Einreibung",
+    "exp": "Händedesinfektionsmittel enthalten Alkohole (Ethanol, Propanol) zur schnellen Abtötung von Erregern."
   },
   {
     "lf": "LF 2",
-    "q": "Welche Monovette muss bei der venösen Blutentnahme zwingend als ERSTE entnommen werden, wenn ein kompletter Satz gefordert ist?",
-    "options": ["Blutkultur (falls angeordnet), gefolgt von Serum / Citrat", "EDTA-Monovette für das kleine Blutbild", "Fluorid-Monovette für Glukose", "Die Reihenfolge spielt laborchemisch keine Rolle"],
-    "correct": "Blutkultur (falls angeordnet), gefolgt von Serum / Citrat",
-    "exp": "Blutkulturen stehen wegen Kontaminationsgefahr an erster Stelle. EDTA darf nie vor Serum oder Citrat gezogen werden."
+    "q": "Wie lange ist die Einwirkzeit bei der hygienischen Händedesinfektion im Standardverfahren?",
+    "options": ["Mindestens 30 Sekunden", "Mindestens 10 Sekunden", "Mindestens 3 Minuten", "Exakt 5 Minuten"],
+    "correct": "Mindestens 30 Sekunden",
+    "exp": "30 Sekunden sind die Einreibzeit für die vollständige Benetzung bei der hygienischen Händedesinfektion."
   },
   {
     "lf": "LF 2",
-    "q": "Aus welchem Grund ist eine zu lange Venenstauung (> 1 Minute) vor der Blutentnahme unbedingt zu vermeiden?",
-    "options": ["Hämokonzentration führt zu fälschlicherweise erhöhten Werten von Kalium, Proteinen und Enzymen", "Das Blut gerinnt sofort in der Vene und verstopft die Kanüle", "Der Blutzuckerspiegel fällt schlagartig ab", "Es bildet sich zwingend eine Lungenembolie"],
-    "correct": "Hämokonzentration führt zu fälschlicherweise erhöhten Werten von Kalium, Proteinen und Enzymen",
-    "exp": "Durch den Flüssigkeitsaustritt ins Gewebe steigen intravasale Zell- und Eiweißkonzentrationen verfälscht an."
+    "q": "Welche Schutzstufe erfordert das Tragen einer FFP2-Maske?",
+    "options": ["Schutz vor aerosolübertragbaren Krankheitserregern (z. B. Tuberkulose, Influenza)", "Schutz vor reinen Flüssigkeitsspritzern ohne Erreger", "Ausschließlich Schutz vor Grobstaub bei Renovierungen", "Tragepflicht nur in der Anmeldung ohne Patientenkontakt"],
+    "correct": "Schutz vor aerosolübertragbaren Krankheitserregern (z. B. Tuberkulose, Influenza)",
+    "exp": "FFP2-Masken filtern mindestens 94 % der Testaerosole und schützen vor tröpfchen- und aerosolübertragenen Viren/Bakterien."
   },
   {
     "lf": "LF 2",
-    "q": "Welche Vorbereitung ist für die korrekte Bestimmung von Nitrit im Urin-Teststreifen essenziell?",
-    "options": ["Verwendung von Morgenurin, der mindestens 4 Stunden in der Blase verweilte", "Verwendung von Spontanurin direkt nach der Nahrungsaufnahme", "Der Urin muss vor dem Test 10 Minuten lang aufgekocht werden", "Es darf ausschließlich Katheterurin genutzt werden"],
-    "correct": "Verwendung von Morgenurin, der mindestens 4 Stunden in der Blase verweilte",
-    "exp": "Bakterien benötigen ausreichend Verweilzeit in der Blase, um Nitrat aus der Nahrung zu Nitrit zu reduzieren."
+    "q": "Was versteht man unter dem Begriff 'Hämolyse' in einer Blutprobe?",
+    "options": ["Auflösung oder Zerstörung der Erythrozyten mit Freisetzung von Hämoglobin ins Plasma", "Gerinnung des Blutes im Röhrchen", "Vermehrung der Leukozyten im Blutbild", "Ausfällung von Fibrinogen im Serum"],
+    "correct": "Auflösung oder Zerstörung der Erythrozyten mit Freisetzung von Hämoglobin ins Plasma",
+    "exp": "Hämolyse färbt das Plasma rötlich und verfälscht Werte wie Kalium, LDH und GOT massiv."
   },
   {
     "lf": "LF 2",
-    "q": "Welche Parameter müssen bei der Freigabe eines Dampfsterilisators (Autoklav) nach dem Sterilisationsprozess dokumentiert werden?",
-    "options": ["Temperatur, Druck, Haltezeit und das Ergebnis des Indikatorstreifens", "Nutzungsdauer der Praxisräumlichkeiten und Raumtemperatur", "Name des Patienten und seine Versichertennummer", "Uhrzeit des Praxisbeginns und Alter der MFA"],
-    "correct": "Temperatur, Druck, Haltezeit und das Ergebnis des Indikatorstreifens",
-    "exp": "Zur Chargenfreigabe nach RiliBÄK gehören Temperatur (z. B. 134 °C), Druck (2 bar), Zeit (5 Min) und Farbumschlag des Indikators."
+    "q": "Welche Blutsenkungsgeschwindigkeit (BSG) gilt bei einer jungen Frau unter 50 Jahren als normal?",
+    "options": ["Bis ca. 20 mm in der 1. Stunde", "Bis 80 mm in der 1. Stunde", "Über 100 mm in der 1. Stunde", "BSG lässt sich bei Frauen nicht bestimmen"],
+    "correct": "Bis ca. 20 mm in der 1. Stunde",
+    "exp": "Der Normwert der BSG nach Westergren liegt bei Frauen unter 50 Jahren bei bis zu 20 mm/h."
   },
   {
     "lf": "LF 2",
-    "q": "Warum muss ein Citrat-Röhrchen für die Gerinnungsdiagnostik (Quick/PTT) exakt befüllt werden?",
-    "options": ["Um das Mischungsverhältnis von 1 Teil Natriumcitrat zu 9 Teilen Blut exakt einzuhalten", "Damit das Röhrchen in der Zentrifuge keine Unwucht erzeugt", "Weil sonst die Erythrozyten hämolysieren", "Damit der pH-Wert des Blutes nicht unter 5,0 fällt"],
-    "correct": "Um das Mischungsverhältnis von 1 Teil Natriumcitrat zu 9 Teilen Blut exakt einzuhalten",
-    "exp": "Ein abweichendes Mischungsverhältnis verändert die Kalziumbindung und führt zu falsch-langen Gerinnungszeiten."
+    "q": "Welche Veränderung der Blutsenkungsgeschwindigkeit (BSG) ist bei bakteriellen Entzündungen zu erwarten?",
+    "options": ["Stark beschleunigte BSG (Erhöhung)", "Verlangsamte BSG", "Die BSG bleibt unverändert bei 0 mm", "Die BSG schwankt stündlich negativ"],
+    "correct": "Stark beschleunigte BSG (Erhöhung)",
+    "exp": "Akute-Phase-Proteine (Fibrinogen, CRP) führen zum Absinken der Erythrozyten und beschleunigen die BSG."
   },
   {
     "lf": "LF 2",
-    "q": "Was versteht man unter der RiliBÄK im Praxislabor?",
-    "options": ["Richtlinie der Bundesärztekammer zur Qualitätssicherung laboratoriumsmedizinischer Untersuchungen", "Rechtsverordnung über die Abrechnung von Laborleistungen", "Richtlinie zur Biologischen Abfallentsorgung in Krankenhäusern", "Reichsordnung für Infektionskrankheiten und Bakteriologie"],
-    "correct": "Richtlinie der Bundesärztekammer zur Qualitätssicherung laboratoriumsmedizinischer Untersuchungen",
-    "exp": "Die RiliBÄK schreibt tägliche Kontrollprobenmessungen und regelmäßige Ringversuche vor."
+    "q": "Welcher Marker im Vollblut dient der Verlaufsbeurteilung von Entzündungen und reagiert schneller als die BSG?",
+    "options": ["C-reaktives Protein (CRP)", "HbA1c", "Bilirubin", "Troponin I"],
+    "correct": "C-reaktives Protein (CRP)",
+    "exp": "CRP steigt bei Entzündungen bereits nach 6–12 Stunden drastisch an."
   },
   {
     "lf": "LF 2",
-    "q": "Wie verhalten Sie sich unmittelbar nach einer Nadelstichverletzung mit einer potenziell kontaminierten Kanüle?",
-    "options": ["Blutung anregen (nicht quetschen), gründlich desinfizieren/spülen, D-Arzt aufsuchen & Vorfall melden", "Wunde sofort mit einem Pflaster abkleben und normal weiterarbeiten", "Ein Oral-Antibiotikum einnehmen und die Einstichstelle abbinden", "Die Verletzung verschweigen, um Probleme im Betrieb zu vermeiden"],
-    "correct": "Blutung anregen (nicht quetschen), gründlich desinfizieren/spülen, D-Arzt aufsuchen & Vorfall melden",
-    "exp": "Erste Hilfe durchführen, D-Arzt aufsuchen (Dokumentation & ggf. HIV-Postexpositionsprophylaxe) und Indexpatienten prüfen."
+    "q": "Was gibt der Hämatokrit-Wert (Hkt) im Laborbefund an?",
+    "options": ["Der Volumensanteil der zellulären Bestandteile (v. a. Erythrozyten) am Gesamtblut", "Die Anzahl der Blutplättchen pro Mikroliter", "Den Hämoglobingehalt eines einzelnen Erythrozyten (MCH)", "Die Konzentration des Blutzuckers im Serum"],
+    "correct": "Der Volumensanteil der zellulären Bestandteile (v. a. Erythrozyten) am Gesamtblut",
+    "exp": "Der Hämatokrit zeigt das Verhältnis zwischen Blutkörperchen und Blutplasma (Norm ca. 38–52 %)."
   },
   {
     "lf": "LF 2",
-    "q": "Welcher Laborwert dient als 'Blutzucker-Gedächtnis' der letzten 8–12 Wochen?",
-    "options": ["HbA1c", "Nüchternglukose", "C-Reaktives Protein (CRP)", "Kreatinin"],
-    "correct": "HbA1c",
-    "exp": "HbA1c zeigt die langfristige Glykierung des Hämoglobins im Blut."
+    "q": "Welches Antikoagulanz ist in Fluorid-Monovetten enthalten?",
+    "options": ["Natriumfluorid / Kaliumoxalat zur Hemmung der Glykolyse", "Lithium-Heparin", "EDTA", "Natriumcitrat 1:9"],
+    "correct": "Natriumfluorid / Kaliumoxalat zur Hemmung der Glykolyse",
+    "exp": "Fluorid hemmt den enzymatischen Abbau von Glukose im Blutröhrchen nach der Entnahme."
+  },
+  {
+    "lf": "LF 2",
+    "q": "Was geschieht, wenn eine Blutprobe für ein Differenzialblutbild zu lange unzentrifugiert bei Raumtemperatur steht?",
+    "options": ["Morphologische Veränderungen der Leukozyten erschweren die Auswertung", "Die Erythrozyten vermehren sich", "Der Hb-Wert steigt auf das Doppelte", "Das Serum wird sofort klar"],
+    "correct": "Morphologische Veränderungen der Leukozyten erschweren die Auswertung",
+    "exp": "Blutausstriche für das Differenzialblutbild sollten möglichst frisch angefertigt werden."
+  },
+  {
+    "lf": "LF 2",
+    "q": "Wie wird der Urin für eine bakteriologische Urinkultur (Uricult) entnommen?",
+    "options": ["Als privater Mittelstrahlurin nach gründlicher Genitalreinigung", "Aus dem Erststrahl der Blasenentleerung", "Aus dem Urinbeutel nach 24 Stunden Stehzeit", "Ausschließlich durch Blasenpunktion"],
+    "correct": "Als privater Mittelstrahlurin nach gründlicher Genitalreinigung",
+    "exp": "Mittelstrahlurin verhindert die Kontamination der Probe durch Keime der vorderen Harnröhre."
+  },
+  {
+    "lf": "LF 2",
+    "q": "Welches Ergebnis beim Urinteststreifen deutet auf eine Hämaturie hin?",
+    "options": ["Posiver Nachweis von Erythrozyten / Hämoglobin", "Hoher Glukosenachweis", "Erhöhter Bilirubinwert", "Saurer pH-Wert unter 5"],
+    "correct": "Posiver Nachweis von Erythrozyten / Hämoglobin",
+    "exp": "Hämaturie bedeutet das Vorkommen von Blut/Erythrozyten im Urin (Mikro- oder Makrohämaturie)."
+  },
+  {
+    "lf": "LF 2",
+    "q": "Was bedeutet der Begriff 'Bakteriurie'?",
+    "options": ["Anwesenheit von Bakterien im Urin", "Ausscheidung von Fett im Harn", "Erhöhte Eiweißausscheidung über die Niere", "Steine in den Harnwegen"],
+    "correct": "Anwesenheit von Bakterien im Urin",
+    "exp": "Signifikante Bakteriurie liegt vor, wenn im Urin ≥ 10^5 Keime/ml nachgewiesen werden."
+  },
+  {
+    "lf": "LF 2",
+    "q": "Welcher Sicherheitsabfallbehälter muss für die Entsorgung von Skalpellklingen und Kanülen verwendet werden?",
+    "options": ["Durchstich- und bruchfeste Einwegbehälter (Kanülenabwurfboxen)", "Gelber Wertstoffsack", "Normaler Restmülleimer mit Papierbeutel", "Offene Plastikschale auf dem Praxistisch"],
+    "correct": "Durchstich- und bruchfeste Einwegbehälter (Kanülenabwurfboxen)",
+    "exp": "TRBA 250 schreibt durchstich- und bruchfeste Abwurfbehälter zur Vermeidung von Nadelstichverletzungen vor."
+  },
+  {
+    "lf": "LF 2",
+    "q": "Welches Prüfverfahren dient der Funktionskontrolle des Vakuumsystems im Autoklaven?",
+    "options": ["Bowie-Dick-Test", "Combur-Test", "Bedside-Test", "Uricult-Test"],
+    "correct": "Bowie-Dick-Test",
+    "exp": "Der Bowie-Dick-Test prüft täglich die vollständige Entlüftung und Dampfdurchdringung des Autoklaven."
+  },
+  {
+    "lf": "LF 2",
+    "q": "Wie müssen medizinische Instrumente vor der Sterilisation im Autoklaven vorbereitet werden?",
+    "options": ["Gründlich gereinigt, desinfiziert, getrocknet, auf Funktion geprüft und steril verpackt", "Ungewaschen direkt in den Autoklaven gelegt", "Nur kurz mit Wasser abgespült und feucht verpackt", "In Desinfektionslösung schwimmend sterilisiert"],
+    "correct": "Gründlich gereinigt, desinfiziert, getrocknet, auf Funktion geprüft und steril verpackt",
+    "exp": "Sterilisation setzt saubere, trockene und einwandfrei funktionierende Medizinprodukte voraus."
+  },
+  {
+    "lf": "LF 2",
+    "q": "Wie lautet die Karenzzeit für Alkohol vor einer Nüchtern-Blutentnahme zur Bestimmung der Triglyzeride?",
+    "options": ["Mindestens 24 Stunden alkoholfrei", "Keine Einschränkung nötig", "5 Minuten vorher kein Hochprozentiges", "3 Monate völliger Verzicht"],
+    "correct": "Mindestens 24 Stunden alkoholfrei",
+    "exp": "Alkoholkonsum am Vortag steigert die Triglyzeridwerte verfälschend stark."
+  },
+  {
+    "lf": "LF 2",
+    "q": "Welcher Blutgruppen-Bedside-Test wird unmittelbar vor einer Bluttransfusionsgabe durchgeführt?",
+    "options": ["Bestätigung der AB0-Blutgruppe des Empfängers direkt am Krankenbett", "Bestimmung des Hämoglobins", "Kontrolle des Rhesusfaktors im Labor", "Schnelltest auf Hepatitis B"],
+    "correct": "Bestätigung der AB0-Blutgruppe des Empfängers direkt am Krankenbett",
+    "exp": "Der Bedside-Test verifiziert kurz vor Transfusionsbeginn die AB0-Eigenschaft des Patienten zur Vermeidung verhängnisvoller Verwechslungen."
+  },
+  {
+    "lf": "LF 2",
+    "q": "Welche Gefahr besteht bei der Venenpunktion, wenn das Stauband zu nahe an der Punktionsstelle und zu stramm angelegt wird?",
+    "options": ["Arterieller Verschluss und unzureichende Venenfüllung", "Sofortiges Platzen der Haut", "Lähmung des Herzmuskels", "Senkung des Blutdrucks auf 0"],
+    "correct": "Arterieller Verschluss und unzureichende Venenfüllung",
+    "exp": "Wird der arterielle Zufluss abgeklemmt, füllen sich die Venen nicht mehr ausreichend."
+  },
+  {
+    "lf": "LF 2",
+    "q": "Was versteht man unter dem Begriff 'Desinfektion' im Unterschied zur 'Sterilisation'?",
+    "options": ["Desinfektion reduziert die Keimzahl so weit, dass keine Infektionsgefahr mehr ausgeht; Sterilisation erzielt völlige Keimfreiheit", "Desinfektion tötet alle Bakteriensporen ab; Sterilisation nur Viren", "Desinfektion wird nur mit Hitze durchgeführt", "Es gibt keinen Unterschied"],
+    "correct": "Desinfektion reduziert die Keimzahl so weit, dass keine Infektionsgefahr mehr ausgeht; Sterilisation erzielt völlige Keimfreiheit",
+    "exp": "Desinfektion = Erregerarmut (Reduktion um mind. 5 Log-Stufen); Sterilisation = Absolut keimfrei (einschließlich Sporen)."
+  },
+
+  {
+    "lf": "LF 3",
+    "q": "Innerhalb welcher Frist muss ein Ausbildungsvertrag spätestens in das Verzeichnis der Berufsausbildungsverhältnisse ( Ärztekammer) eingetragen werden?",
+    "options": ["Unverzüglich nach Abschluss des Vertrages vor Beginn der Ausbildung", "Erst nach Ablauf der Probezeit", "Am Ende des 1. Ausbildungsjahres", "Spätestens zur Zwischenprüfung"],
+    "correct": "Unverzüglich nach Abschluss des Vertrages vor Beginn der Ausbildung",
+    "exp": "Der Ausbildende ist verpflichtet, den Vertrag unverzüglich bei der Ärztekammer zur Eintragung einzureichen."
   },
   {
     "lf": "LF 3",
-    "q": "Eine 17-jährige Auszubildende arbeitet in einer Arztpraxis. Wie viele Pausenminuten stehen ihr laut JArbSchG bei einer Arbeitszeit von 7,5 Stunden zu?",
-    "options": ["Mindestens 60 Minuten Ruhepause", "Mindestens 30 Minuten Ruhepause", "Pausen sind bei Jugendlichen freiwillig", "Exakt 15 Minuten am Ende des Arbeitstages"],
-    "correct": "Mindestens 60 Minuten Ruhepause",
-    "exp": "Nach JArbSchG § 11 stehen Jugendlichen bei einer Arbeitszeit von mehr als 6 Stunden mindestens 60 Minuten Pause zu."
+    "q": "Wer ist laut Berufsbildungsgesetz (BBiG) für die Führung des Ausbildungsnachweises (Berichtsheft) verantwortlich?",
+    "options": ["Der Auszubildende führt das Heft; der Ausbildende stellt die Zeit dafür bereit und kontrolliert es regelmäßig", "Der Ausbildende schreibt das Berichtsheft komplett selbst", "Die Berufsschule führt das Berichtsheft stellvertretend", "Das Berichtsheft muss nur von den Eltern geführt werden"],
+    "correct": "Der Auszubildende führt das Heft; der Ausbildende stellt die Zeit dafür bereit und kontrolliert es regelmäßig",
+    "exp": "Der Auszubildende hat den Nachweis ordnungsgemäß zu führen; der Ausbilder hat ihn kostenfrei bereitzustellen und zu prüfen."
   },
   {
     "lf": "LF 3",
-    "q": "Wann ist ein Kündigungsschreiben im Arbeitsverhältnis rechtlich wirksam?",
-    "options": ["Sobald es dem Empfänger in schriftlicher Form (mit eigenhändiger Unterschrift) zugeht", "Sobald eine E-Mail oder WhatsApp-Nachricht gelesen wurde", "Wenn eine mündliche Absichtserklärung unter Zeugen ausgesprochen wird", "Ausschließlich nach Bestätigung durch das Arbeitsamt"],
-    "correct": "Sobald es dem Empfänger in schriftlicher Form (mit eigenhändiger Unterschrift) zugeht",
-    "exp": "Gemäß § 623 BGB bedarf die Kündigung eines Arbeitsverhältnisses zwingend der Schriftform."
+    "q": "Wie kann ein Ausbildungsverhältnis nach Ablauf der Probezeit seitens des Auszubildenden gekündigt werden?",
+    "options": ["Mit einer Frist von 4 Wochen, wenn er die Berufsausbildung aufgeben oder sich für eine andere Berufstätigkeit ausbilden lassen will", "Jederzeit fristlos ohne Angabe von Gründen", "Gar nicht; Ausbildungsverträge sind unkündbar", "Nur durch gerichtliches Urteil"],
+    "correct": "Mit einer Frist von 4 Wochen, wenn er die Berufsausbildung aufgeben oder sich für eine andere Berufstätigkeit ausbilden lassen will",
+    "exp": "Nach § 22 BBiG kann der Azubi mit 4-Wochen-Frist kündigen, wenn ein Berufswechsel angestrebt wird."
   },
   {
     "lf": "LF 3",
-    "q": "Welche Maßnahme im Qualitätsmanagement (QM) beschreibt eine 'SOP' (Standard Operating Procedure)?",
-    "options": ["Eine verbindliche schriftliche Arbeitsanweisung für wiederkehrende Abläufe", "Die jährliche Abrechnung mit der Kassenärztlichen Vereinigung", "Die Anmeldung eines Arbeitsunfalls bei der Berufsgenossenschaft", "Ein Behandlungsfehler-Protokoll zur Einreichung beim Gericht"],
-    "correct": "Eine verbindliche schriftliche Arbeitsanweisung für wiederkehrende Abläufe",
-    "exp": "Standard Operating Procedures (SOPs) sichern als Standard-Arbeitsanweisungen die Qualitätsstandards."
+    "q": "Welches Gesetz regelt den Schutz von Arbeitszeiten, Ruhepausen und Nachtarbeitsverboten für schwangere Mitarbeiterinnen?",
+    "options": ["Mutterschutzgesetz (MuSchG)", "Jugendarbeitsschutzgesetz (JArbSchG)", "Bundesurlaubsgesetz (BUrlG)", "Kündigungsschutzgesetz (KSchG)"],
+    "correct": "Mutterschutzgesetz (MuSchG)",
+    "exp": "Das MuSchG schützt die Gesundheit von Frau und Kind am Arbeitsplatz vor Gefährdungen und Überlastung."
   },
   {
     "lf": "LF 3",
-    "q": "Wofür steht das Akronym PDCA im Qualitätsmanagement einer Arztpraxis?",
-    "options": ["Plan - Do - Check - Act", "Practice - Doctor - Care - Action", "Patient - Diagnosis - Cure - Assessment", "Prevention - Documentation - Control - Analysis"],
-    "correct": "Plan - Do - Check - Act",
-    "exp": "Der Deming-Kreislauf beschreibt den kontinuierlichen Verbesserungsprozess im QM."
+    "q": "Dürfen schwangere Medizinische Fachangestellte mit Wunddesinfektionsmitteln oder biologischen Arbeitsstoffen der Risikogruppe 2 arbeiten?",
+    "options": ["Nur nach individueller Gefährdungsbeurteilung und wenn keine unverantwortbare Gefährdung vorliegt", "Generell uneingeschränkt bis zur Geburt", "Nein, Schwangere dürfen das Praxistagebuch nicht betreten", "Ja, aber nur ohne Handschuhe"],
+    "correct": "Nur nach individueller Gefährdungsbeurteilung und wenn keine unverantwortbare Gefährdung vorliegt",
+    "exp": "Der Arbeitgeber muss nach § 10 MuSchG eine Gefährdungsbeurteilung durchführen und Schutzmaßnahmen festlegen."
   },
   {
     "lf": "LF 3",
-    "q": "Ein Ehemann ruft an und bittet um Herausgabe der Befunde seiner volljährigen Ehefrau. Wie reagieren Sie rechtlich korrekt?",
-    "options": ["Auskunft verweigern, solange keine schriftliche Schweigepflichtentbindung der Ehefrau vorliegt", "Die Befunde sofort vorlesen, da Eheleute ein gegenseitiges Auskunftsrecht haben", "Auskunft geben, wenn der Ehemann das Geburtsdatum der Frau nennen kann", "Den Ehemann an die Krankenkasse verweisen"],
-    "correct": "Auskunft verweigern, solange keine schriftliche Schweigepflichtentbindung der Ehefrau vorliegt",
-    "exp": "Die ärztliche Schweigepflicht (§ 203 StGB) gilt ausnahmslos auch gegenüber Familienangehörigen."
+    "q": "Welche Stelle muss bei einer geplanten Kündigung einer Mitarbeiterin während der Schwangerschaft die Zustimmung erteilen?",
+    "options": ["Die zuständige Arbeitsschutzbehörde (z. B. Regierungspräsidium / Gewerbeaufsichtsamt)", "Die Kassenärztliche Vereinigung", "Die Krankenkasse der Mitarbeiterin", "Das Finanzamt"],
+    "correct": "Die zuständige Arbeitsschutzbehörde (z. B. Regierungspräsidium / Gewerbeaufsichtsamt)",
+    "exp": "Eine Kündigung während der Schwangerschaft ist zulässig nur in Ausnahmefällen mit vorheriger Zustimmung der Aufsichtsbehörde."
+  },
+  {
+    "lf": "LF 3",
+    "q": "Was versteht man unter dem Begriff 'Offene Sprechstunde' in der Praxisorganisation?",
+    "options": ["Sprechstundenzeiten, in denen Patienten ohne vorherige Terminvereinbarung behandelt werden", "Ein Tag der offenen Tür für Patienten", "Online-Videosprechstunde für Jedermann", "Sprechstunde am Wochenende ohne MFA"],
+    "correct": "Sprechstundenzeiten, in denen Patienten ohne vorherige Terminvereinbarung behandelt werden",
+    "exp": "In offenen Sprechstunden kommen Patienten unangemeldet; Wartezeiten müssen durch Puffer einkalkuliert werden."
+  },
+  {
+    "lf": "LF 3",
+    "q": "Welche Frist gilt für die Aufbewahrung von zahnärztlichen oder ärztlichen Röntgenaufzeichnungen bei Erwachsenen nach dem Strahlenschutzgesetz?",
+    "options": ["10 Jahre nach der letzten Behandlung / Aufnahme", "3 Jahre ab Jahresende", "30 Jahre ohne Ausnahme", "5 Jahre ab Erstellung"],
+    "correct": "10 Jahre nach der letzten Behandlung / Aufnahme",
+    "exp": "Aufzeichnungen und Röntgenbilder Volljähriger müssen 10 Jahre nach der letzten Untersuchung aufbewahrt werden."
+  },
+  {
+    "lf": "LF 3",
+    "q": "Welche Daten gehören nach der DSGVO zu den 'besonderen Kategorien personenbezogener Daten'?",
+    "options": ["Gesundheitsdaten, genetische und biometrische Daten", "Postleitzahl und Wohnort", "Marke des PKW des Patienten", "Name der Grundschule"],
+    "correct": "Gesundheitsdaten, genetische und biometrische Daten",
+    "exp": "Gesundheitsdaten genießen nach Art. 9 DSGVO einen besonders hohen Schutzstandard."
+  },
+  {
+    "lf": "LF 3",
+    "q": "Wann liegt ein Verstoß gegen das Datenschutzgesetz vor?",
+    "options": ["Wenn MFA am Empfang Patientennamen und Befunde so laut vorlesen, dass Wartende im Raum es mithören können", "Wenn Behandlungsakten in verschlossenen Schränken gelagert werden", "Wenn der Bildschirm an der Anmeldung vom Wartebereich aus nicht einsehbar ist", "Wenn der Patient eine Datenverarbeitungseinwilligung unterschreibt"],
+    "correct": "Wenn MFA am Empfang Patientennamen und Befunde so laut vorlesen, dass Wartende im Raum es mithören können",
+    "exp": "Der Diskretionsabstand am Empfang soll das Mithören vertraulicher Daten verhindern."
+  },
+  {
+    "lf": "LF 3",
+    "q": "Was beschreibt der Begriff 'Ergonomie am Arbeitsplatz'?",
+    "options": ["Die menschengerechte Gestaltung von Arbeitsmitteln und Arbeitsplätzen zur Schonung der Gesundheit", "Die Einsparung von Energie und Papier in der Praxis", "Die Optimierung der Praxisrendite", "Die regelmäßige Desinfektion von Tastaturen"],
+    "correct": "Die menschengerechte Gestaltung von Arbeitsmitteln und Arbeitsplätzen zur Schonung der Gesundheit",
+    "exp": "Ergonomische Stühle, Bildschirmeinstellungen und Bewegungsabläufe beugen Haltungsschäden vor."
+  },
+  {
+    "lf": "LF 3",
+    "q": "Welche Mindestruhezeit zwischen zwei Arbeitstagen schreibt das Arbeitszeitgesetz (ArbZG) für erwachsene Arbeitnehmer vor?",
+    "options": ["Mindestens 11 Stunden ununterbrochene Ruhezeit", "Mindestens 8 Stunden", "Mindestens 24 Stunden jeden Tag", "Es gibt keine gesetzliche Ruhezeit"],
+    "correct": "Mindestens 11 Stunden ununterbrochene Ruhezeit",
+    "exp": "Nach § 5 ArbZG müssen Arbeitnehmer nach Beendigung der täglichen Arbeitszeit eine ununterbrochene Ruhezeit von 11 Stunden haben."
+  },
+  {
+    "lf": "LF 3",
+    "q": "Wie viele Arbeitstage bezahlter Erholungsurlaub stehen einem Arbeitnehmer bei einer 5-Tage-Woche nach dem Bundesurlaubsgesetz (BUrlG) jährlich mindestens zu?",
+    "options": ["20 Arbeitstage (entspricht 24 Werktagen)", "10 Arbeitstage", "30 Arbeitstage", "15 Arbeitstage"],
+    "correct": "20 Arbeitstage (entspricht 24 Werktagen)",
+    "exp": "Das BUrlG geht von 24 Werktagen bei einer 6-Tage-Woche aus = 20 Arbeitstage bei 5 Tage/Woche."
+  },
+  {
+    "lf": "LF 3",
+    "q": "Was versteht man unter einem Behandlungsfehler (Kunstfehler)?",
+    "options": ["Eine unsachgemäße Behandlung durch den Arzt, die nicht den zum Behandlungszeitpunkt bestehenden medizinischen Standards entspricht", "Eine erfolglose Heilung trotz fachgerechter Therapie", "Das Auftreten bekannter, aufgeklärter Nebenwirkungen eines Medikaments", "Verpätete Zahlung des Honorars durch den Patienten"],
+    "correct": "Eine unsachgemäße Behandlung durch den Arzt, die nicht den zum Behandlungszeitpunkt bestehenden medizinischen Standards entspricht",
+    "exp": "Arzt und MFA haften bei Abweichung vom fachlichen Standard für verursachte Schäden."
+  },
+  {
+    "lf": "LF 3",
+    "q": "Welche Versicherung schützt den Arzt vor finanziellen Ansprüchen von Patienten bei vermuteten Behandlungsfehlern?",
+    "options": ["Berufshaftpflichtversicherung", "Praxisunterbrechungsversicherung", "Gesetzliche Rentenversicherung", "Gebäudeversicherung"],
+    "correct": "Berufshaftpflichtversicherung",
+    "exp": "Der Abschluss einer Berufshaftpflichtversicherung ist für niedergelassene Ärzte gesetzlich vorgeschrieben."
+  },
+  {
+    "lf": "LF 3",
+    "q": "Welche Rechtsfolge tritt ein, wenn eine Kündigung nicht in Schriftform, sondern per E-Mail ausgesprochen wird?",
+    "options": ["Die Kündigung ist absolut nichtig (unwirksam)", "Die Kündigung wird erst nach 14 Tagen wirksam", "Die Kündigung gilt als mündlich vereinbart", "Die Kündigung wandelt sich in einen Aufhebungsvertrag um"],
+    "correct": "Die Kündigung ist absolut nichtig (unwirksam)",
+    "exp": "Verstoß gegen die gesetzliche Schriftform (§ 623 BGB) führt zur Nichtigkeit des Rechtsgeschäfts (§ 125 BGB)."
+  },
+  {
+    "lf": "LF 3",
+    "q": "Was regelt das Infektionsschutzgesetz (IfSG) unter anderem?",
+    "options": ["Meldepflichten von übertragbaren Krankheiten und Maßnahmen zur Verhinderung der Ausbreitung", "Die Höhe des Honorars von Laborärzten", "Die Preise von apothekenpflichtigen Arzneimitteln", "Die Arbeitszeiten von Auszubildenden"],
+    "correct": "Meldepflichten von übertragbaren Krankheiten und Maßnahmen zur Verhinderung der Ausbreitung",
+    "exp": "Das IfSG dient der Vorbeugung übertragbarer Krankheiten und regelt namentliche und nicht-namentliche Meldungen."
+  },
+  {
+    "lf": "LF 3",
+    "q": "Innerhalb welcher Frist muss eine namentliche Meldung bei Verdacht auf eine meldepflichtige Krankheit nach IfSG an das Gesundheitsamt erfolgen?",
+    "options": ["Unverzüglich, spätestens innerhalb von 24 Stunden", "Innerhalb von 14 Tagen", "Einmal im Quartal gesammelt", "Erst nach Bestätigung durch den Obduktionsbericht"],
+    "correct": "Unverzüglich, spätestens innerhalb von 24 Stunden",
+    "exp": "Meldepflichtige Erkrankungen müssen dem zuständigen Gesundheitsamt binnen 24 Stunden übermittelt werden."
+  },
+  {
+    "lf": "LF 3",
+    "q": "Wer trägt die Kosten für die vom Arbeitgeber vorgeschriebene Arbeitskleidung und persönliche Schutzausrüstung (PSA) im Labor?",
+    "options": ["Der Arbeitgeber", "Der Auszubildende / Arbeitnehmer zu 100 %", "Die Krankenkasse", "Die Berufsgenossenschaft erstattet 50 %"],
+    "correct": "Der Arbeitgeber",
+    "exp": "Nach Arbeitsschutzgesetz § 3 Abs. 3 darf der Arbeitgeber die Kosten für Arbeitsschutzmaßnahmen nicht den Beschäftigten auferlegen."
+  },
+  {
+    "lf": "LF 3",
+    "q": "Welche Aufgabe hat das Beschwerdemanagement als Teil des Praxis-QM?",
+    "options": ["Systematische Erfassung, Bearbeitung und Auswertung von Patientenbeschwerden zur Qualitätssicherung", "Abrechnung fehlerhafter Kassenrezepte", "Erhöhung der Verzugszinsen bei säumigen Zahlern", "Ablehnung von unpünktlichen Patienten"],
+    "correct": "Systematische Erfassung, Bearbeitung und Auswertung von Patientenbeschwerden zur Qualitätssicherung",
+    "exp": "Beschwerden decken Schwachstellen im Praxisablauf auf und bieten Chancen zur Verbesserung."
+  },
+
+  {
+    "lf": "LF 4",
+    "q": "Welche Leistung deckt die EBM-Versichertenpauschale (z. B. 03000) unter anderem ab?",
+    "options": ["Die Kontaktaufnahme, Beratung und Grunduntersuchung des Patienten im Behandlungsfall", "Spezielle Ultraschalluntersuchungen des Herzens", "Ambulante Operationen unter Vollnarkose", "Laborleistungen des Speziallabors"],
+    "correct": "Die Kontaktaufnahme, Beratung und Grunduntersuchung des Patienten im Behandlungsfall",
+    "exp": "Die Versichertenpauschale deckt die hausärztliche Grundversorgung für das gesamte Quartal ab."
   },
   {
     "lf": "LF 4",
-    "q": "Unter welcher Voraussetzung kann die EBM-Gebrauchsgebühr für ein Langzeit-EKG (03241 / 18400) abgerechnet werden?",
-    "options": ["Wenn eine Aufzeichnungsdauer von mindestens 18 Stunden kontinuierlich erfolgt ist", "Bereits ab einer Messdauer von 30 Minuten in der Praxis", "Nur wenn der Patient während der Messung stationär aufgenommen wurde", "Bei jeder normalen EKG-Abrechnung ohne Zeiteinschränkung"],
-    "correct": "Wenn eine Aufzeichnungsdauer von mindestens 18 Stunden kontinuierlich erfolgt ist",
-    "exp": "Für das Langzeit-EKG fordert der EBM eine kontinuierliche Aufzeichnung von mindestens 18 Stunden."
+    "q": "Wie oft kann die EBM-Versichertenpauschale im selben Behandlungsfall (Quartal) abgerechnet werden?",
+    "options": ["Einmal im Behandlungsfall", "Bei jedem Praxisbesuch des Patienten erneut", "Maximal 4-mal im Monat", "Einmal pro Kalenderjahr"],
+    "correct": "Einmal im Behandlungsfall",
+    "exp": "Die Versichertenpauschale wird bei Erstkontakt im Quartal 1x je Behandlungsfall angesetzt."
   },
   {
     "lf": "LF 4",
-    "q": "Ein Privatpatient erhält eine eingehende Beratung (GOÄ-Ziffer 3). Welche Mindestdauer verlangt die Legende der GOÄ?",
-    "options": ["Mindestens 10 Minuten Dauer", "Mindestens 20 Minuten Dauer", "Mindestens 5 Minuten Dauer", "Es gibt keine zeitliche Mindestvorgabe"],
-    "correct": "Mindestens 10 Minuten Dauer",
-    "exp": "GOÄ Ziffer 3 definiert eine eingehende Beratung, die mindestens 10 Minuten gedauert haben muss."
+    "q": "Was versteht man unter dem Begriff 'Arztfall' im EBM-Abrechnungssystem?",
+    "options": ["Die Behandlung desselben Patienten durch denselben Arzt in einem Kalendervierteljahr", "Die Gesamtzahl aller Patienten einer Praxis", "Ein Kunstfehlerfall vor Gericht", "Ein Notfalleinsatz des Arztes am Wochenende"],
+    "correct": "Die Behandlung desselben Patienten durch denselben Arzt in einem Kalendervierteljahr",
+    "exp": "Der Arztfall umfasst die Betreuung eines Patienten durch einen spezifischen Arzt im Quartal."
   },
   {
     "lf": "LF 4",
-    "q": "Welches Muster kommt zum Einsatz, wenn ein gesetzlich versicherter Patient wegen eines Arbeitsunfalls behandelt werden muss?",
-    "options": ["Es wird kein GKV-Formular genutzt, die Abrechnung erfolgt über die D-Arzt-Formulare der Berufsgenossenschaft (UV-GOÄ)", "Muster 16 (Arzneiverordnungsblatt)", "Muster 6 (Überweisungsschein)", "Muster 10 (Laboranforderung)"],
-    "correct": "Es wird kein GKV-Formular genutzt, die Abrechnung erfolgt über die D-Arzt-Formulare der Berufsgenossenschaft (UV-GOÄ)",
-    "exp": "Arbeits- und Wegeunfälle fallen nicht unter die GKV, sondern unter die gesetzliche Unfallversicherung."
+    "q": "Unter welcher Ziffer wird ein Hausbesuch des Hausarztes bei einem erwachsenen Patienten im EBM abgerechnet?",
+    "options": ["EBM 01410", "EBM 03000", "EBM 03220", "EBM 01210"],
+    "correct": "EBM 01410",
+    "exp": "01410 ist die EBM-Ziffer für den dringenden oder geplanten Hausbesuch des Arztes."
   },
   {
     "lf": "LF 4",
-    "q": "Was ist die Voraussetzung für die Abrechnung der EBM-Chronikerpauschale (03220 / 03221)?",
-    "options": ["Mindestens 2 persönliche Arzt-Patienten-Kontakte in den letzten 4 Quartalen wegen derselben lebensverändernden Erkrankung", "Einmaliger Kontakt pro Kalenderjahr bei Patienten über 60 Jahren", "Tägliche Blutdruckmessung über einen Zeitraum von 4 Wochen", "Ausschließlich die Diagnose Diabetes mellitus Typ 2"],
-    "correct": "Mindestens 2 persönliche Arzt-Patienten-Kontakte in den letzten 4 Quartalen wegen derselben lebensverändernden Erkrankung",
-    "exp": "Die 4-3-2-1 Regel bestimmt die kontinuierliche Betreuung chronisch Kranker im EBM."
+    "q": "Welche Ziffer setzt die MFA an, wenn sie im Auftrag des Arztes einen selbstständigen Hausbesuch (z. B. zur Blutentnahme) durchführt?",
+    "options": ["EBM 03810 / 38100", "EBM 01410", "EBM 03000", "EBM 01210"],
+    "correct": "EBM 03810 / 38100",
+    "exp": "03810 beschreibt den Besuch einer qualifizierten Praxismitarbeiterin (MFA) beim Patienten."
   },
   {
     "lf": "LF 4",
-    "q": "Welcher Schwellenwert (Regelhöchstsatz) gilt in der GOÄ für persönliche ärztliche Leistungen ohne schriftliche Begründung?",
-    "options": ["2,3-fach", "1,8-fach", "3,5-fach", "1,0-fach"],
-    "correct": "2,3-fach",
-    "exp": "Der 2,3-fache Satz ist der Regelhöchstsatz. Überschreitungen bis 3,5-fach erfordern eine schriftliche Begründung."
+    "q": "Welche Gebührenordnung gilt für die Abrechnung von medizinischen Leistungen bei Privatpatienten und IGeL-Leistungen?",
+    "options": ["Gebührenordnung für Ärzte (GOÄ)", "Einheitlicher Bewertungsmaßstab (EBM)", "Fallpauschalenkatalog (DRG)", "Bundesbesoldungsgesetz"],
+    "correct": "Gebührenordnung für Ärzte (GOÄ)",
+    "exp": "Die GOÄ ist die gesetzliche Grundlage für Privatabrechnungen und individuelle Gesundheitsleistungen (IGeL)."
   },
+  {
+    "lf": "LF 4",
+    "q": "Was verlangt die GOÄ, wenn ein Arzt eine Leistung über den Schwellenwert (z. B. 2,3-fach) hinaus bis zum 3,5-fachen Höchstsatz steigern möchte?",
+    "options": ["Eine schriftliche, verständliche und patientenbezogene Begründung auf der Rechnung", "Eine Vorab-Genehmigung durch die Krankenkasse", "Einen Gerichtsbeschluss", "Eine Rücksprache mit der Kassenärztlichen Vereinigung"],
+    "correct": "Eine schriftliche, verständliche und patientenbezogene Begründung auf der Rechnung",
+    "exp": "Schwierigkeit, Zeitaufwand oder besondere Umstände begründen Steigerungen oberhalb des Schwellenwertes."
+  },
+  {
+    "lf": "LF 4",
+    "q": "Welcher GOÄ-Steigerungsfaktor gilt als Regelsatz für medizinisch-technische Laborleistungen (Abschnitt M)?",
+    "options": ["1,15-fach (Höchstsatz 1,3-fach)", "2,3-fach", "1,8-fach", "3,5-fach"],
+    "correct": "1,15-fach (Höchstsatz 1,3-fach)",
+    "exp": "Für reine Laborleistungen nach Abschnitt M gilt der Schwellenwert 1,15 (Höchstsatz 1,3)."
+  },
+  {
+    "lf": "LF 4",
+    "q": "Welcher GOÄ-Steigerungsfaktor gilt als Schwellenwert (Regelhöchstsatz) für physikalisch-medizinische Leistungen (Abschnitt A, E, O)?",
+    "options": ["1,8-fach (Höchstsatz 2,5-fach)", "2,3-fach", "1,15-fach", "3,5-fach"],
+    "correct": "1,8-fach (Höchstsatz 2,5-fach)",
+    "exp": "Für medizinisch-technische Leistungen (z. B. EKG, Röntgen, Ultraschall) liegt der Regelhöchstsatz bei 1,8."
+  },
+  {
+    "lf": "LF 4",
+    "q": "Welche Angabe muss ein Privatrechnungsdokument nach § 12 GOÄ zwingend enthalten?",
+    "options": ["Datum der Leistungserbringung, GOÄ-Ziffer, Leistungsbeschreibung, Einzelbetrag, Steigerungssatz und Rechnungsbetrag", "Arbeitslosennummer des Patienten", "Nur die Endsumme ohne Einzelpositionen", "Bankverbindung der Kassenärztlichen Vereinigung"],
+    "correct": "Datum der Leistungserbringung, GOÄ-Ziffer, Leistungsbeschreibung, Einzelbetrag, Steigerungssatz und Rechnungsbetrag",
+    "exp": "§ 12 GOÄ regelt die Fälligkeit und die strengen formalen Mindestangaben einer Liquidation."
+  },
+  {
+    "lf": "LF 4",
+    "q": "Welches Formular stellt das 'Muster 1' dar?",
+    "options": ["Arbeitsunfähigkeitsbescheinigung (AU)", "Kassenrezept", "Überweisungsschein", "Krankenhauseinweisung"],
+    "correct": "Arbeitsunfähigkeitsbescheinigung (AU)",
+    "exp": "Muster 1 ist der Vordruck für die Bescheinigung einer Arbeitsunfähigkeit."
+  },
+  {
+    "lf": "LF 4",
+    "q": "Für welche Medikamente muss zwingend ein gelbes Betäubungsmittelrezept (BtM-Rezept) ausgestellt werden?",
+    "options": ["Stark wirksame Analgetika unter das Betäubungsmittelgesetz fallen (z. B. Morphin, Fentanyl, Methylphenidat)", "Standard-Antibiotika", "Klassische Blutdrucksenker", "Pflanzliche Beruhigungsmittel"],
+    "correct": "Stark wirksame Analgetika unter das Betäubungsmittelgesetz fallen (z. B. Morphin, Fentanyl, Methylphenidat)",
+    "exp": "Betäubungsmittel unterliegen strengster Nachweispflicht und erfordern das dreiteilige gelbe BtM-Formular."
+  },
+  {
+    "lf": "LF 4",
+    "q": "Wie viele Tage ist ein gelbes BtM-Rezept nach dem Ausstellungsdatum gültig?",
+    "options": ["7 Tage", "28 Tage", "3 Monate", "14 Tage"],
+    "correct": "7 Tage",
+    "exp": "Ein Betäubungsmittelrezept muss innerhalb von 7 Tagen nach Ausstellung in der Apotheke vorgelegt werden."
+  },
+  {
+    "lf": "LF 4",
+    "q": "Was versteht man unter einer 'IGeL'-Leistung?",
+    "options": ["Individuelle Gesundheitsleistung, die nicht zum Festbetragskatalog der GKV gehört und vom Patienten selbst bezahlt wird", "Innere Gelbfieber-Impfung", "Gezahlte Notfallbehandlung der Krankenkasse", "Internationale Patientenversorgung"],
+    "correct": "Individuelle Gesundheitsleistung, die nicht zum Festbetragskatalog der GKV gehört und vom Patienten selbst bezahlt wird",
+    "exp": "IGeL sind Wunschleistungen oder medizinisch nicht zwingend indizierte Behandlungen auf Verlangen des Patienten."
+  },
+  {
+    "lf": "LF 4",
+    "q": "Welche Voraussetzung muss vor der Durchführung einer IGeL-Leistung erfüllt sein?",
+    "options": ["Abschluss eines schriftlichen Behandlungsvertrages / Honorarvereinbarung nach GOÄ vor Behandlungsbeginn", "Mündliche Zusage der Krankenkasse per Telefon", "Vorausbezahlung in Bar ohne Quittung", "Genehmigung durch die Ärztekammer"],
+    "correct": "Abschluss eines schriftlichen Behandlungsvertrages / Honorarvereinbarung nach GOÄ vor Behandlungsbeginn",
+    "exp": "Der Patient muss vorab schriftlich über Kosten und Selbstzahlerstatus informiert werden."
+  },
+  {
+    "lf": "LF 4",
+    "q": "Welches Formular wird für die Anforderung von Laboruntersuchungen im GKV-System verwendet?",
+    "options": ["Muster 10 (Laboratoriumsuntersuchung auf Muster 10 / 10A)", "Muster 16", "Muster 6", "Muster 2"],
+    "correct": "Muster 10 (Laboratoriumsuntersuchung auf Muster 10 / 10A)",
+    "exp": "Muster 10 dient Überweisungsuntersuchungen an das Praxislabor / Fachlabor."
+  },
+  {
+    "lf": "LF 4",
+    "q": "Wer rechnet die vertragsärztlichen Leistungen der GKV-Patienten mit den Krankenkassen ab?",
+    "options": ["Die Kassenärztliche Vereinigung (KV)", "Der Arzt direkt mit den Patienten", "Die Berufsgenossenschaft", "Das Gesundheitsamt"],
+    "correct": "Die Kassenärztliche Vereinigung (KV)",
+    "exp": "Die KV sammelt die Abrechnungsdaten der Vertragsärzte und verteilt die Honorare (Körperschaft des öffentlichen Rechts)."
+  },
+  {
+    "lf": "LF 4",
+    "q": "In welchem Rhythmus erfolgt die Quartalsabrechnung der Kassenärztlichen Vereinigung?",
+    "options": ["Alle 3 Monate (zum Quartalsende)", "Monatlich", "Einmal im Jahr", "Alle 2 Jahre"],
+    "correct": "Alle 3 Monate (zum Quartalsende)",
+    "exp": "Abrechnungszeiträume sind Q1 (Jan–März), Q2 (Apr–Juni), Q3 (Juli–Sept) und Q4 (Okt–Dez)."
+  },
+  {
+    "lf": "LF 4",
+    "q": "Was versteht man unter der Zuzahlungsbefreiung in der GKV?",
+    "options": ["Befreiung von gesetzlichen Zuzahlungen, wenn die Belastungsgrenze (2 % bzw. 1 % bei Chronikern des Bruttojahreseinkommens) erreicht ist", "Befreiung von allen Steuern für chronisch Kranke", "Kostenlose Privatbehandlung für Rentner", "Rabatt auf IGeL-Leistungen"],
+    "correct": "Befreiung von gesetzlichen Zuzahlungen, wenn die Belastungsgrenze (2 % bzw. 1 % bei Chronikern des Bruttojahreseinkommens) erreicht ist",
+    "exp": "Übersteigen die Zuzahlungen (Rezepte, Krankenhaus) die Belastungsgrenze, stellt die Krankenkasse eine Befreiungskarte aus."
+  },
+  {
+    "lf": "LF 4",
+    "q": "Wie viel Zuzahlung leistet ein volljähriger GKV-Versicherter für ein verschreibungspflichtiges Arzneimittel regulär?",
+    "options": ["10 % des Verkaufspreises, mindestens 5 € und maximal 10 € (jedoch nicht mehr als die tatsächlichen Kosten)", "Immer pauschal 20 €", "Generell 50 % des Preises", "Arzneimittel sind für GKV-Patienten immer gratis"],
+    "correct": "10 % des Verkaufspreises, mindestens 5 € und maximal 10 € (jedoch nicht mehr als die tatsächlichen Kosten)",
+    "exp": "Regelzuzahlung nach § 31 SGB V beträgt 10 %, min. 5 €, max. 10 €."
+  },
+
   {
     "lf": "LF 5",
-    "q": "Ein 16-jähriger Azubi kauft sich von seinem gesparten Taschengeld ohne Wissen der Eltern ein Fahrrad für 200 €. Ist der Kaufvertrag wirksam?",
-    "options": ["Ja, der Kaufvertrag ist nach § 110 BGB ('Taschengeldparagraf') von Anfang an wirksam", "Nein, Verträge Minderjähriger sind immer absolut nichtig", "Der Vertrag wird erst mit Vollendung des 18. Lebensjahres wirksam", "Nein, Käufe über 50 € sind für Jugendliche gesetzlich verboten"],
-    "correct": "Ja, der Kaufvertrag ist nach § 110 BGB ('Taschengeldparagraf') von Anfang an wirksam",
-    "exp": "Wird die Leistung mit Mitteln bewirkt, die dem Minderjährigen zur freien Verfügung überlassen wurden, gilt der Vertrag als wirksam."
-  },
-  {
-    "lf": "LF 5",
-    "q": "Welche Körperschaft ist der Träger der Gesetzlichen Unfallversicherung für medizinische Praxisbetriebe?",
-    "options": ["Berufsgenossenschaft für Gesundheitsdienst und Wohlfahrtspflege (BGW)", "Deutsche Rentenversicherung Bund", "Kassenärztliche Vereinigung Baden-Württemberg (KVBW)", "AOK Baden-Württemberg"],
-    "correct": "Berufsgenossenschaft für Gesundheitsdienst und Wohlfahrtspflege (BGW)",
-    "exp": "Die BGW ist die zuständige Berufsgenossenschaft für nicht-staatliche Einrichtungen im Gesundheitssystem."
-  },
-  {
-    "lf": "LF 5",
-    "q": "Welche Säule der gesetzlichen Sozialversicherung wird zu 100 % vom Arbeitgeber finanziert?",
-    "options": ["Gesetzliche Unfallversicherung (Berufsgenossenschaft)", "Gesetzliche Krankenversicherung", "Rentenversicherung", "Pflegeversicherung"],
-    "correct": "Gesetzliche Unfallversicherung (Berufsgenossenschaft)",
-    "exp": "Die Beitragslast der Unfallversicherung trägt allein der Arbeitgeber zur Absicherung von Arbeits- und Wegeunfällen."
-  },
-  {
-    "lf": "LF 5",
-    "q": "In welchem Alter ist eine Person nach dem BGB beschränkt geschäftsunfähig?",
-    "options": ["Vom vollendeten 7. bis zum vollendeten 18. Lebensjahr", "Von der Geburt bis zum 7. Lebensjahr", "Ab dem vollendeten 18. Lebensjahr", "Ab dem 21. Lebensjahr"],
-    "correct": "Vom vollendeten 7. bis zum vollendeten 18. Lebensjahr",
-    "exp": "Kinder unter 7 sind geschäftsunfähig, Jugendliche von 7 bis 17 sind beschränkt geschäftsfähig."
-  }
-]
+    "q": "Welches Grundrecht schützt die Würde des Menschen in Artikel 1 des Grundgesetzes (GG)?",
