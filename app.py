@@ -17,7 +17,7 @@ st.set_page_config(
     initial_sidebar_state="expanded",
 )
 
-# Injektion von stark kontrastierendem CSS (Weiße Eingabefelder + Schwarzer Text)
+# Injektion von stark kontrastierendem CSS (Inklusive perfekter Lesbarkeit in der Sidebar)
 st.markdown(
     """
     <style>
@@ -28,13 +28,50 @@ st.markdown(
         font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     }
     
-    /* Headers */
+    /* Headers im Hauptbereich */
     h1, h2, h3 {
         color: #1E3A8A !important;
         font-weight: 700 !important;
     }
+
+    /* ---------------------------------------------------------------------- */
+    /* STYLING FÜR DIE NAVIGATIONSLEISTE (SIDEBAR) - FIX FÜR LESBARKEIT     */
+    /* ---------------------------------------------------------------------- */
+    section[data-testid="stSidebar"] {
+        background-color: #EDF2F7 !important;
+        border-right: 2px solid #CBD5E1 !important;
+    }
+
+    /* Alle Texte & Überschriften in der Sidebar dunkel färben */
+    section[data-testid="stSidebar"] *, 
+    section[data-testid="stSidebar"] h1, 
+    section[data-testid="stSidebar"] h2, 
+    section[data-testid="stSidebar"] h3,
+    section[data-testid="stSidebar"] label,
+    section[data-testid="stSidebar"] p,
+    section[data-testid="stSidebar"] span {
+        color: #0F172A !important;
+        font-weight: 600 !important;
+    }
+
+    /* Radio-Buttons in der Navigation gut lesbar gestalten */
+    div[data-testid="stSidebarUserContent"] div[role="radiogroup"] label {
+        background-color: #FFFFFF !important;
+        padding: 8px 12px !important;
+        border-radius: 6px !important;
+        margin-bottom: 4px !important;
+        border: 1px solid #CBD5E1 !important;
+        color: #0F172A !important;
+    }
+
+    /* Hover-Effekt für die Optionen in der Navigation */
+    div[data-testid="stSidebarUserContent"] div[role="radiogroup"] label:hover {
+        background-color: #DBEAFE !important;
+        border-color: #2563EB !important;
+    }
+    /* ---------------------------------------------------------------------- */
     
-    /* KONTRAST-FIX FÜR TEXTFELDER & EINGABEN */
+    /* KONTRAST-FIX FÜR TEXTFELDER & EINGABEN IM HAUPTBEREICH */
     textarea, input, select, div[data-baseweb="select"] {
         background-color: #FFFFFF !important;
         color: #000000 !important;
