@@ -194,13 +194,22 @@ def get_default_questions():
 
 @st.cache_data
 def load_all_questions():
+    questions = []
     if os.path.exists(JSON_FILE):
         try:
             with open(JSON_FILE, "r", encoding="utf-8") as f:
-                return json.load(f)
+                questions = json.load(f)
         except Exception:
-            return get_default_questions()
-    return get_default_questions()
+            questions = get_default_questions()
+    else:
+        questions = get_default_questions()
+
+    # SICHERSTELLEN, DASS JEDE FRAGE EINE EINDEUTIGE ID HAT
+    for idx, q in enumerate(questions):
+        if "id" not in q or not q["id"]:
+            q["id"] = f"q_{idx}_{hash(q.get('q', ''))}"
+
+    return questions
 
 
 ALL_QUESTIONS = load_all_questions()
@@ -227,8 +236,7 @@ def evaluate_answer(user_text, keywords, sample_solution):
     found_keywords = []
 
     for kw in keywords:
-        kw_clean = kw.lower().strip()
-        # Flexibler Stammabgleich (mindestens 3 Zeichen)
+        kw_clean = str(kw).lower().strip()
         pattern = re.escape(kw_clean)
         if len(kw_clean) > 3:
             pattern = re.escape(kw_clean[:4])
@@ -249,11 +257,11 @@ def render_urine_case_image():
     draw.rectangle([120, 20, 200, 460], fill="#E2E8F0", outline="#94A3B8", width=2)
 
     fields = [
-        ("LEU (Leukozyten)", "#7E22CE"),  # Positiv: Violett
-        ("NIT (Nitrit)", "#EC4899"),  # Positiv: Pink
-        ("PRO (Protein)", "#FACC15"),  # Normal: Gelb
-        ("GLU (Glukose)", "#10B981"),  # Normal: Grün
-        ("ERY (Erythrozyten)", "#F97316"),  # Positiv: Orange/Rot
+        ("LEU (Leukozyten)", "#7E22CE"),
+        ("NIT (Nitrit)", "#EC4899"),
+        ("PRO (Protein)", "#FACC15"),
+        ("GLU (Glukose)", "#10B981"),
+        ("ERY (Erythrozyten)", "#F97316"),
     ]
 
     y = 40
@@ -283,7 +291,7 @@ def render_ekg_case_image():
         (125, 240),
         (135, 110),
         (190, 110),
-        (220, 180),  # STEMI ST-Elevation
+        (220, 180),
         (280, 180),
         (295, 195),
         (305, 180),
@@ -379,34 +387,33 @@ if mode == "📖 Übungsmodus (Adaptive Recall)":
     questions_pool = [
         q
         for q in ALL_QUESTIONS
-        if lf_filter == "Alle Lernfelder" or q["lf"] == lf_filter
+        if lf_filter == "Alle Lernfelder" or q.get("lf") == lf_filter
     ]
 
     if not questions_pool:
         st.warning("Keine Aufgaben für dieses Lernfeld gefunden.")
     else:
         for idx, q in enumerate(questions_pool):
+            q_id = q.get("id", f"gen_id_{idx}")
             st.markdown(
-                f'<div class="mfa-card"><span class="badge-lf">{q["lf"]}</span><h3>Frage {idx+1}: {q["q"]}</h3></div>',
+                f'<div class="mfa-card"><span class="badge-lf">{q.get("lf", "LF")}</span><h3>Frage {idx+1}: {q["q"]}</h3></div>',
                 unsafe_allow_html=True,
             )
 
-            # Interactive Scaffolding (Tipps)
             with st.expander("💡 Hinweis / Tipp einblenden"):
                 st.info(q.get("hint", "Kein gesonderter Tipp vorhanden."))
 
             user_ans = st.text_area(
-                "Deine Antwort eingeben:", key=f"ans_{q['id']}", height=100
+                "Deine Antwort eingeben:", key=f"ans_{q_id}", height=100
             )
 
             col_a, col_b = st.columns([1, 4])
-            if col_a.button("Antwort prüfen", key=f"btn_{q['id']}"):
+            if col_a.button("Antwort prüfen", key=f"btn_{q_id}"):
                 score, found, status = evaluate_answer(
-                    user_ans, q["keywords"], q["sample"]
+                    user_ans, q.get("keywords", []), q.get("sample", "")
                 )
 
-                # Persist state
-                st.session_state.history[q["id"]] = score
+                st.session_state.history[q_id] = score
 
                 if score >= 80:
                     st.markdown(
@@ -424,8 +431,8 @@ if mode == "📖 Übungsmodus (Adaptive Recall)":
                         unsafe_allow_html=True,
                     )
 
-                st.markdown(f"**Musterlösung:**\n> {q['sample']}")
-                st.info(f"**Fachliche Begründung:** {q['exp']}")
+                st.markdown(f"**Musterlösung:**\n> {q.get('sample', 'Keine Musterlösung hinterlegt.')}")
+                st.info(f"**Fachliche Begründung:** {q.get('exp', '')}")
 
             st.markdown("---")
 
@@ -459,15 +466,15 @@ elif mode == "🖼️ Interaktive Bild-Fallstudien":
                 "Lösungsansatz:", key=f"cs_ans_{cs['id']}_{q_idx}", height=80
             )
             if st.button("Teilaufgabe auswerten", key=f"cs_btn_{cs['id']}_{q_idx}"):
-                score, found, _ = evaluate_answer(c_ans, q["keywords"], q["sample"])
+                score, found, _ = evaluate_answer(c_ans, q.get("keywords", []), q.get("sample", ""))
 
                 if score >= 70:
                     st.success(f"✅ Korrekt! ({score}%)")
                 else:
                     st.error(f"❌ Unvollständig ({score}%)")
 
-                st.markdown(f"**Musterlösung:** {q['sample']}")
-                st.caption(f"Erklärung: {q['exp']}")
+                st.markdown(f"**Musterlösung:** {q.get('sample', '')}")
+                st.caption(f"Erklärung: {q.get('exp', '')}")
             st.markdown("---")
 
 # ==============================================================================
@@ -506,10 +513,11 @@ elif mode == "⏱️ Prüfungsmodus (Simulations-Klausur)":
 
         exam_answers = {}
         for idx, q in enumerate(st.session_state.exam_questions):
-            st.markdown(f"### Frage {idx+1} [{q['lf']}]")
+            q_id = q.get("id", f"exam_q_{idx}")
+            st.markdown(f"### Frage {idx+1} [{q.get('lf', 'LF')}]")
             st.write(q["q"])
-            exam_answers[q["id"]] = st.text_area(
-                "Deine Antwort:", key=f"exam_ans_{q['id']}", height=90
+            exam_answers[q_id] = st.text_area(
+                "Deine Antwort:", key=f"exam_ans_{q_id}", height=90
             )
             st.markdown("---")
 
@@ -519,13 +527,14 @@ elif mode == "⏱️ Prüfungsmodus (Simulations-Klausur)":
 
             st.header("📋 Prüfungsergebnis")
             for idx, q in enumerate(st.session_state.exam_questions):
-                u_text = exam_answers.get(q["id"], "")
-                score, found, _ = evaluate_answer(u_text, q["keywords"], q["sample"])
+                q_id = q.get("id", f"exam_q_{idx}")
+                u_text = exam_answers.get(q_id, "")
+                score, found, _ = evaluate_answer(u_text, q.get("keywords", []), q.get("sample", ""))
                 total_score += score
 
-                st.markdown(f"**Frage {idx+1} ({q['lf']}):** {q['q']}")
+                st.markdown(f"**Frage {idx+1} ({q.get('lf', 'LF')}):** {q['q']}")
                 st.write(f"Deine Punkte: {score}%")
-                st.write(f"Musterlösung: {q['sample']}")
+                st.write(f"Musterlösung: {q.get('sample', '')}")
                 st.markdown("---")
 
             final_percent = total_score / len(st.session_state.exam_questions)
