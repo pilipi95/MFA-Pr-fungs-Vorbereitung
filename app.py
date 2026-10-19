@@ -8,7 +8,7 @@ from PIL import Image, ImageDraw
 import streamlit as st
 
 # ==============================================================================
-# 1. PAGE CONFIGURATION & CUSTOM DESIGN SYSTEM (HOCHKONTRAST)
+# 1. PAGE CONFIGURATION & CUSTOM DESIGN SYSTEM (HOCHKONTRAST & BARRIEREFREI)
 # ==============================================================================
 st.set_page_config(
     page_title="MFA Prüfungs-Trainer PRO BW",
@@ -17,7 +17,6 @@ st.set_page_config(
     initial_sidebar_state="expanded",
 )
 
-# Injektion von stark kontrastierendem CSS (Inklusive perfekter Lesbarkeit in der Sidebar)
 st.markdown(
     """
     <style>
@@ -35,14 +34,13 @@ st.markdown(
     }
 
     /* ---------------------------------------------------------------------- */
-    /* STYLING FÜR DIE NAVIGATIONSLEISTE (SIDEBAR) - FIX FÜR LESBARKEIT     */
+    /* STYLING FÜR DIE NAVIGATIONSLEISTE (SIDEBAR) - OPTIMALE LESBARKEIT     */
     /* ---------------------------------------------------------------------- */
     section[data-testid="stSidebar"] {
         background-color: #EDF2F7 !important;
         border-right: 2px solid #CBD5E1 !important;
     }
 
-    /* Alle Texte & Überschriften in der Sidebar dunkel färben */
     section[data-testid="stSidebar"] *, 
     section[data-testid="stSidebar"] h1, 
     section[data-testid="stSidebar"] h2, 
@@ -54,7 +52,6 @@ st.markdown(
         font-weight: 600 !important;
     }
 
-    /* Radio-Buttons in der Navigation gut lesbar gestalten */
     div[data-testid="stSidebarUserContent"] div[role="radiogroup"] label {
         background-color: #FFFFFF !important;
         padding: 8px 12px !important;
@@ -64,12 +61,10 @@ st.markdown(
         color: #0F172A !important;
     }
 
-    /* Hover-Effekt für die Optionen in der Navigation */
     div[data-testid="stSidebarUserContent"] div[role="radiogroup"] label:hover {
         background-color: #DBEAFE !important;
         border-color: #2563EB !important;
     }
-    /* ---------------------------------------------------------------------- */
     
     /* KONTRAST-FIX FÜR TEXTFELDER & EINGABEN IM HAUPTBEREICH */
     textarea, input, select, div[data-baseweb="select"] {
@@ -85,7 +80,6 @@ st.markdown(
         box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2) !important;
     }
     
-    /* Labels über den Textfeldern */
     label, .stTextArea label, .stTextInput label {
         color: #0F172A !important;
         font-weight: 700 !important;
@@ -160,14 +154,14 @@ st.markdown(
 )
 
 # ==============================================================================
-# 2. DATA LAYER & PERSISTENCE
+# 2. DATA LAYER & VOLLSTÄNDIGER KATALOG (LF 1 BIS LF 5)
 # ==============================================================================
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 JSON_FILE = os.path.join(BASE_DIR, "fragen.json")
 
 
 def get_default_questions():
-    """Umfassender Katalog für MFA LF 1 bis LF 5 (Baden-Württemberg)."""
+    """Umfassender Prüfungsfragen-Katalog (MFA Baden-Württemberg, LF 1 - LF 5)."""
     return [
         {
             "id": "q1",
@@ -189,6 +183,15 @@ def get_default_questions():
         },
         {
             "id": "q3",
+            "lf": "LF 1",
+            "q": "Wie wird der voraussichtliche Geburtstermin nach der erweiterten Naegele-Regel berechnet, wenn die Patientin einen Zyklus von 31 Tagen angibt?",
+            "sample": "1. Tag der letzten Regel + 7 Tage - 3 Monate + 1 Jahr + 3 Tage (Zyklusabweichung von 28 Tagen).",
+            "keywords": ["7 tage", "3 monate", "1 jahr", "3 tage"],
+            "hint": "Rechne erst die Grundformel und korrigiere dann die Differenz zum Standardzyklus (28 Tage).",
+            "exp": "Die Standardformel lautet: LMP + 7 Tage - 3 Monate + 1 Jahr. Bei einem 31-Tage-Zyklus werden +3 Tage hinzugefügt.",
+        },
+        {
+            "id": "q4",
             "lf": "LF 2",
             "q": "Warum muss ein Citrat-Röhrchen für Gerinnungsuntersuchungen (z. B. Quick, PTT) exakt bis zur Füllmarkierung befüllt werden?",
             "sample": "Um das exakte Mischungsverhältnis von 1 Teil Citrat zu 9 Teilen Blut (1:9) einzuhalten.",
@@ -197,7 +200,7 @@ def get_default_questions():
             "exp": "Zuviel oder zuwenig Blut verschiebt das Kalzium-Bindungsverhältnis und führt zu fälschlicherweise verlängerten oder verkürzten Gerinnungszeiten.",
         },
         {
-            "id": "q4",
+            "id": "q5",
             "lf": "LF 2",
             "q": "Aus welchem Grund ist zur Beseitigung von Blut- und Sekretverschmutzungen auf Arbeitsflächen eine Scheuer-Wisch-Desinfektion einer gezielten Sprühdesinfektion vorzuziehen?",
             "sample": "Die Scheuer-Wisch-Desinfektion gewährleistet eine mechanische Reinigung und verhindert gesundheitsschädliche Aerosolbildung.",
@@ -206,7 +209,16 @@ def get_default_questions():
             "exp": "Sprühdesinfektion verteilt Keime und Chemikalien als Aerosole in der Raumluft und erreicht oft keine vollständige Wischbenetzung.",
         },
         {
-            "id": "q5",
+            "id": "q6",
+            "lf": "LF 2",
+            "q": "Warum muss für den verlässlichen Nachweis von Nitrit im Urin bevorzugt Morgenurin verwendet werden?",
+            "sample": "Weil Bakterien eine Verweilzeit von mindestens 4 Stunden in der Blase benötigen, um Nitrat zu Nitrit zu reduzieren.",
+            "keywords": ["4 stunden", "verweilzeit", "blase", "nitrat"],
+            "hint": "Denke an die Dauer, die Bakterien im Blasenurin benötigen, um biochemisch aktiv zu werden.",
+            "exp": "Die bakterielle Nitratreduktase benötigt mehrere Stunden Verweilzeit im Blasenurin, um nachweisbare Mengen Nitrit zu bilden.",
+        },
+        {
+            "id": "q7",
             "lf": "LF 3",
             "q": "Ein Ehemann bittet telefonisch um Übermittlung der Laborbefunde seiner volljährigen Ehefrau. Wie ist rechtlich korrekt zu handeln?",
             "sample": "Die Auskunft muss verweigert werden, solange keine schriftliche Schweigepflichtentbindung der Ehefrau vorliegt.",
@@ -215,7 +227,7 @@ def get_default_questions():
             "exp": "Gemäß § 203 StGB gilt die Schweigepflicht absolut – auch gegenüber Familienangehörigen, sofern keine Vollmacht vorliegt.",
         },
         {
-            "id": "q6",
+            "id": "q8",
             "lf": "LF 3",
             "q": "Welche Stelle muss nach einer betrieblichen Nadelstichverletzung zur Unfallaufnahme aufgesucht werden und wer ist Kostenträger?",
             "sample": "Vorstellung beim Durchgangsarzt (D-Arzt). Kostenträger ist die Berufsgenossenschaft (BGW).",
@@ -224,16 +236,16 @@ def get_default_questions():
             "exp": "Arbeitsunfälle fallen nicht unter die GKV, sondern werden über den D-Arzt bei der Berufsgenossenschaft für Gesundheitsdienst und Wohlfahrtspflege (BGW) abgewickelt.",
         },
         {
-            "id": "q7",
+            "id": "q9",
             "lf": "LF 4",
             "q": "Welche Voraussetzungen müssen erfüllt sein, damit die EBM-Chronikerpauschale (GOP 03220) abgerechnet werden darf?",
             "sample": "Mindestens 2 persönliche Arzt-Patienten-Kontakte in den letzten 4 Quartalen wegen derselben chronischen Erkrankung.",
             "keywords": ["kontakte", "quartale", "chronisch"],
-            "hint": "Erinnere dich an die '4-3-2-1'-Regel des EBM.",
+            "hint": "Erinnere dich an die Regelung bezüglich Kontakten pro Jahr/Quartalen.",
             "exp": "Für die Chronikerpauschale fordert der EBM den kontinuierlichen Nachweis der Betreuung über mindestens ein Jahr mit mind. 2 persönlichen Kontakten.",
         },
         {
-            "id": "q8",
+            "id": "q10",
             "lf": "LF 4",
             "q": "Bis zu welchem Schwellenwert (Regelhöchstsatz) dürfen persönliche ärztliche Leistungen nach der GOÄ ohne schriftliche Begründung berechnet werden?",
             "sample": "Bis zum 2,3-fachen Gebührensatz.",
@@ -242,7 +254,16 @@ def get_default_questions():
             "exp": "Der 2,3-fache Satz ist der Regelhöchstsatz. Höhere Faktoren bis 3,5-fach verlangen eine medizinische Begründung auf der Rechnung.",
         },
         {
-            "id": "q9",
+            "id": "q11",
+            "lf": "LF 4",
+            "q": "Was bedeutet die Zusatzkennzeichnung 'G' hinter einem ICD-10-Diagnosecode im ambulanten Bereich?",
+            "sample": "G steht für 'Gesicherte Diagnose'.",
+            "keywords": ["gesichert", "gesicherte diagnose"],
+            "hint": "Unterscheide zwischen gesichert, Verdacht, Ausschluss und symptomfreiem Zustand.",
+            "exp": "In der ambulanten Abrechnung steht 'G' für gesichert, 'V' für Verdacht auf, 'A' für Ausschluss und 'Z' für symptomfreien Zustand nach.",
+        },
+        {
+            "id": "q12",
             "lf": "LF 5",
             "q": "Ein 16-jähriger Auszubildender kauft von seinem ersparten Geld ein Tablet für 300 €. Welcher Paragraf des BGB regelt die Wirksamkeit dieses Kaufs?",
             "sample": "§ 110 BGB ('Taschengeldparagraf').",
@@ -274,7 +295,6 @@ def load_all_questions():
 
 ALL_QUESTIONS = load_all_questions()
 
-# Session-State Initialisierung
 if "history" not in st.session_state:
     st.session_state.history = {}
 if "exam_active" not in st.session_state:
@@ -282,10 +302,10 @@ if "exam_active" not in st.session_state:
 
 
 # ==============================================================================
-# 3. ADVANCED NLP / TEXT MATCHING EVALUATOR
+# 3. ADVANCED NLP / SEMANTISCHER EVALUATOR
 # ==============================================================================
 def evaluate_answer(user_text, keywords, sample_solution):
-    """Semantische Evaluierung der Freitextantwort."""
+    """Semantische Evaluierung der Freitextantwort über Schlüsselwörter und Wortstämme."""
     if not user_text or not user_text.strip():
         return 0, [], "empty"
 
@@ -306,7 +326,7 @@ def evaluate_answer(user_text, keywords, sample_solution):
 
 
 # ==============================================================================
-# 4. IMAGE GENERATORS FOR CASES
+# 4. CANVA / CANVAS BILD-GENERATOREN FÜR FALLSTUDIEN
 # ==============================================================================
 def render_urine_case_image():
     img = Image.new("RGB", (360, 480), color="#F8FAFC")
@@ -366,6 +386,28 @@ def render_ekg_case_image():
     return img
 
 
+def render_au_form_image():
+    img = Image.new("RGB", (520, 320), color="#F0FDF4")
+    draw = ImageDraw.Draw(img)
+    draw.rectangle([10, 10, 510, 310], fill="#DCFCE7", outline="#16A34A", width=2)
+    draw.text((20, 20), "Muster 1: Arbeitsunfähigkeitsbescheinigung", fill="#15803D")
+    draw.rectangle([30, 55, 160, 85], outline="#16A34A")
+    draw.text((35, 63), "[X] Erstbescheinigung", fill="#166534")
+    draw.rectangle([180, 55, 310, 85], outline="#16A34A")
+    draw.text((185, 63), "[ ] Folgebescheinigung", fill="#166534")
+    draw.text((30, 105), "Diagnose (ICD-10-Schlüssel):", fill="#166534")
+    draw.rectangle([30, 125, 490, 165], fill="#FFFFFF", outline="#16A34A")
+    draw.text(
+        (40, 138),
+        "N39.0 G (Harnwegsinfektion, Lokalisation nicht näher bezeichnet)",
+        fill="#0F172A",
+    )
+    draw.text((30, 185), "Arbeitsunfähig seit: 14.10.2026", fill="#166534")
+    draw.text((30, 210), "Voraussichtlich bis: 20.10.2026", fill="#166534")
+    draw.text((30, 235), "Festgestellt am: 14.10.2026", fill="#166534")
+    return img
+
+
 CASE_STUDIES = [
     {
         "id": "cs1",
@@ -410,6 +452,29 @@ CASE_STUDIES = [
                 "sample": "Notruf 112 absetzen und Oberkörper hochlagern.",
                 "keywords": ["112", "notruf", "oberkörper"],
                 "exp": "Oberkörperhochlagerung senkt die kardiale Vorlast. Der Notruf sichert das Überleben.",
+            },
+        ],
+    },
+    {
+        "id": "cs3",
+        "lf": "LF 3 / LF 4",
+        "title": "Fallstudie C: Formularkunde & Arbeitsunfähigkeit",
+        "image_fn": render_au_form_image,
+        "scenario": "**Anamnese:** Ein GKV-Patient verlangt nach Feststellung eines HWI eine Arbeitsunfähigkeitsbescheinigung (Muster 1).",
+        "questions": [
+            {
+                "id": "cs3_q1",
+                "q": "Was bedeutet der Zusatzbuchstabe 'G' hinter dem ICD-10 Code N39.0 auf dem Formular?",
+                "sample": "Gesicherte Diagnose.",
+                "keywords": ["gesichert", "gesicherte diagnose"],
+                "exp": "Im ambulanten Bereich steht 'G' für eine gesicherte Diagnose.",
+            },
+            {
+                "id": "cs3_q2",
+                "q": "Unter welcher Voraussetzung darf der AU-Beginn ausnahmsweise rückdatiert werden?",
+                "sample": "Maximal 3 Tage nach eingehender ärztlicher Untersuchung.",
+                "keywords": ["3 tage", "ausnahmsweise"],
+                "exp": "Nach den AU-Richtlinien ist eine Rückdatierung nur ausnahmsweise und bis zu 3 Tage zulässig.",
             },
         ],
     },
@@ -554,7 +619,6 @@ elif mode == "⏱️ Prüfungsmodus (Simulations-Klausur)":
             "Die Simulation besteht aus 4 Wissensfragen sowie 1 komplexe Fallstudie inklusive Befundmaterial. Zeitlimit: 15 Minuten."
         )
         if st.button("🚀 Prüfung jetzt starten"):
-            # Wähle 4 allgemeine Fragen und 1 Fallstudie zufällig aus
             st.session_state.exam_questions = random.sample(
                 ALL_QUESTIONS, min(4, len(ALL_QUESTIONS))
             )
@@ -565,7 +629,7 @@ elif mode == "⏱️ Prüfungsmodus (Simulations-Klausur)":
 
     else:
         elapsed = int(time.time() - st.session_state.exam_start_time)
-        remaining = max(0, 900 - elapsed)  # 15 Minuten Limit
+        remaining = max(0, 900 - elapsed)
 
         col_time, col_prog = st.columns([1, 3])
         col_time.metric(
@@ -615,7 +679,6 @@ elif mode == "⏱️ Prüfungsmodus (Simulations-Klausur)":
 
             st.header("📋 Gesamtes Prüfungsergebnis")
             
-            # Auswertung Teil A
             st.subheader("Auswertung Teil A: Wissensfragen")
             for idx, q in enumerate(st.session_state.exam_questions):
                 q_id = q.get("id", f"exam_q_{idx}")
@@ -628,7 +691,6 @@ elif mode == "⏱️ Prüfungsmodus (Simulations-Klausur)":
                 st.write(f"Musterlösung: _{q.get('sample', '')}_")
                 st.markdown("---")
 
-            # Auswertung Teil B
             st.subheader("Auswertung Teil B: Fallstudie")
             for q_idx, q in enumerate(cs["questions"]):
                 cs_q_id = q["id"]
