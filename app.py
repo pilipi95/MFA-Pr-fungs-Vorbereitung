@@ -8,7 +8,7 @@ from PIL import Image, ImageDraw
 import streamlit as st
 
 # ==============================================================================
-# 1. PAGE CONFIGURATION & CUSTOM DESIGN SYSTEM (UI/UX)
+# 1. PAGE CONFIGURATION & CUSTOM DESIGN SYSTEM (HOCHKONTRAST)
 # ==============================================================================
 st.set_page_config(
     page_title="MFA Prüfungs-Trainer PRO BW",
@@ -17,11 +17,11 @@ st.set_page_config(
     initial_sidebar_state="expanded",
 )
 
-# Injektion von modernem, augenschonendem und hochkontrastreichem CSS
+# Injektion von stark kontrastierendem CSS (Weiße Eingabefelder + Schwarzer Text)
 st.markdown(
     """
     <style>
-    /* Global Styles */
+    /* Global Background & Base Text */
     .stApp {
         background-color: #F8FAFC !important;
         color: #0F172A !important;
@@ -34,10 +34,31 @@ st.markdown(
         font-weight: 700 !important;
     }
     
+    /* KONTRAST-FIX FÜR TEXTFELDER & EINGABEN */
+    textarea, input, select, div[data-baseweb="select"] {
+        background-color: #FFFFFF !important;
+        color: #000000 !important;
+        border: 2px solid #64748B !important;
+        border-radius: 8px !important;
+        font-weight: 500 !important;
+    }
+
+    textarea:focus, input:focus {
+        border-color: #2563EB !important;
+        box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2) !important;
+    }
+    
+    /* Labels über den Textfeldern */
+    label, .stTextArea label, .stTextInput label {
+        color: #0F172A !important;
+        font-weight: 700 !important;
+        font-size: 1rem !important;
+    }
+
     /* Card Container */
     .mfa-card {
         background-color: #FFFFFF;
-        border: 1px solid #E2E8F0;
+        border: 1px solid #CBD5E1;
         border-radius: 12px;
         padding: 1.5rem;
         margin-bottom: 1.5rem;
@@ -51,6 +72,7 @@ st.markdown(
         padding: 1rem;
         border-radius: 6px;
         margin: 1rem 0;
+        color: #14532D !important;
     }
     .feedback-warning {
         background-color: #FEFCE8;
@@ -58,6 +80,7 @@ st.markdown(
         padding: 1rem;
         border-radius: 6px;
         margin: 1rem 0;
+        color: #713F12 !important;
     }
     .feedback-error {
         background-color: #FEF2F2;
@@ -65,9 +88,10 @@ st.markdown(
         padding: 1rem;
         border-radius: 6px;
         margin: 1rem 0;
+        color: #7F1D1D !important;
     }
 
-    /* Custom Buttons */
+    /* Buttons */
     .stButton>button {
         background-color: #2563EB !important;
         color: #FFFFFF !important;
@@ -82,7 +106,7 @@ st.markdown(
         box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
     }
     
-    /* Progress Bars & Badges */
+    /* Badges */
     .badge-lf {
         background-color: #DBEAFE;
         color: #1E40AF;
@@ -204,7 +228,6 @@ def load_all_questions():
     else:
         questions = get_default_questions()
 
-    # SICHERSTELLEN, DASS JEDE FRAGE EINE EINDEUTIGE ID HAT
     for idx, q in enumerate(questions):
         if "id" not in q or not q["id"]:
             q["id"] = f"q_{idx}_{hash(q.get('q', ''))}"
@@ -214,7 +237,7 @@ def load_all_questions():
 
 ALL_QUESTIONS = load_all_questions()
 
-# Initialize Session State
+# Session-State Initialisierung
 if "history" not in st.session_state:
     st.session_state.history = {}
 if "exam_active" not in st.session_state:
@@ -225,10 +248,7 @@ if "exam_active" not in st.session_state:
 # 3. ADVANCED NLP / TEXT MATCHING EVALUATOR
 # ==============================================================================
 def evaluate_answer(user_text, keywords, sample_solution):
-    """
-    Semantische Evaluierung der Freitextantwort über Schlüsselwort-Stämme.
-    Gibt Score (0-100%), Trefferliste und visuelles Feedback zurück.
-    """
+    """Semantische Evaluierung der Freitextantwort."""
     if not user_text or not user_text.strip():
         return 0, [], "empty"
 
@@ -249,7 +269,7 @@ def evaluate_answer(user_text, keywords, sample_solution):
 
 
 # ==============================================================================
-# 4. CANVA / CANVAS IMAGE GENERATORS FOR CASES
+# 4. IMAGE GENERATORS FOR CASES
 # ==============================================================================
 def render_urine_case_image():
     img = Image.new("RGB", (360, 480), color="#F8FAFC")
@@ -312,17 +332,20 @@ def render_ekg_case_image():
 CASE_STUDIES = [
     {
         "id": "cs1",
+        "lf": "LF 2 / LF 4",
         "title": "Fallstudie A: Infektiologie & Praxislabor",
         "image_fn": render_urine_case_image,
         "scenario": "**Anamnese:** Frau K. (34 J., GKV) klagt über Dysurie und Pollakisurie seit 2 Tagen. Sie übergeben ihr einen Becher für frischen Morgenurin.",
         "questions": [
             {
+                "id": "cs1_q1",
                 "q": "Welche zwei Parameter auf dem Teststreifen sichern den Verdacht auf einen bakteriellen Harnwegsinfekt?",
                 "sample": "Leukozyten (Entzündungszeichen) und Nitrit (Bakteriennachweis).",
                 "keywords": ["leukozyten", "nitrit"],
                 "exp": "Leukozyten zeigen die immunologische Reaktion; Nitrit entsteht durch die bakterielle Umwandlung von Nitrat.",
             },
             {
+                "id": "cs1_q2",
                 "q": "Welche Abrechnungsziffer (EBM) ist für diesen Urinstreifen-Schnelltest anzusetzen?",
                 "sample": "EBM-GOP 32033.",
                 "keywords": ["32033"],
@@ -332,17 +355,20 @@ CASE_STUDIES = [
     },
     {
         "id": "cs2",
+        "lf": "LF 1 / LF 2",
         "title": "Fallstudie B: Kardiologischer Notfall",
         "image_fn": render_ekg_case_image,
         "scenario": "**Anamnese:** Herr M. (58 J.) erscheint unangemeldet mit retrosternalem Vernichtungsschmerz, Kaltschweißigkeit und Atemnot.",
         "questions": [
             {
+                "id": "cs2_q1",
                 "q": "Welche spezifische EKG-Veränderung liegt in der Ableitung vor?",
                 "sample": "Signifikante ST-Streckenhebung (STEMI).",
                 "keywords": ["st-hebung", "stemi", "st-streckenhebung"],
                 "exp": "Die Hebung der ST-Strecke aus dem absteigenden Schenkel der R-Zacke zeigt den transmuralen Myokardinfarkt.",
             },
             {
+                "id": "cs2_q2",
                 "q": "Nenne die zwei wichtigsten Erstmaßnahmen der MFA vor Eintreffen des Arztes.",
                 "sample": "Notruf 112 absetzen und Oberkörper hochlagern.",
                 "keywords": ["112", "notruf", "oberkörper"],
@@ -372,12 +398,12 @@ st.sidebar.markdown("---")
 st.sidebar.caption("Status: 100% Offline-fähig & DSGVO-konform")
 
 # ==============================================================================
-# MODUS 1: ÜBUNGSMODUS (ACTIVE RECALL WITH SCAFFOLDING)
+# MODUS 1: ÜBUNGSMODUS
 # ==============================================================================
 if mode == "📖 Übungsmodus (Adaptive Recall)":
     st.header("📖 Übungsmodus: Aktives Erinnern & Verstehen")
     st.caption(
-        "Formuliere deine Antworten eigenständig. Das System analysiert deine Eingabe semantisch auf Schlüsselkonzepte."
+        "Formuliere deine Antworten eigenständig im Freitextfeld. Das System analysiert deine Eingabe."
     )
 
     lf_filter = st.selectbox(
@@ -478,54 +504,82 @@ elif mode == "🖼️ Interaktive Bild-Fallstudien":
             st.markdown("---")
 
 # ==============================================================================
-# MODUS 3: PRÜFUNGSMODUS (TIMED EXAM)
+# MODUS 3: PRÜFUNGSMODUS (SIMULATIONS-KLAUSUR INKL. FALLSTUDIEN)
 # ==============================================================================
 elif mode == "⏱️ Prüfungsmodus (Simulations-Klausur)":
     st.header("⏱️ Simulations-Prüfung")
     st.caption(
-        "Simulation unter Zeitdruck. Die Auswertung erfolgt gesammelt nach Abgabe."
+        "Prüfungssimulation unter Zeitdruck: Enthält Wissensfragen & komplexe Fallstudien."
     )
 
     if not st.session_state.exam_active:
         st.info(
-            "Die Prüfung umfasst 5 zufällige Fragen aus allen Lernfeldern. Zeitlimit: 10 Minuten."
+            "Die Simulation besteht aus 4 Wissensfragen sowie 1 komplexe Fallstudie inklusive Befundmaterial. Zeitlimit: 15 Minuten."
         )
-        if st.button("🚀 Klausur jetzt starten"):
+        if st.button("🚀 Prüfung jetzt starten"):
+            # Wähle 4 allgemeine Fragen und 1 Fallstudie zufällig aus
             st.session_state.exam_questions = random.sample(
-                ALL_QUESTIONS, min(5, len(ALL_QUESTIONS))
+                ALL_QUESTIONS, min(4, len(ALL_QUESTIONS))
             )
+            st.session_state.exam_case = random.choice(CASE_STUDIES)
             st.session_state.exam_start_time = time.time()
             st.session_state.exam_active = True
             st.rerun()
 
     else:
         elapsed = int(time.time() - st.session_state.exam_start_time)
-        remaining = max(0, 600 - elapsed)
+        remaining = max(0, 900 - elapsed)  # 15 Minuten Limit
 
         col_time, col_prog = st.columns([1, 3])
         col_time.metric(
             "Verbleibende Zeit", f"{remaining // 60}:{remaining % 60:02d} Min"
         )
-        col_prog.progress(min(1.0, elapsed / 600))
+        col_prog.progress(min(1.0, elapsed / 900))
 
         if remaining == 0:
             st.error("⏰ Die Zeit ist abgelaufen! Bitte reiche deine Antworten ein.")
 
         exam_answers = {}
+
+        # TEIL 1: WISSENSFRAGEN
+        st.markdown("---")
+        st.subheader("Teil A: Wissensfragen")
         for idx, q in enumerate(st.session_state.exam_questions):
             q_id = q.get("id", f"exam_q_{idx}")
-            st.markdown(f"### Frage {idx+1} [{q.get('lf', 'LF')}]")
-            st.write(q["q"])
+            st.markdown(f"**Frage {idx+1} [{q.get('lf', 'LF')}]:** {q['q']}")
             exam_answers[q_id] = st.text_area(
-                "Deine Antwort:", key=f"exam_ans_{q_id}", height=90
+                "Deine Ausarbeitung:", key=f"exam_ans_{q_id}", height=90
             )
             st.markdown("---")
 
-        if st.button("📥 Klausur abgeben & auswerten"):
+        # TEIL 2: FALLSTUDIE
+        st.subheader("Teil B: Komplexe Fallstudie")
+        cs = st.session_state.exam_case
+        st.markdown(f"**{cs['title']} [{cs.get('lf', 'Praxis')}]**")
+        
+        col_img, col_scen = st.columns([1, 1])
+        with col_img:
+            st.image(cs["image_fn"](), caption="Prüfungsdokument / Befund", use_container_width=True)
+        with col_scen:
+            st.markdown(cs["scenario"])
+
+        for q_idx, q in enumerate(cs["questions"]):
+            cs_q_id = q["id"]
+            st.markdown(f"**Teilaufgabe B.{q_idx+1}:** {q['q']}")
+            exam_answers[cs_q_id] = st.text_area(
+                "Lösungsansatz zur Fallstudie:", key=f"exam_ans_{cs_q_id}", height=90
+            )
+            st.markdown("---")
+
+        if st.button("📥 Gesamte Prüfung abgeben & auswerten"):
             st.session_state.exam_active = False
             total_score = 0
+            total_items = len(st.session_state.exam_questions) + len(cs["questions"])
 
-            st.header("📋 Prüfungsergebnis")
+            st.header("📋 Gesamtes Prüfungsergebnis")
+            
+            # Auswertung Teil A
+            st.subheader("Auswertung Teil A: Wissensfragen")
             for idx, q in enumerate(st.session_state.exam_questions):
                 q_id = q.get("id", f"exam_q_{idx}")
                 u_text = exam_answers.get(q_id, "")
@@ -533,18 +587,31 @@ elif mode == "⏱️ Prüfungsmodus (Simulations-Klausur)":
                 total_score += score
 
                 st.markdown(f"**Frage {idx+1} ({q.get('lf', 'LF')}):** {q['q']}")
-                st.write(f"Deine Punkte: {score}%")
-                st.write(f"Musterlösung: {q.get('sample', '')}")
+                st.write(f"Erreichte Erfüllung: **{score}%**")
+                st.write(f"Musterlösung: _{q.get('sample', '')}_")
                 st.markdown("---")
 
-            final_percent = total_score / len(st.session_state.exam_questions)
-            st.subheader(f"Gesamtergebnis: {final_percent:.1f}%")
+            # Auswertung Teil B
+            st.subheader("Auswertung Teil B: Fallstudie")
+            for q_idx, q in enumerate(cs["questions"]):
+                cs_q_id = q["id"]
+                u_text = exam_answers.get(cs_q_id, "")
+                score, found, _ = evaluate_answer(u_text, q.get("keywords", []), q.get("sample", ""))
+                total_score += score
+
+                st.markdown(f"**Teilaufgabe B.{q_idx+1}:** {q['q']}")
+                st.write(f"Erreichte Erfüllung: **{score}%**")
+                st.write(f"Musterlösung: _{q.get('sample', '')}_")
+                st.markdown("---")
+
+            final_percent = total_score / total_items
+            st.subheader(f"📊 Gesamtergebnis der Prüfung: {final_percent:.1f}%")
 
             if final_percent >= 50:
                 st.balloons()
-                st.success("🎉 Glückwunsch! Du hast die Prüfung bestanden.")
+                st.success("🎉 Herzlichen Glückwunsch! Du hast die Prüfungssimulation bestanden.")
             else:
-                st.error("❌ Leider nicht bestanden. Nutze den Übungsmodus zum Vertiefen.")
+                st.error("❌ Das erforderliche Ziel wurde nicht erreicht. Nutze den Übungsmodus zum gezielten Nacharbeiten.")
 
 # ==============================================================================
 # MODUS 4: LERNFORTSCHRITT & ANALYSEN
